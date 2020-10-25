@@ -12,8 +12,8 @@ import {
     TableRow,
     Checkbox,
     Grid,
-    Button
 } from "@material-ui/core"
+import Filter from "../../components/Filter/Filter";
 
 
 const columns = [
@@ -108,11 +108,7 @@ export default function StickyHeadTable() {
         <React.Fragment>
             <Container maxWidth="xl" style={{ marginTop: 30 }}>
                 <Grid>
-                    <Grid item xl={12}>
-                        <Button variant="contained" color="primary">
-                            Primary
-                        </Button>
-                    </Grid>
+                    <Filter/>
                 </Grid>
             </Container>
             <Container maxWidth="xl">
