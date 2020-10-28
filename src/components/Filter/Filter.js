@@ -10,6 +10,8 @@ import {
     MenuItem,
     TextField,
     Grid,
+    Fade,
+    FormGroup
 } from "@material-ui/core"
 import DateFnsUtils from '@date-io/date-fns';
 import {
@@ -27,7 +29,7 @@ const useStyles = makeStyles(theme => ({
         flexGrow: 1,
     },
     appBar: {
-        backgroundColor: '#1876D1',
+        backgroundColor: '#028946',
         borderRadius: theme.shape.borderRadius,
     },
     title: {
@@ -62,7 +64,7 @@ const useStyles = makeStyles(theme => ({
     btn: {
         flexGrow: 1,
         marginLeft: theme.spacing(2),
-        backgroundColor: '#4050B5',
+        backgroundColor: '#2A4C37',
         color: 'white',
         '&:hover': {
             backgroundColor: '#fff',
@@ -82,7 +84,9 @@ const useStyles = makeStyles(theme => ({
         paddingBottom: theme.spacing(1),
     },
     input: {
-        color: 'inherit',
+        '& .MuiInput-input': {
+            color: 'white',
+        },
         marginRight: theme.spacing(1),
     },
     inputRoot: {
@@ -90,8 +94,8 @@ const useStyles = makeStyles(theme => ({
         width: '100%'
     },
     inputInput: {
-        padding: theme.spacing(1, 1, 1, 0),
         paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+        flexGrow: 1,
         transition: theme.transitions.create('width'),
         width: '100%',
         [theme.breakpoints.up('sm')]: {
@@ -108,11 +112,11 @@ const defaultMaterialTheme = createMuiTheme({
 const Filter = (props) => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
-    const [status, setStatus] = React.useState('');
+
     const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
 
     const handleChange = (event) => {
-        setStatus(event.target.value);
+        props.onSearch(event)
     };
     const handleDateChange = (date) => {
         setSelectedDate(date);
@@ -120,6 +124,11 @@ const Filter = (props) => {
     const handleClick = () => {
         setOpen(!open);
     };
+
+    const handleApply = () => {
+        props.onApply()
+    };
+
     return (
         <div className={classes.root}>
             <AppBar position="static" className={classes.appBar}>
@@ -131,145 +140,161 @@ const Filter = (props) => {
                         <div className={classes.searchIcon}>
                             <SearchIcon />
                         </div>
-                        <InputBase
-                            placeholder="Search…"
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput,
-                            }}
-                            inputProps={{ 'aria-label': 'поиск' }}
-                        />
+                        <FormGroup>
+                            <InputBase
+                                name="name"
+                                value={props.state.name}
+                                onChange={handleChange}
+                                placeholder="Search…"
+                                classes={{
+                                    root: classes.inputRoot,
+                                    input: classes.inputInput,
+                                }}
+                                inputProps={{ 'aria-label': 'поиск' }}
+                            />
+                        </FormGroup>
                     </div>
                     <Typography className={classes.title} variant="h6" noWrap>
                         Статус:
                     </Typography>
-                    <Select
-                        className={classes.nativeInput}
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={status}
-                        onChange={handleChange}
-                    >
-                        <MenuItem value="Заявка">Заявка</MenuItem>
-                        <MenuItem value="Задаток">Задаток</MenuItem>
-                        <MenuItem value="Сделка">Сделка</MenuItem>
-                        <MenuItem value="Срыв">Срыв</MenuItem>
-                        <MenuItem value="Ожидает">Ожидает</MenuItem>
-                    </Select>
-                    <Button color="default" className={classes.btn}>
+                    <FormGroup>
+                        <Select
+                            className={classes.nativeInput}
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            name="status"
+                            value={props.state.status}
+                            onChange={handleChange}
+                        >
+                            <MenuItem value="Заявка">Заявка</MenuItem>
+                            <MenuItem value="Задаток">Задаток</MenuItem>
+                            <MenuItem value="Сделка">Сделка</MenuItem>
+                            <MenuItem value="Срыв">Срыв</MenuItem>
+                            <MenuItem value="Ожидает">Ожидает</MenuItem>
+                        </Select>
+                    </FormGroup>
+                    <Button color="default" className={classes.btn} onClick={handleApply}>
                         Применить
                     </Button>
-                    <Button color="default" className={classes.btn} onClick={handleClick}>
+                    <Button color="default" variant="outlined" className={classes.btn} onClick={handleClick}>
                         Расширенный поиск
                         {open ? <ExpandLess /> : <ExpandMore />}
                     </Button>
                 </Toolbar>
                 {
-                    open ? <Toolbar className={classes.toolbar}>
+                    open ? <Fade in={open}>
+                        <Toolbar className={classes.toolbar}>
 
-                        <Grid direction={"row"} container>
-                            <Grid item direction={"row"} alignItems={"center"} justify={"space-between"} container>
-                                <Typography className={classes.title} variant="body1" noWrap>
-                                    Предствитель собственника:
-                                </Typography>
-                                <TextField required id="standard-multiline-flexible" className={classes.input}/>
-                                <Typography className={classes.title} variant="body1" noWrap>
-                                    Предствитель покупателя:
-                                </Typography>
-                                <TextField required id="standard-multiline-flexible" className={classes.input}/>
-                                <Typography className={classes.title} variant="body1" noWrap>
-                                    Сегмент:
-                                </Typography>
-                                <TextField required id="standard-multiline-flexible" className={classes.input}/>
-                            </Grid>
-                            <Grid item direction={"row"} alignItems={"center"} justify={"space-between"} container>
-                                <Typography className={classes.title} variant="body1" noWrap>
-                                    Контакт собственника:
-                                </Typography>
-                                <TextField required id="standard-multiline-flexible" className={classes.input}/>
-                                <Typography className={classes.title} variant="body1" noWrap>
-                                    Контакт покупателя:
-                                </Typography>
-                                <TextField required id="standard-multiline-flexible" className={classes.input}/>
-                                <Typography className={classes.title} variant="body1" noWrap>
-                                    Оплата:
-                                </Typography>
-                                <TextField required id="standard-multiline-flexible" className={classes.input}/>
-                            </Grid>
-                            <Grid item direction={"row"} alignItems={"center"} justify={"space-between"} container>
-                                <Typography className={classes.title} variant="body1" noWrap>
-                                    Имя собственника:
-                                </Typography>
-                                <TextField required id="standard-multiline-flexible" className={classes.input}/>
-                                <Typography className={classes.title} variant="body1" noWrap>
-                                    Имя покупателя:
-                                </Typography>
-                                <TextField required id="standard-multiline-flexible" className={classes.input}/>
-                                <Typography className={classes.title} variant="body1" noWrap>
-                                    Цена объекта:
-                                </Typography>
-                                <TextField required id="standard-multiline-flexible" className={classes.input}/>
-                                <Typography className={classes.title} variant="body1" noWrap>
-                                    Сумма задатка:
-                                </Typography>
-                                <TextField required id="standard-multiline-flexible" className={classes.input}/>
-                            </Grid>
+                            <Grid direction={"row"} container>
+                                <Grid item direction={"row"} alignItems={"center"} justify={"space-between"} container>
+                                    <Typography className={classes.title} variant="body1" noWrap>
+                                        Предствитель собственника:
+                                    </Typography>
+                                    <FormGroup>
+                                        <TextField required id="employees" className={classes.input} name="employees" onChange={handleChange}/>
+                                    </FormGroup>
+                                    <Typography className={classes.title} variant="body1" noWrap>
+                                        Предствитель покупателя:
+                                    </Typography>
+                                    <FormGroup>
+                                        <TextField required id="standard-multiline-flexible" className={classes.input}/>
+                                    </FormGroup>
+                                    <Typography className={classes.title} variant="body1" noWrap>
+                                        Сегмент:
+                                    </Typography>
+                                    <TextField required id="standard-multiline-flexible" className={classes.input}/>
+                                </Grid>
+                                <Grid item direction={"row"} alignItems={"center"} justify={"space-between"} container>
+                                    <Typography className={classes.title} variant="body1" noWrap>
+                                        Контакт собственника:
+                                    </Typography>
+                                    <FormGroup>
+                                        <TextField required id="standard-multiline-flexible" className={classes.input} onChange={handleChange}/>
+                                    </FormGroup>
+                                    <Typography className={classes.title} variant="body1" noWrap>
+                                        Контакт покупателя:
+                                    </Typography>
+                                    <TextField required id="standard-multiline-flexible" className={classes.input}/>
+                                    <Typography className={classes.title} variant="body1" noWrap>
+                                        Оплата:
+                                    </Typography>
+                                    <TextField required id="standard-multiline-flexible" className={classes.input}/>
+                                </Grid>
+                                <Grid item direction={"row"} alignItems={"center"} justify={"space-between"} container>
+                                    <Typography className={classes.title} variant="body1" noWrap>
+                                        Имя собственника:
+                                    </Typography>
+                                    <TextField required id="standard-multiline-flexible" className={classes.input}/>
+                                    <Typography className={classes.title} variant="body1" noWrap>
+                                        Имя покупателя:
+                                    </Typography>
+                                    <TextField required id="standard-multiline-flexible" className={classes.input}/>
+                                    <Typography className={classes.title} variant="body1" noWrap>
+                                        Цена объекта:
+                                    </Typography>
+                                    <TextField required id="standard-multiline-flexible" className={classes.input}/>
+                                    <Typography className={classes.title} variant="body1" noWrap>
+                                        Сумма задатка:
+                                    </Typography>
+                                    <TextField required id="standard-multiline-flexible" className={classes.input}/>
+                                </Grid>
 
-                            <Grid item direction={"row"} alignItems={"center"} justify={"space-between"} container>
-                                <Typography className={classes.title} variant="body1" noWrap>
-                                    Дата задатка:
-                                </Typography>
-                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                    <ThemeProvider theme={defaultMaterialTheme}>
+                                <Grid item direction={"row"} alignItems={"center"} justify={"space-between"} container>
+                                    <Typography className={classes.title} variant="body1" noWrap>
+                                        Дата задатка:
+                                    </Typography>
+                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                        <ThemeProvider theme={defaultMaterialTheme}>
+                                            <KeyboardDatePicker
+                                                variant="inline"
+                                                format="MM/dd/yyyy"
+                                                margin="normal"
+                                                id="date-picker-a"
+                                                value={selectedDate}
+                                                onChange={handleDateChange}
+                                                KeyboardButtonProps={{
+                                                    'aria-label': 'change date',
+                                                }}
+                                            />
+                                        </ThemeProvider>
+                                    </MuiPickersUtilsProvider>
+                                    <Typography className={classes.title} variant="body1" noWrap>
+                                        Дата завершения задатка:
+                                    </Typography>
+                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                         <KeyboardDatePicker
                                             variant="inline"
                                             format="MM/dd/yyyy"
                                             margin="normal"
-                                            id="date-picker-a"
+                                            id="date-picker-b"
                                             value={selectedDate}
                                             onChange={handleDateChange}
                                             KeyboardButtonProps={{
                                                 'aria-label': 'change date',
                                             }}
                                         />
-                                    </ThemeProvider>
-                                </MuiPickersUtilsProvider>
-                                <Typography className={classes.title} variant="body1" noWrap>
-                                    Дата завершения задатка:
-                                </Typography>
-                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                    <KeyboardDatePicker
-                                        variant="inline"
-                                        format="MM/dd/yyyy"
-                                        margin="normal"
-                                        id="date-picker-b"
-                                        value={selectedDate}
-                                        onChange={handleDateChange}
-                                        KeyboardButtonProps={{
-                                            'aria-label': 'change date',
-                                        }}
-                                    />
-                                </MuiPickersUtilsProvider>
-                                <Typography className={classes.title} variant="body1" noWrap>
-                                    Дата сделки:
-                                </Typography>
-                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                    <KeyboardDatePicker
-                                        variant="inline"
-                                        format="MM/dd/yyyy"
-                                        margin="normal"
-                                        id="date-picker-c"
-                                        value={selectedDate}
-                                        onChange={handleDateChange}
-                                        KeyboardButtonProps={{
-                                            'aria-label': 'change date',
-                                        }}
-                                    />
-                                </MuiPickersUtilsProvider>
+                                    </MuiPickersUtilsProvider>
+                                    <Typography className={classes.title} variant="body1" noWrap>
+                                        Дата сделки:
+                                    </Typography>
+                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                        <KeyboardDatePicker
+                                            variant="inline"
+                                            format="MM/dd/yyyy"
+                                            margin="normal"
+                                            id="date-picker-c"
+                                            value={selectedDate}
+                                            onChange={handleDateChange}
+                                            KeyboardButtonProps={{
+                                                'aria-label': 'change date',
+                                            }}
+                                        />
+                                    </MuiPickersUtilsProvider>
+                                </Grid>
                             </Grid>
-                        </Grid>
 
-                    </Toolbar>: null
+                        </Toolbar>
+                    </Fade>: null
                 }
             </AppBar>
         </div>

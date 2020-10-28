@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { fade, makeStyles } from '@material-ui/core/styles'
 import {
     Container,
@@ -10,14 +10,29 @@ import {
     TableHead,
     TablePagination,
     TableRow,
-    Checkbox,
+    Chip,
     Grid,
 } from "@material-ui/core"
+import { deals } from '../../data/deals'
 import Filter from "../../components/Filter/Filter";
 
 
+const arr = [];
+deals.map(deal => arr.push({
+    no: deal.iddeals,
+    employees: [`${deal.advertisement.employeesid.name} ${deal.advertisement.employeesid.surname}`, `\n${deal.customer.employeesid.name} ${deal.customer.employeesid.surname}`],
+    address: `${deal.advertisement.parameters.street} ${deal.advertisement.parameters.house_number}`,
+    price: `${deal.advertisement.parameters.cost} тг`,
+    deal: [`${deal.advertisement.parameters.owner_card.name}`, `\n${deal.customer.name}`],
+    contacts: [`${deal.advertisement.parameters.owner_card.phone_number}`, `\n${deal.customer?.phone_number}`],
+    advanced: [`${deal.date_of_deposit}`, ` - ${deal.expiration_date_of_deposit}`],
+    kickbacks: [`${deal.amount_of_deposit} тг`, `\n${deal.customer_commission} тг`],
+    deposit: deal.amount_of_deposit,
+    transaction: `${deal.type_of_deal}`,
+    status: deal.status
+}));
 const columns = [
-    { id: 'no', label: 'NO', minWidth: 50 },
+    { id: 'no', label: 'NO', minWidth: 100 },
     { id: 'employees', label: ' Специалисты', minWidth: 120 },
     { id: 'address', label: ' Адрес', minWidth: 120 },
     { id: 'price', label: ' Цена', minWidth: 100 },
@@ -26,29 +41,8 @@ const columns = [
     { id: 'advances', label: ' Дата задатка от/ Дата задатка до', minWidth: 120 },
     { id: 'kickbacks', label: ' Комиссионные', minWidth: 100 },
     { id: 'deposit', label: ' Сумма задатка', minWidth: 100 },
-    { id: 'transaction', label: ' Вид сделки', minWidth: 80 }
-];
-
-function createData(no, employees, address, price, deal, contacts, advances, kickbacks, deposit, transaction) {
-    return { no, employees, address, price, deal, contacts, advances, kickbacks, deposit, transaction};
-}
-
-const rows = [
-    createData(1, ['Гульшат Шакенова', '\nГульшат Орынбаева'], 'Родостовца д 271', '12,500,500 тг',
-        ['Галия Нуржановна', '\nГульжан Айтбаева'], ['87007002161', '\n87007002161'],
-        ['12.04.20 -', '\n16.04.20'], ['200000 тг', '\n100000 тг'], '400000 тг', 'наличные' ),
-    createData(2, ['Гульшат Шакенова', '\nГульшат Орынбаева'], 'Родостовца д 271', '12,500,500 тг',
-        ['Галия Нуржановна', '\nГульжан Айтбаева'], ['87007002161', '\n87007002161'],
-        ['12.04.20 -', '\n16.04.20'], ['200000 тг', '\n100000 тг'], '400000 тг', 'наличные' ),
-    createData(3, ['Гульшат Шакенова', '\nГульшат Орынбаева'], 'Родостовца д 271', '12,500,500 тг',
-        ['Галия Нуржановна', '\nГульжан Айтбаева'], ['87007002161', '\n87007002161'],
-        ['12.04.20 -', '\n16.04.20'], ['200000 тг', '\n100000 тг'], '400000 тг', 'наличные' ),
-    createData(4, ['Гульшат Шакенова', '\nГульшат Орынбаева'], 'Родостовца д 271', '12,500,500 тг',
-        ['Галия Нуржановна', '\nГульжан Айтбаева'], ['87007002161', '\n87007002161'],
-        ['12.04.20 -', '\n16.04.20'], ['200000 тг', '\n100000 тг'], '400000 тг', 'наличные' ),
-    createData(5, ['Гульшат Шакенова', '\nГульшат Орынбаева'], 'Родостовца д 271', '12,500,500 тг',
-        ['Галия Нуржановна', '\nГульжан Айтбаева'], ['87007002161', '\n87007002161'],
-        ['12.04.20 -', '\n16.04.20'], ['200000 тг', '\n100000 тг'], '400000 тг', 'наличные' ),
+    { id: 'transaction', label: ' Вид сделки', minWidth: 80 },
+    // { id: 'status', label: 'Статус' }
 ];
 
 const useStyles = makeStyles(theme => ({
@@ -91,6 +85,17 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function StickyHeadTable() {
+    const [state, setState] = useState({
+        name: '',
+        status: ''
+    });
+    const [deal, setDeals] = useState([]);
+    useEffect(() => {
+        setDeals(arr)
+    }, []);
+    const rows = [
+        ...deal
+    ];
     const classes = useStyles();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -104,11 +109,70 @@ export default function StickyHeadTable() {
         setPage(0);
     };
 
+    const handleSearch = (e) => {
+        setState({
+            ...state,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const colors = status => {
+        switch (status) {
+            case 'Срыв':
+                return 'red';
+            case 'Сделка':
+                return 'green';
+            case 'Заявка':
+                return 'lightgreen';
+            case 'Задаток':
+                return 'yellow';
+            case 'Ожидает':
+                return 'grey';
+            default:
+                return 'black'
+        }
+    };
+
+    const status = (status) => (
+        <Chip
+            label={status}
+            size="small"
+            style={{ backgroundColor: colors(status), color: 'white', marginLeft: '8px' }}
+        />
+    );
+
+    const roows = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+        return (
+            <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                {columns.map((column, index) => {
+                    const value = row[column.id];
+
+                    return (
+                        <React.Fragment key={index}>
+                            <TableCell align={column.align}>
+                                {(value && value !== 'null') ? value : '-'}
+                                { column.id === 'no'
+                                    ? status(row.status) : null
+                                }
+                            </TableCell>
+                        </React.Fragment>
+
+                    );
+                })}
+            </TableRow>
+        );
+    })
+
+    const onApply = e => {
+        setDeals(deal.filter(d => d.status === state.status))
+    }
+
+
     return (
         <React.Fragment>
             <Container maxWidth="xl" style={{ marginTop: 30 }}>
                 <Grid>
-                    <Filter/>
+                    <Filter onSearch={handleSearch} state={state} onApply={onApply}/>
                 </Grid>
             </Container>
             <Container maxWidth="xl">
@@ -128,31 +192,11 @@ export default function StickyHeadTable() {
                                     ))}
                                 </TableRow>
                             </TableHead>
-                            <TableBody>
-                                {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-                                    return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={index}>
-                                            {columns.map((column, index) => {
-                                                const value = row[column.id];
-                                                return (
-                                                    <React.Fragment key={index}>
-                                                        <TableCell align={column.align}>
-                                                            {value}
-                                                            { column.id === 'no' ?
-                                                                <Checkbox
-                                                                    defaultChecked
-                                                                    color="primary"
-                                                                    inputProps={{ 'aria-label': 'secondary checkbox' }}
-                                                                /> : null
-                                                            }
-                                                        </TableCell>
-                                                    </React.Fragment>
 
-                                                );
-                                            })}
-                                        </TableRow>
-                                    );
-                                })}
+                            <TableBody>
+                                {
+                                    roows
+                                }
                             </TableBody>
                         </Table>
                     </TableContainer>
