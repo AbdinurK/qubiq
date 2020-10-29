@@ -39,7 +39,7 @@ export const deals =  [
                 "bank":"Мурат Байгарашев"
             },
         "date_of_deposit":"2017-06-13",
-        "expiration_date_of_deposit":null,
+        "expiration_date_of_deposit":"2019-07-10",
         "transaction_date":"2017-06-17",
         "amount_of_deposit":300000,
         "seller_commission":0,

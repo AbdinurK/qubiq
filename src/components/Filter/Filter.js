@@ -71,6 +71,14 @@ const useStyles = makeStyles(theme => ({
             color: 'black'
         },
     },
+    reset: {
+        backgroundColor: '#2A4C37',
+        color: 'white',
+        '&:hover': {
+            backgroundColor: '#fff',
+            color: 'black'
+        },
+    },
     searchIcon: {
         padding: theme.spacing(0, 2),
         height: '100%',
@@ -113,13 +121,11 @@ const Filter = (props) => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 
-    const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
-
     const handleChange = (event) => {
         props.onSearch(event)
     };
     const handleDateChange = (date) => {
-        setSelectedDate(date);
+        props.onDateChange(date)
     };
     const handleClick = () => {
         setOpen(!open);
@@ -127,6 +133,10 @@ const Filter = (props) => {
 
     const handleApply = () => {
         props.onApply()
+    };
+
+    const onReset = () => {
+        props.onReset()
     };
 
     return (
@@ -191,105 +201,130 @@ const Filter = (props) => {
                                         Предствитель собственника:
                                     </Typography>
                                     <FormGroup>
-                                        <TextField required id="employees" className={classes.input} name="employees" onChange={handleChange}/>
+                                        <TextField required id="employees1" value={props.state.employees} className={classes.input} name="employees" onChange={handleChange}/>
                                     </FormGroup>
                                     <Typography className={classes.title} variant="body1" noWrap>
                                         Предствитель покупателя:
                                     </Typography>
                                     <FormGroup>
-                                        <TextField required id="standard-multiline-flexible" className={classes.input}/>
+                                        <TextField required id="employees2" value={props.state.employees} className={classes.input} name="employees" onChange={handleChange}/>
                                     </FormGroup>
                                     <Typography className={classes.title} variant="body1" noWrap>
                                         Сегмент:
                                     </Typography>
-                                    <TextField required id="standard-multiline-flexible" className={classes.input}/>
+                                    <FormGroup>
+                                        <TextField required id="address" value={props.state.address} className={classes.input} name="address" onChange={handleChange}/>
+                                    </FormGroup>
                                 </Grid>
                                 <Grid item direction={"row"} alignItems={"center"} justify={"space-between"} container>
                                     <Typography className={classes.title} variant="body1" noWrap>
                                         Контакт собственника:
                                     </Typography>
                                     <FormGroup>
-                                        <TextField required id="standard-multiline-flexible" className={classes.input} onChange={handleChange}/>
+                                        <TextField required id="contact1" className={classes.input} name="contacts" onChange={handleChange}/>
                                     </FormGroup>
                                     <Typography className={classes.title} variant="body1" noWrap>
                                         Контакт покупателя:
                                     </Typography>
-                                    <TextField required id="standard-multiline-flexible" className={classes.input}/>
+                                    <FormGroup>
+                                        <TextField required id="contact2" className={classes.input} name="contacts" onChange={handleChange}/>
+                                    </FormGroup>
                                     <Typography className={classes.title} variant="body1" noWrap>
                                         Оплата:
                                     </Typography>
-                                    <TextField required id="standard-multiline-flexible" className={classes.input}/>
+                                    <FormGroup>
+                                        <TextField required id="transaction" name="price" className={classes.input} value={props.state.price} onChange={handleChange}/>
+                                    </FormGroup>
                                 </Grid>
                                 <Grid item direction={"row"} alignItems={"center"} justify={"space-between"} container>
                                     <Typography className={classes.title} variant="body1" noWrap>
                                         Имя собственника:
                                     </Typography>
-                                    <TextField required id="standard-multiline-flexible" className={classes.input}/>
+                                    <FormGroup>
+                                        <TextField required id="deal1" className={classes.input} name="deal" onChange={handleChange}/>
+                                    </FormGroup>
                                     <Typography className={classes.title} variant="body1" noWrap>
                                         Имя покупателя:
                                     </Typography>
-                                    <TextField required id="standard-multiline-flexible" className={classes.input}/>
+                                    <FormGroup>
+                                        <TextField required id="deal2" className={classes.input} name="deal" onChange={handleChange}/>
+                                    </FormGroup>
                                     <Typography className={classes.title} variant="body1" noWrap>
                                         Цена объекта:
                                     </Typography>
-                                    <TextField required id="standard-multiline-flexible" className={classes.input}/>
+                                    <FormGroup>
+                                        <TextField required id="price" name="price" className={classes.input} onChange={handleChange}/>
+                                    </FormGroup>
                                     <Typography className={classes.title} variant="body1" noWrap>
                                         Сумма задатка:
                                     </Typography>
-                                    <TextField required id="standard-multiline-flexible" className={classes.input}/>
+                                    <FormGroup>
+                                        <TextField required id="deposit" value={props.state.deposit} name="deposit" className={classes.input} onChange={handleChange}/>
+                                    </FormGroup>
                                 </Grid>
 
                                 <Grid item direction={"row"} alignItems={"center"} justify={"space-between"} container>
                                     <Typography className={classes.title} variant="body1" noWrap>
-                                        Дата задатка:
+                                        Дата задатка от:
                                     </Typography>
                                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                         <ThemeProvider theme={defaultMaterialTheme}>
+                                            <FormGroup>
+                                                <KeyboardDatePicker
+                                                    variant="inline"
+                                                    format="yyyy-MM-dd"
+                                                    margin="normal"
+                                                    name="advances1"
+                                                    id="advances1"
+                                                    value={props.state.advances}
+                                                    onChange={handleDateChange}
+                                                    KeyboardButtonProps={{
+                                                        'aria-label': 'change date',
+                                                    }}
+                                                />
+                                            </FormGroup>
+                                        </ThemeProvider>
+                                    </MuiPickersUtilsProvider>
+                                    <Typography className={classes.title} variant="body1" noWrap>
+                                        до:
+                                    </Typography>
+                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                        <FormGroup>
                                             <KeyboardDatePicker
                                                 variant="inline"
-                                                format="MM/dd/yyyy"
+                                                format="yyyy-MM-dd"
                                                 margin="normal"
-                                                id="date-picker-a"
-                                                value={selectedDate}
+                                                name="advances2"
+                                                id="date-picker-b"
+                                                value={props.state.advances}
                                                 onChange={handleDateChange}
                                                 KeyboardButtonProps={{
                                                     'aria-label': 'change date',
                                                 }}
                                             />
-                                        </ThemeProvider>
-                                    </MuiPickersUtilsProvider>
-                                    <Typography className={classes.title} variant="body1" noWrap>
-                                        Дата завершения задатка:
-                                    </Typography>
-                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                        <KeyboardDatePicker
-                                            variant="inline"
-                                            format="MM/dd/yyyy"
-                                            margin="normal"
-                                            id="date-picker-b"
-                                            value={selectedDate}
-                                            onChange={handleDateChange}
-                                            KeyboardButtonProps={{
-                                                'aria-label': 'change date',
-                                            }}
-                                        />
+                                        </FormGroup>
                                     </MuiPickersUtilsProvider>
                                     <Typography className={classes.title} variant="body1" noWrap>
                                         Дата сделки:
                                     </Typography>
                                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                        <KeyboardDatePicker
-                                            variant="inline"
-                                            format="MM/dd/yyyy"
-                                            margin="normal"
-                                            id="date-picker-c"
-                                            value={selectedDate}
-                                            onChange={handleDateChange}
-                                            KeyboardButtonProps={{
-                                                'aria-label': 'change date',
-                                            }}
-                                        />
+                                        <FormGroup>
+                                            <KeyboardDatePicker
+                                                variant="inline"
+                                                format="yyyy-MM-dd"
+                                                margin="normal"
+                                                id="transaction_date"
+                                                vvalue={props.state.advances}
+                                                onChange={handleDateChange}
+                                                KeyboardButtonProps={{
+                                                    'aria-label': 'change date',
+                                                }}
+                                            />
+                                        </FormGroup>
                                     </MuiPickersUtilsProvider>
+                                    <Button color="default" className={classes.reset} onClick={onReset}>
+                                        Сбросить
+                                    </Button>
                                 </Grid>
                             </Grid>
 

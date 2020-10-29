@@ -22,29 +22,27 @@ deals.map(deal => arr.push({
     no: deal.iddeals,
     employees: [`${deal.advertisement.employeesid.name} ${deal.advertisement.employeesid.surname}`, `\n${deal.customer.employeesid.name} ${deal.customer.employeesid.surname}`],
     address: `${deal.advertisement.parameters.street} ${deal.advertisement.parameters.house_number}`,
-    price: `${deal.advertisement.parameters.cost} тг`,
+    price: `${deal.advertisement.parameters.cost}`,
     deal: [`${deal.advertisement.parameters.owner_card.name}`, `\n${deal.customer.name}`],
-    contacts: [`${deal.advertisement.parameters.owner_card.phone_number}`, `\n${deal.customer?.phone_number}`],
-    advanced: [`${deal.date_of_deposit}`, ` - ${deal.expiration_date_of_deposit}`],
+    contacts: [`${deal.advertisement.parameters.owner_card.phone_number !== "NULL" ? deal.advertisement.parameters.owner_card.phone_number : '-'}`, `\n${deal.customer.phone_number !== "NULL"  ? deal.customer.phone_number : '-'}`],
+    advances: [`${deal.date_of_deposit}`, ` / ${deal.expiration_date_of_deposit !== null ? deal.expiration_date_of_deposit : '-'}`],
     kickbacks: [`${deal.amount_of_deposit} тг`, `\n${deal.customer_commission} тг`],
-    deposit: deal.amount_of_deposit,
+    deposit: `${deal.amount_of_deposit}`,
     transaction: `${deal.type_of_deal}`,
     status: deal.status
 }));
 const columns = [
-    { id: 'no', label: 'NO', minWidth: 100 },
-    { id: 'employees', label: ' Специалисты', minWidth: 120 },
-    { id: 'address', label: ' Адрес', minWidth: 120 },
-    { id: 'price', label: ' Цена', minWidth: 100 },
-    { id: 'deal', label: 'Собственник/Покупатель', minWidth: 130 },
-    { id: 'contacts', label: ' Контакты', minWidth: 100 },
-    { id: 'advances', label: ' Дата задатка от/ Дата задатка до', minWidth: 120 },
-    { id: 'kickbacks', label: ' Комиссионные', minWidth: 100 },
-    { id: 'deposit', label: ' Сумма задатка', minWidth: 100 },
-    { id: 'transaction', label: ' Вид сделки', minWidth: 80 },
-    // { id: 'status', label: 'Статус' }
+    { id: 'no', label: 'NO', minWidth: 95 },
+    { id: 'employees', label: 'Специалисты', minWidth: 120 },
+    { id: 'address', label: 'Адрес', minWidth: 120 },
+    { id: 'price', label: 'Цена', minWidth: 85 },
+    { id: 'deal', label: 'Собственник/Покупатель', minWidth: 150 },
+    { id: 'contacts', label: 'Контакты', minWidth: 90 },
+    { id: 'advances', label: 'Дата задатка от/ Дата задатка до', minWidth: 160 },
+    { id: 'kickbacks', label: 'Комиссионные', minWidth: 100 },
+    { id: 'deposit', label: 'Сумма задатка', minWidth: 70 },
+    { id: 'transaction', label: 'Вид сделки', minWidth: 80 },
 ];
-
 const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
@@ -84,15 +82,29 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function StickyHeadTable() {
-    const [state, setState] = useState({
+export default function StickyHeadTable(value1, value2) {
+    const initialState = {
         name: '',
-        status: ''
-    });
+        status: '',
+        employees: '',
+        address: '',
+        price: '',
+        deal: '',
+        contacts: '',
+        advances: new Date('2017-06-23'),
+        kickbacks: '',
+        deposit: '',
+        transaction: ''
+    };
+    const [state, setState] = useState(initialState);
     const [deal, setDeals] = useState([]);
     useEffect(() => {
         setDeals(arr)
     }, []);
+    const onReset = () => {
+        setDeals(arr);
+        setState(initialState)
+    };
     const rows = [
         ...deal
     ];
@@ -141,7 +153,7 @@ export default function StickyHeadTable() {
         />
     );
 
-    const roows = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+    const data = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
         return (
             <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                 {columns.map((column, index) => {
@@ -161,18 +173,26 @@ export default function StickyHeadTable() {
                 })}
             </TableRow>
         );
-    })
+    });
 
-    const onApply = e => {
-        setDeals(deal.filter(d => d.status === state.status))
-    }
+
+    const onApply = () => {
+        setDeals(deal.filter(d => d.price === state.price || d.status === state.status || d.deposit === state.deposit))
+    };
+
+    const onDateChange = e => {
+        setState({
+            ...state,
+            advances: e
+        })
+    };
 
 
     return (
         <React.Fragment>
             <Container maxWidth="xl" style={{ marginTop: 30 }}>
                 <Grid>
-                    <Filter onSearch={handleSearch} state={state} onApply={onApply}/>
+                    <Filter onSearch={handleSearch} state={state} onApply={onApply} onDateChange={onDateChange} onReset={onReset}/>
                 </Grid>
             </Container>
             <Container maxWidth="xl">
@@ -195,7 +215,7 @@ export default function StickyHeadTable() {
 
                             <TableBody>
                                 {
-                                    roows
+                                    data
                                 }
                             </TableBody>
                         </Table>
