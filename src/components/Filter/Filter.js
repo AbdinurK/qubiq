@@ -8,7 +8,6 @@ import {
     Button,
     Select,
     MenuItem,
-    TextField,
     Grid,
     Fade,
     FormGroup
@@ -72,6 +71,8 @@ const useStyles = makeStyles(theme => ({
         },
     },
     reset: {
+        flexGrow: 1,
+        marginLeft: theme.spacing(2),
         backgroundColor: '#2A4C37',
         color: 'white',
         '&:hover': {
@@ -124,20 +125,32 @@ const Filter = (props) => {
     const handleChange = (event) => {
         props.onSearch(event)
     };
-    const handleDateChange = (date) => {
-        props.onDateChange(date)
+    const handleDepDateChange = (date) => {
+        props.onDepDateChange(date)
     };
+
+    const handleExpDateChange = (date) => {
+        props.onExpDateChange(date)
+    };
+
+    const handleDealDateChange = (date) => {
+        props.onDealDateChange(date)
+    };
+
     const handleClick = () => {
         setOpen(!open);
     };
 
     const handleApply = () => {
-        props.onApply()
+        props.onApply();
+        props.onUsed(true)
     };
 
     const onReset = () => {
-        props.onReset()
+        props.onReset();
+        props.onUsed(false)
     };
+
 
     return (
         <div className={classes.root}>
@@ -164,14 +177,14 @@ const Filter = (props) => {
                             />
                         </FormGroup>
                     </div>
-                    <Typography className={classes.title} variant="h6" noWrap>
+                    <Typography aria-label="status" className={classes.title} variant="h6" noWrap>
                         Статус:
                     </Typography>
                     <FormGroup>
                         <Select
                             className={classes.nativeInput}
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
+                            labelId="status"
+                            id="status"
                             name="status"
                             value={props.state.status}
                             onChange={handleChange}
@@ -183,11 +196,16 @@ const Filter = (props) => {
                             <MenuItem value="Ожидает">Ожидает</MenuItem>
                         </Select>
                     </FormGroup>
-                    <Button color="default" className={classes.btn} onClick={handleApply}>
+                    <Button color="default" disabled={props.apply} className={classes.btn} onClick={handleApply}>
                         Применить
                     </Button>
+                    <Button color="default" className={classes.reset} onClick={onReset}>
+                        Сбросить
+                    </Button>
                     <Button color="default" variant="outlined" className={classes.btn} onClick={handleClick}>
-                        Расширенный поиск
+                        <Typography variant="srOnly">
+                            Расширенный поиск
+                        </Typography>
                         {open ? <ExpandLess /> : <ExpandMore />}
                     </Button>
                 </Toolbar>
@@ -197,73 +215,22 @@ const Filter = (props) => {
 
                             <Grid direction={"row"} container>
                                 <Grid item direction={"row"} alignItems={"center"} justify={"space-between"} container>
-                                    <Typography className={classes.title} variant="body1" noWrap>
-                                        Предствитель собственника:
-                                    </Typography>
-                                    <FormGroup>
-                                        <TextField required id="employees1" value={props.state.employees} className={classes.input} name="employees" onChange={handleChange}/>
-                                    </FormGroup>
-                                    <Typography className={classes.title} variant="body1" noWrap>
-                                        Предствитель покупателя:
-                                    </Typography>
-                                    <FormGroup>
-                                        <TextField required id="employees2" value={props.state.employees} className={classes.input} name="employees" onChange={handleChange}/>
-                                    </FormGroup>
-                                    <Typography className={classes.title} variant="body1" noWrap>
-                                        Сегмент:
-                                    </Typography>
-                                    <FormGroup>
-                                        <TextField required id="address" value={props.state.address} className={classes.input} name="address" onChange={handleChange}/>
-                                    </FormGroup>
-                                </Grid>
-                                <Grid item direction={"row"} alignItems={"center"} justify={"space-between"} container>
-                                    <Typography className={classes.title} variant="body1" noWrap>
-                                        Контакт собственника:
-                                    </Typography>
-                                    <FormGroup>
-                                        <TextField required id="contact1" className={classes.input} name="contacts" onChange={handleChange}/>
-                                    </FormGroup>
-                                    <Typography className={classes.title} variant="body1" noWrap>
-                                        Контакт покупателя:
-                                    </Typography>
-                                    <FormGroup>
-                                        <TextField required id="contact2" className={classes.input} name="contacts" onChange={handleChange}/>
-                                    </FormGroup>
-                                    <Typography className={classes.title} variant="body1" noWrap>
+                                    <Typography aria-label="transaction" className={classes.title} variant="body1" noWrap>
                                         Оплата:
                                     </Typography>
                                     <FormGroup>
-                                        <TextField required id="transaction" name="price" className={classes.input} value={props.state.price} onChange={handleChange}/>
+                                        <Select
+                                            className={classes.nativeInput}
+                                            labelId="transaction"
+                                            id="payment"
+                                            name="payment"
+                                            value={props.state.payment}
+                                            onChange={handleChange}
+                                        >
+                                            <MenuItem value="Наличные">Наличные</MenuItem>
+                                            <MenuItem value="Ипотека">Ипотека</MenuItem>
+                                        </Select>
                                     </FormGroup>
-                                </Grid>
-                                <Grid item direction={"row"} alignItems={"center"} justify={"space-between"} container>
-                                    <Typography className={classes.title} variant="body1" noWrap>
-                                        Имя собственника:
-                                    </Typography>
-                                    <FormGroup>
-                                        <TextField required id="deal1" className={classes.input} name="deal" onChange={handleChange}/>
-                                    </FormGroup>
-                                    <Typography className={classes.title} variant="body1" noWrap>
-                                        Имя покупателя:
-                                    </Typography>
-                                    <FormGroup>
-                                        <TextField required id="deal2" className={classes.input} name="deal" onChange={handleChange}/>
-                                    </FormGroup>
-                                    <Typography className={classes.title} variant="body1" noWrap>
-                                        Цена объекта:
-                                    </Typography>
-                                    <FormGroup>
-                                        <TextField required id="price" name="price" className={classes.input} onChange={handleChange}/>
-                                    </FormGroup>
-                                    <Typography className={classes.title} variant="body1" noWrap>
-                                        Сумма задатка:
-                                    </Typography>
-                                    <FormGroup>
-                                        <TextField required id="deposit" value={props.state.deposit} name="deposit" className={classes.input} onChange={handleChange}/>
-                                    </FormGroup>
-                                </Grid>
-
-                                <Grid item direction={"row"} alignItems={"center"} justify={"space-between"} container>
                                     <Typography className={classes.title} variant="body1" noWrap>
                                         Дата задатка от:
                                     </Typography>
@@ -274,10 +241,10 @@ const Filter = (props) => {
                                                     variant="inline"
                                                     format="yyyy-MM-dd"
                                                     margin="normal"
-                                                    name="advances1"
-                                                    id="advances1"
-                                                    value={props.state.advances}
-                                                    onChange={handleDateChange}
+                                                    name="dep_date"
+                                                    id="dep_date"
+                                                    value={props.state.dep_date}
+                                                    onChange={handleDepDateChange}
                                                     KeyboardButtonProps={{
                                                         'aria-label': 'change date',
                                                     }}
@@ -295,9 +262,9 @@ const Filter = (props) => {
                                                 format="yyyy-MM-dd"
                                                 margin="normal"
                                                 name="advances2"
-                                                id="date-picker-b"
-                                                value={props.state.advances}
-                                                onChange={handleDateChange}
+                                                id="advances-b"
+                                                value={props.state.exp_date}
+                                                onChange={handleExpDateChange}
                                                 KeyboardButtonProps={{
                                                     'aria-label': 'change date',
                                                 }}
@@ -313,18 +280,15 @@ const Filter = (props) => {
                                                 variant="inline"
                                                 format="yyyy-MM-dd"
                                                 margin="normal"
-                                                id="transaction_date"
-                                                vvalue={props.state.advances}
-                                                onChange={handleDateChange}
+                                                id="transaction"
+                                                value={props.state.transaction}
+                                                onChange={handleDealDateChange}
                                                 KeyboardButtonProps={{
                                                     'aria-label': 'change date',
                                                 }}
                                             />
                                         </FormGroup>
                                     </MuiPickersUtilsProvider>
-                                    <Button color="default" className={classes.reset} onClick={onReset}>
-                                        Сбросить
-                                    </Button>
                                 </Grid>
                             </Grid>
 
