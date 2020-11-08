@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import { fade, makeStyles } from '@material-ui/core/styles'
+import { Link } from 'react-router-dom'
 import {
     Container,
     Paper,
@@ -12,10 +13,12 @@ import {
     TableRow,
     Chip,
     Grid,
+    Button
 } from "@material-ui/core"
 import { deals } from '../../data/deals'
 import Filter from "../../components/Filter/Filter";
 import moment from 'moment';
+import { CsvBuilder } from 'filefy';
 
 
 const arr = [];
@@ -142,13 +145,15 @@ export default function StickyHeadTable() {
                 return 'black'
         }
     };
-    const status = (status) => {
+    const status = (status, id) => {
         return (
-            <Chip
-                label={status}
-                size="small"
-                style={{ backgroundColor: colors(status), color: 'white', marginLeft: '8px' }}
-            />
+            <Link to={`/deals/${id}`} style={{ textDecoration: 'none'}}>
+                <Chip
+                    label={status}
+                    size="small"
+                    style={{ backgroundColor: colors(status), color: 'white', marginLeft: '8px', cursor: 'pointer' }}
+                />
+            </Link>
         )
     };
 
@@ -163,7 +168,7 @@ export default function StickyHeadTable() {
                             <TableCell align={column.align}>
                                 {(value && value !== 'null') ? value : '-'}
                                 { column.id === 'no'
-                                    ? status(row.status) : null
+                                    ? status(row.status, row.no) : null
                                 }
                             </TableCell>
                         </React.Fragment>
@@ -213,6 +218,17 @@ export default function StickyHeadTable() {
         setUsed(state)
     };
 
+    const handleExport = () => {
+        new CsvBuilder("user_list.csv")
+            .setColumns(["name", "surname"])
+            .addRow(["Eve", "Holt"])
+            .addRows([
+                ["Charles", "Morris"],
+                ["Tracey", "Ramos"]
+            ])
+            .exportFile();
+    };
+
     return (
         <React.Fragment>
             <Container maxWidth="xl" style={{ marginTop: 30 }}>
@@ -229,6 +245,11 @@ export default function StickyHeadTable() {
                         onUsed={onUsed}
                     />
                 </Grid>
+            </Container>
+            <Container maxWidth="xl">
+                <Button onClick={handleExport} variant="contained" color="primary" style={{ marginTop: '30px' }}>
+                    Export
+                </Button>
             </Container>
             <Container maxWidth="xl">
                 <Paper className={classes.root}>
