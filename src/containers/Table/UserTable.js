@@ -80,6 +80,7 @@ const useStyles = makeStyles(theme => ({
 const cellStyles = makeStyles(theme => ({
     root: {
         '& .MuiDataGrid-colCell': {
+            overflow: 'inherit',
         },
         '& .MuiDataGrid-row > .MuiDataGrid-cell': {
             minHeight: '100px !important',
