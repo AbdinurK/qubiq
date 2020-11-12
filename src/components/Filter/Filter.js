@@ -70,16 +70,6 @@ const useStyles = makeStyles(theme => ({
             color: 'black'
         },
     },
-    reset: {
-        flexGrow: 1,
-        marginLeft: theme.spacing(2),
-        backgroundColor: '#2A4C37',
-        color: 'white',
-        '&:hover': {
-            backgroundColor: '#fff',
-            color: 'black'
-        },
-    },
     searchIcon: {
         padding: theme.spacing(0, 2),
         height: '100%',
@@ -199,8 +189,11 @@ const Filter = (props) => {
                     <Button color="default" disabled={props.apply} className={classes.btn} onClick={handleApply}>
                         Применить
                     </Button>
-                    <Button color="default" className={classes.reset} onClick={onReset}>
+                    <Button color="default" className={classes.btn} onClick={onReset}>
                         Сбросить
+                    </Button>
+                    <Button onClick={props.handleExport} className={classes.btn} variant="contained" color="primary">
+                        Экспорт
                     </Button>
                     <Button color="default" variant="outlined" className={classes.btn} onClick={handleClick}>
                         <Typography variant="srOnly">

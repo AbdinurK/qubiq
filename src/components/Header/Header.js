@@ -16,7 +16,8 @@ import logo from './logo.png'
 const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
-      flexGrow: 1,
+        flexGrow: 1,
+        maxHeight: 70,
     },
     header: {
         backgroundColor: '#F8F9FA'
@@ -24,7 +25,8 @@ const useStyles = makeStyles((theme) =>
     innerHeader: {
         display: 'flex',
         justifyContent: 'space-between',
-        padding: 0
+        padding: 0,
+        width: '100%'
     },
     menuButton: {
       padding: '5px',
@@ -37,7 +39,8 @@ const useStyles = makeStyles((theme) =>
         color: '#000000',
         display: 'flex',
         justifyContent: 'space-between',
-        flex: 1.5
+        flex: 1.5,
+        fontSize: '0.8rem'
     },
     menuItem: {
         fontSize: '0.8rem',
@@ -61,7 +64,7 @@ const Header = props => {
         <div className={classes.root}>
             <AppBar position="static" className={classes.header}>
                 <Container maxWidth="xl">
-                    <Grid>
+                    <Grid container>
                         <Toolbar className={classes.innerHeader}>
                             <IconButton disableFocusRipple edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                                 <img src={logo} className={classes.logo} alt="logo"/>

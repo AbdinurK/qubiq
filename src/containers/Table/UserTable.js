@@ -1,24 +1,18 @@
 import React, {useEffect, useState} from 'react'
 import { fade, makeStyles } from '@material-ui/core/styles'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import {
     Container,
-    Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TablePagination,
-    TableRow,
-    Chip,
+    // Chip,
     Grid,
-    Button
+    // Button
 } from "@material-ui/core"
 import { deals } from '../../data/deals'
 import Filter from "../../components/Filter/Filter";
 import moment from 'moment';
 import { CsvBuilder } from 'filefy';
+import {DataGrid} from "@material-ui/data-grid";
+import {randomCreatedDate} from "@material-ui/x-grid-data-generator";
 
 
 const arr = [];
@@ -44,6 +38,14 @@ const useStyles = makeStyles(theme => ({
     },
     container: {
         maxHeight: 800,
+    },
+    header: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        wordWrap: 'break-word',
+        whiteSpace: 'initial',
+        height: '100%',
+        maxHeight: '110px',
     },
     search: {
         position: 'relative',
@@ -95,32 +97,112 @@ export default function StickyHeadTable() {
         setDeals(arr);
         setState(initialState)
     };
-    const columns = [
-        { id: 'no', label: 'NO', minWidth: 100 },
-        { id: 'employees', label: 'Специалисты', minWidth: 120 },
-        { id: 'address', label: 'Адрес', minWidth: 120 },
-        { id: 'price', label: 'Цена', minWidth: 85 },
-        { id: 'deal', label: 'Собственник/Покупатель', minWidth: 150 },
-        { id: 'contacts', label: 'Контакты', minWidth: 90 },
-        { id: 'advances', label: 'Дата задатка от/ Дата задатка до', minWidth: 160 },
-        { id: 'kickbacks', label: 'Комиссионные', minWidth: 100 },
-        { id: 'deposit', label: 'Сумма задатка', minWidth: 70 },
-        { id: 'payment', label: 'Тип оплаты', minWidth: 80 },
-    ];
-    const rows = [
-        ...deal
-    ];
     const classes = useStyles();
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const columns = [
+        { field: 'id', width: 80, headerName: 'Номер',
+            renderCell: (params) => (
+                <React.Fragment>
+                    { params.getValue('id') }
+                </React.Fragment>
+            ),
+        },
+        { field: 'employees', width: 300, headerName: 'Специалисты', headerAlign: 'center',
+            valueGetter: (params) =>
+                `${params.getValue('employee1') || ''} ${
+                    params.getValue('employee2') || ''
+                }`,
+        },
+        { field: 'deal_date', type: 'date', width: 120, headerName: 'Дата сделки'},
+        { field: 'start_commission_date', type: 'date', width: 145, headerName: 'Дата задатка от'},
+        { field: 'end_commission_date', type: 'date', width: 145, headerName: 'Дата задатка до'},
+        { field: 'price', headerName: 'Цена', width: 100 },
+        { field: 'address', headerName: 'Адрес'},
+        { field: 'contract', headerName: 'Собственик / Покупатель', width: 330,
+            valueGetter: (params) =>
+                `${params.getValue('owner') || ''} - ${
+                    params.getValue('customer') || ''
+                }`,
+            headerAlign: 'center',
+            headerClassName: classes.header
+        },
+        { field: 'commission', headerName: 'Сумма задатка', width: 140 },
+        { field: 'moneys', headerName: 'Комиссионные собственника', width: 120,
+            valueGetter: (params) =>
+                `${params.getValue('owner_money') || ''} - ${
+                    params.getValue('customer_money') || ''
+                }`,
+            headerClassName: classes.header
+        },
+        { field: 'contacts', headerName: 'Контакты собственника', width: 200,
+            valueGetter: (params) =>
+                `${params.getValue('owner_phone') || ''} - ${
+                    params.getValue('customer_phone') || ''
+                }`,
+        },
+        { field: 'deal_type', headerName: 'Тип сделки', width: 110},
+        { field: 'payment', headerName: 'Тип оплаты', width: 120}
+    ];
 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
+    const rows = [
+        {
+            id: 544,
+            employee1: 'Гульшат Шакенова',
+            employee2: 'Гульшат Шакенова',
+            deal_date: randomCreatedDate().toLocaleDateString(),
+            start_commission_date: randomCreatedDate().toLocaleDateString(),
+            end_commission_date: randomCreatedDate().toLocaleDateString(),
+            address: '212132',
+            price: '250000',
+            owner: 'Бериккали Брекешев',
+            customer: 'Бериккали Брекешев',
+            commission: '300000',
+            owner_money: '200000',
+            customer_money: '2430000',
+            owner_phone: '87007002161',
+            customer_phone: '87007002161',
+            deal_type: 'Сделка',
+            payment: 'Наличные'
+        },
+        {
+            id: 545,
+            employee1: 'Гульшат Шакенова',
+            employee2: 'Гульшат Шакенова',
+            deal_date: randomCreatedDate().toLocaleDateString(),
+            start_commission_date: randomCreatedDate().toLocaleDateString(),
+            end_commission_date: randomCreatedDate().toLocaleDateString(),
+            address: '212132',
+            price: '250000',
+            owner: 'Бериккали Брекешев',
+            customer: 'Бериккали Брекешев',
+            commission: '300000',
+            owner_money: '200000',
+            customer_money: '2430000',
+            owner_phone: '87007002161',
+            customer_phone: '87007002161',
+            deal_type: 'Сделка',
+            payment: 'Наличные'
+        },
+        {
+            id: 546,
+            employee1: 'Гульшат Шакенова',
+            employee2: 'Гульшат Шакенова',
+            deal_date: randomCreatedDate().toLocaleDateString(),
+            start_commission_date: randomCreatedDate().toLocaleDateString(),
+            end_commission_date: randomCreatedDate().toLocaleDateString(),
+            address: '212132',
+            price: '250000',
+            owner: 'Бериккали Брекешев',
+            customer: 'Бериккали Брекешев',
+            commission: '300000',
+            owner_money: '200000',
+            customer_money: '2430000',
+            owner_phone: '87007002161',
+            customer_phone: '87007002161',
+            deal_type: 'Сделка',
+            payment: 'Наличные'
+        },
+    ];
+
 
     const handleSearch = (e) => {
         setState({
@@ -128,56 +210,35 @@ export default function StickyHeadTable() {
             [e.target.name]: e.target.value
         });
     };
+    //
+    // const colors = status => {
+    //     switch (status) {
+    //         case 'Срыв':
+    //             return 'red';
+    //         case 'Сделка':
+    //             return 'green';
+    //         case 'Заявка':
+    //             return 'lightgreen';
+    //         case 'Задаток':
+    //             return 'yellow';
+    //         case 'Ожидает':
+    //             return 'grey';
+    //         default:
+    //             return 'black'
+    //     }
+    // };
+    // const status = (status, id) => {
+    //     return (
+    //         <Link to={`/deals/${id}`} style={{ textDecoration: 'none'}}>
+    //             <Chip
+    //                 label={status}
+    //                 size="small"
+    //                 style={{ backgroundColor: colors(status), color: 'white', marginLeft: '8px', cursor: 'pointer' }}
+    //             />
+    //         </Link>
+    //     )
+    // };
 
-    const colors = status => {
-        switch (status) {
-            case 'Срыв':
-                return 'red';
-            case 'Сделка':
-                return 'green';
-            case 'Заявка':
-                return 'lightgreen';
-            case 'Задаток':
-                return 'yellow';
-            case 'Ожидает':
-                return 'grey';
-            default:
-                return 'black'
-        }
-    };
-    const status = (status, id) => {
-        return (
-            <Link to={`/deals/${id}`} style={{ textDecoration: 'none'}}>
-                <Chip
-                    label={status}
-                    size="small"
-                    style={{ backgroundColor: colors(status), color: 'white', marginLeft: '8px', cursor: 'pointer' }}
-                />
-            </Link>
-        )
-    };
-
-    const data = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-        return (
-            <TableRow hover role="checkbox" tabIndex={-1} key={index}>
-                {columns.map((column, index) => {
-                    const value = row[column.id];
-
-                    return (
-                        <React.Fragment key={index}>
-                            <TableCell align={column.align}>
-                                {(value && value !== 'null') ? value : '-'}
-                                { column.id === 'no'
-                                    ? status(row.status, row.no) : null
-                                }
-                            </TableCell>
-                        </React.Fragment>
-
-                    );
-                })}
-            </TableRow>
-        );
-    });
 
 
     const onApply = () => {
@@ -219,13 +280,11 @@ export default function StickyHeadTable() {
     };
 
     const handleExport = () => {
-        new CsvBuilder("user_list.csv")
-            .setColumns(["name", "surname"])
-            .addRow(["Eve", "Holt"])
-            .addRows([
-                ["Charles", "Morris"],
-                ["Tracey", "Ramos"]
-            ])
+        new CsvBuilder("users.csv")
+            .setColumns(['Номер', 'Специалист', 'Специалист покупателя', 'Дата сделки', 'Дата задатка от', 'Дата задатка до',
+                'Адрес', 'Цена', 'Собственик', 'Покупатель', 'Сумма задатка', 'Комиссионные собственника', 'Комиссионные покупателя',
+                'Контакты собственника', 'Контакты покупателя', 'Тип сделки', 'Тип оплаты'])
+            .addRows(rows.map(row => Object.values(row)))
             .exportFile();
     };
 
@@ -243,51 +302,17 @@ export default function StickyHeadTable() {
                         onReset={onReset}
                         apply={use}
                         onUsed={onUsed}
+                        handleExport={handleExport}
                     />
                 </Grid>
             </Container>
-            <Container maxWidth="xl">
-                <Button onClick={handleExport} variant="contained" color="primary" style={{ marginTop: '30px' }}>
-                    Export
-                </Button>
-            </Container>
-            <Container maxWidth="xl">
-                <Paper className={classes.root}>
-                    <TableContainer className={classes.container}>
-                        <Table stickyHeader aria-label="sticky table">
-                            <TableHead>
-                                <TableRow>
-                                    {columns.map((column) => (
-                                        <TableCell
-                                            key={column.id}
-                                            align={column.align}
-                                            style={{ minWidth: column.minWidth }}
-                                        >
-                                            {column.label}
-                                        </TableCell>
-                                    ))}
-                                </TableRow>
-                            </TableHead>
-
-                            <TableBody>
-                                {
-                                    data
-                                }
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-
-                    <TablePagination
-                        rowsPerPageOptions={[10, 25, 100]}
-                        component="div"
-                        count={rows.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onChangePage={handleChangePage}
-                        onChangeRowsPerPage={handleChangeRowsPerPage}
-                    />
-                </Paper>
-            </Container>
+            <div style={{ height: 500, width: 1400, margin: '0 auto' }}>
+                <div style={{ display: 'flex', height: '100%' }}>
+                    <div style={{ flexGrow: 1 }}>
+                        <DataGrid rows={rows} columns={columns} />
+                    </div>
+                </div>
+            </div>
         </React.Fragment>
     );
 }
