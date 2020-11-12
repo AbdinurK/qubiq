@@ -1,11 +1,8 @@
 import React, {useEffect, useState} from 'react'
 import { fade, makeStyles } from '@material-ui/core/styles'
-// import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import {
     Container,
-    // Chip,
-    Grid,
-    // Button
 } from "@material-ui/core"
 import { deals } from '../../data/deals'
 import Filter from "../../components/Filter/Filter";
@@ -34,7 +31,10 @@ deals.map(deal => arr.push({
 const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
-        marginTop: '30px'
+        marginTop: '30px',
+        '& MuiDataGrid-colCell': {
+            minHeight: 110,
+        },
     },
     container: {
         maxHeight: 800,
@@ -45,7 +45,7 @@ const useStyles = makeStyles(theme => ({
         wordWrap: 'break-word',
         whiteSpace: 'initial',
         height: '100%',
-        maxHeight: '110px',
+
     },
     search: {
         position: 'relative',
@@ -77,7 +77,33 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.text.secondary,
     },
 }));
-
+const cellStyles = makeStyles(theme => ({
+    root: {
+        '& .MuiDataGrid-colCell': {
+        },
+        '& .MuiDataGrid-row > .MuiDataGrid-cell': {
+            minHeight: '100px !important',
+            overflow: 'inherit',
+            alignItems: 'center',
+            lineHeight: '50px!important',
+            whiteSpace: 'pre-wrap',
+            height: '100%',
+            wordWrap: 'break-word',
+            textAlign: 'center'
+        },
+        '& .MuiDataGrid-colCellTitle': {
+            textOverflow: 'ellipsis',
+            overflowWrap: 'break-word',
+            display: '-webkit-box',
+            '-webkit-line-clamp': 4,
+            '-webkit-box-orient': 'vertical',
+            hyphens: 'auto'
+        },
+        '& .MuiDataGrid-row': {
+            minHeight: '100px !important',
+        }
+    },
+}));
 export default function StickyHeadTable() {
     const initialState = {
         name: '',
@@ -90,6 +116,22 @@ export default function StickyHeadTable() {
     const [state, setState] = useState(initialState);
     const [use, setUsed] = useState(false);
     const [deal, setDeals] = useState([]);
+    // const colors = status => {
+    //     switch (status) {
+    //         case 'Срыв':
+    //             return 'red';
+    //         case 'Сделка':
+    //             return 'green';
+    //         case 'Заявка':
+    //             return 'lightgreen';
+    //         case 'Задаток':
+    //             return 'yellow';
+    //         case 'Ожидает':
+    //             return 'grey';
+    //         default:
+    //             return 'black'
+    //     }
+    // };
     useEffect(() => {
         setDeals(arr)
     }, []);
@@ -98,15 +140,19 @@ export default function StickyHeadTable() {
         setState(initialState)
     };
     const classes = useStyles();
+    const cell = cellStyles();
+
     const columns = [
         { field: 'id', width: 80, headerName: 'Номер',
             renderCell: (params) => (
                 <React.Fragment>
-                    { params.getValue('id') }
+                    <Link to={`/deals/:id`}>
+                        { params.getValue('id') }
+                    </Link>
                 </React.Fragment>
             ),
         },
-        { field: 'employees', width: 300, headerName: 'Специалисты', headerAlign: 'center',
+        { field: 'employees', width: 170, headerName: 'Специалисты', headerAlign: 'center',
             valueGetter: (params) =>
                 `${params.getValue('employee1') || ''} ${
                     params.getValue('employee2') || ''
@@ -115,34 +161,31 @@ export default function StickyHeadTable() {
         { field: 'deal_date', type: 'date', width: 120, headerName: 'Дата сделки'},
         { field: 'start_commission_date', type: 'date', width: 145, headerName: 'Дата задатка от'},
         { field: 'end_commission_date', type: 'date', width: 145, headerName: 'Дата задатка до'},
-        { field: 'price', headerName: 'Цена', width: 100 },
-        { field: 'address', headerName: 'Адрес'},
-        { field: 'contract', headerName: 'Собственик / Покупатель', width: 330,
+        { field: 'price', headerName: 'Цена', width: 90, headerAlign: 'center', },
+        { field: 'address', headerName: 'Адрес', headerAlign: 'center'},
+        { field: 'contract', headerName: 'Собственик/Покупатель', width: 200,
             valueGetter: (params) =>
-                `${params.getValue('owner') || ''} - ${
+                `${params.getValue('owner') || ''} ${
                     params.getValue('customer') || ''
                 }`,
             headerAlign: 'center',
             headerClassName: classes.header
         },
-        { field: 'commission', headerName: 'Сумма задатка', width: 140 },
-        { field: 'moneys', headerName: 'Комиссионные собственника', width: 120,
+        { field: 'commission', headerName: 'Задаток', width: 100 },
+        { field: 'moneys', headerName: 'Комиссионные', width: 100,
             valueGetter: (params) =>
-                `${params.getValue('owner_money') || ''} - ${
+                `${params.getValue('owner_money') || ''} ${
                     params.getValue('customer_money') || ''
                 }`,
-            headerClassName: classes.header
+            cellClassName: classes.header,
         },
-        { field: 'contacts', headerName: 'Контакты собственника', width: 200,
+        { field: 'contacts', headerName: 'Контакты', width: 140,
             valueGetter: (params) =>
-                `${params.getValue('owner_phone') || ''} - ${
+                `${params.getValue('owner_phone') || ''} ${
                     params.getValue('customer_phone') || ''
                 }`,
         },
-        { field: 'deal_type', headerName: 'Тип сделки', width: 110},
-        { field: 'payment', headerName: 'Тип оплаты', width: 120}
     ];
-
     const rows = [
         {
             id: 544,
@@ -179,7 +222,7 @@ export default function StickyHeadTable() {
             customer_money: '2430000',
             owner_phone: '87007002161',
             customer_phone: '87007002161',
-            deal_type: 'Сделка',
+            deal_type: 'Срыв',
             payment: 'Наличные'
         },
         {
@@ -198,7 +241,7 @@ export default function StickyHeadTable() {
             customer_money: '2430000',
             owner_phone: '87007002161',
             customer_phone: '87007002161',
-            deal_type: 'Сделка',
+            deal_type: 'Задаток',
             payment: 'Наличные'
         },
     ];
@@ -210,23 +253,7 @@ export default function StickyHeadTable() {
             [e.target.name]: e.target.value
         });
     };
-    //
-    // const colors = status => {
-    //     switch (status) {
-    //         case 'Срыв':
-    //             return 'red';
-    //         case 'Сделка':
-    //             return 'green';
-    //         case 'Заявка':
-    //             return 'lightgreen';
-    //         case 'Задаток':
-    //             return 'yellow';
-    //         case 'Ожидает':
-    //             return 'grey';
-    //         default:
-    //             return 'black'
-    //     }
-    // };
+
     // const status = (status, id) => {
     //     return (
     //         <Link to={`/deals/${id}`} style={{ textDecoration: 'none'}}>
@@ -314,7 +341,11 @@ export default function StickyHeadTable() {
                 <div style={{ height: 500, minWidth: 1400, margin: '0 auto', flexGrow: 1 }}>
                     <div style={{ display: 'flex', height: '100%' }}>
                         <div style={{ flexGrow: 1 }}>
-                            <DataGrid rows={rows} columns={columns} />
+                            <DataGrid
+                                className={cell.root}
+                                rows={rows}
+                                columns={columns}
+                            />
                         </div>
                     </div>
                 </div>
