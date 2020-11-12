@@ -69,6 +69,7 @@ const useStyles = makeStyles(theme => ({
             backgroundColor: '#fff',
             color: 'black'
         },
+        fontSize: '0.6rem'
     },
     searchIcon: {
         padding: theme.spacing(0, 2),

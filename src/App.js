@@ -7,7 +7,7 @@ import { Switch, Route } from "react-router-dom"
 
 function App() {
   return (
-    <div style={{ minWidth: 1440, display: 'flex', flexDirection: 'column' }}>
+    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
       <Header/>
       <Switch>
           <Route exact path={"/"} component={UserCard}/>

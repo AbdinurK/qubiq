@@ -291,28 +291,34 @@ export default function StickyHeadTable() {
     return (
         <React.Fragment>
             <Container maxWidth="xl" style={{ marginTop: 30 }}>
-                <Grid>
-                    <Filter
-                        onSearch={handleSearch}
-                        state={state}
-                        onApply={onApply}
-                        onDepDateChange={onDepDateChange}
-                        onExpDateChange={onExpDateChange}
-                        onDealDateChange={onDealDateChange}
-                        onReset={onReset}
-                        apply={use}
-                        onUsed={onUsed}
-                        handleExport={handleExport}
-                    />
-                </Grid>
-            </Container>
-            <div style={{ height: 500, width: 1400, margin: '0 auto' }}>
-                <div style={{ display: 'flex', height: '100%' }}>
-                    <div style={{ flexGrow: 1 }}>
-                        <DataGrid rows={rows} columns={columns} />
+                <div style={{ height: 100, minWidth: 1400, margin: '0 auto', flexGrow: 1 }}>
+                    <div style={{ display: 'flex', height: '100%' }}>
+                        <div style={{ flexGrow: 1 }}>
+                            <Filter
+                                onSearch={handleSearch}
+                                state={state}
+                                onApply={onApply}
+                                onDepDateChange={onDepDateChange}
+                                onExpDateChange={onExpDateChange}
+                                onDealDateChange={onDealDateChange}
+                                onReset={onReset}
+                                apply={use}
+                                onUsed={onUsed}
+                                handleExport={handleExport}
+                            />
+                        </div>
                     </div>
                 </div>
-            </div>
+            </Container>
+            <Container maxWidth="xl" style={{ marginTop: 30 }}>
+                <div style={{ height: 500, minWidth: 1400, margin: '0 auto', flexGrow: 1 }}>
+                    <div style={{ display: 'flex', height: '100%' }}>
+                        <div style={{ flexGrow: 1 }}>
+                            <DataGrid rows={rows} columns={columns} />
+                        </div>
+                    </div>
+                </div>
+            </Container>
         </React.Fragment>
     );
 }
