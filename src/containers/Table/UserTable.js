@@ -6,28 +6,50 @@ import {
 } from "@material-ui/core"
 import { deals } from '../../data/deals'
 import Filter from "../../components/Filter/Filter";
-import moment from 'moment';
 import { CsvBuilder } from 'filefy';
-import {DataGrid} from "@material-ui/data-grid";
-import {randomCreatedDate} from "@material-ui/x-grid-data-generator";
+import { DataGrid } from "@material-ui/data-grid";
 
 
 const arr = [];
+const exp = [];
 deals.map(deal => arr.push({
-    no: deal.iddeals,
-    employees: [`${deal.advertisement.employeesid.name} ${deal.advertisement.employeesid.surname}`, `\n${deal.customer.employeesid.name} ${deal.customer.employeesid.surname}`],
+    id: deal.iddeals,
+    employee1: `${deal.advertisement.employeesid.name} ${deal.advertisement.employeesid.surname}`,
+    employee2: `${deal.customer.employeesid.name} ${deal.customer.employeesid.surname}`,
+    deal_date: new Date(deal.transaction_date),
+    start_commission_date: new Date(deal.date_of_deposit),
+    end_commission_date: new Date(deal.expiration_date_of_deposit),
     address: `${deal.advertisement.parameters.street} ${deal.advertisement.parameters.house_number}`,
     price: `${deal.advertisement.parameters.cost}`,
-    deal: [`${deal.advertisement.parameters.owner_card.name}`, `\n${deal.customer.name}`],
-    contacts: [`${deal.advertisement.parameters.owner_card.phone_number !== "NULL" ? deal.advertisement.parameters.owner_card.phone_number : '-'}`, `\n${deal.customer.phone_number !== "NULL"  ? deal.customer.phone_number : '-'}`],
-    advances: [`${new Date(deal.date_of_deposit).toLocaleDateString()}`, `${deal.expiration_date_of_deposit !== null ? new Date(deal.expiration_date_of_deposit).toLocaleDateString() : '-'}`],
-    kickbacks: [`${deal.amount_of_deposit} тг`, `\n${deal.customer_commission} тг`],
-    deposit: `${deal.amount_of_deposit}`,
-    payment: `${deal.customer.payment_type}`,
-    status: deal.status,
-    transaction: deal.transaction_date
+    owner: deal.advertisement.parameters.owner_card.name,
+    customer: `${deal?.customer?.name} ${ deal.customer.surname ? deal.customer.surname : 'отсутствует'  }`,
+    commission: deal.amount_of_deposit,
+    owner_money: deal.amount_of_deposit,
+    customer_money: deal.customer_commission,
+    owner_phone: deal.advertisement.parameters.owner_card.phone_number,
+    customer_phone: deal.customer.phone_number !== "NULL" ? deal.customer.phone_number : 'отсутствует' ,
+    deal_type: deal.status,
+    payment: deal.customer.payment_type
 }));
-
+deals.map(deal => exp.push({
+    id: deal.iddeals,
+    employee1: `${deal.advertisement.employeesid.name} ${deal.advertisement.employeesid.surname}`,
+    employee2: `${deal.customer.employeesid.name} ${deal.customer.employeesid.surname}`,
+    deal_date: new Date(deal.transaction_date).toLocaleDateString(),
+    start_commission_date: new Date(deal.date_of_deposit).toLocaleDateString(),
+    end_commission_date: new Date(deal.expiration_date_of_deposit).toLocaleDateString(),
+    address: `${deal.advertisement.parameters.street} ${deal.advertisement.parameters.house_number}`,
+    price: `${deal.advertisement.parameters.cost}`,
+    owner: deal.advertisement.parameters.owner_card.name,
+    customer: `${deal?.customer?.name} ${ deal.customer.surname ? deal.customer.surname : 'отсутствует'  }`,
+    commission: deal.amount_of_deposit,
+    owner_money: deal.amount_of_deposit,
+    customer_money: deal.customer_commission,
+    owner_phone: deal.advertisement.parameters.owner_card.phone_number,
+    customer_phone: deal.customer.phone_number !== "NULL" ? deal.customer.phone_number : 'отсутствует' ,
+    deal_type: deal.status,
+    payment: deal.customer.payment_type
+}));
 const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
@@ -41,10 +63,9 @@ const useStyles = makeStyles(theme => ({
     },
     header: {
         display: 'flex',
-        flexWrap: 'wrap',
-        wordWrap: 'break-word',
-        whiteSpace: 'initial',
+        flexDirection: 'row',
         height: '100%',
+        textDecoration: 'none',
 
     },
     search: {
@@ -82,14 +103,23 @@ const cellStyles = makeStyles(theme => ({
         '& .MuiDataGrid-colCell': {
         },
         '& .MuiDataGrid-row > .MuiDataGrid-cell': {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'row',
             minHeight: '100px !important',
             overflow: 'inherit',
-            alignItems: 'center',
-            lineHeight: '50px!important',
+            lineHeight: '30px!important',
             whiteSpace: 'pre-wrap',
             height: '100%',
             wordWrap: 'break-word',
-            textAlign: 'center'
+            textAlign: 'center',
+            position: 'relative'
+        },
+        '& .MuiDataGrid-row > .MuiDataGrid-cell > p': {
+            display: 'inline-block',
+            textAlign: 'center',
+            margin: 'auto',
         },
         '& .MuiDataGrid-colCellTitle': {
             textOverflow: 'ellipsis',
@@ -104,6 +134,8 @@ const cellStyles = makeStyles(theme => ({
         }
     },
 }));
+
+
 export default function StickyHeadTable() {
     const initialState = {
         name: '',
@@ -116,22 +148,6 @@ export default function StickyHeadTable() {
     const [state, setState] = useState(initialState);
     const [use, setUsed] = useState(false);
     const [deal, setDeals] = useState([]);
-    // const colors = status => {
-    //     switch (status) {
-    //         case 'Срыв':
-    //             return 'red';
-    //         case 'Сделка':
-    //             return 'green';
-    //         case 'Заявка':
-    //             return 'lightgreen';
-    //         case 'Задаток':
-    //             return 'yellow';
-    //         case 'Ожидает':
-    //             return 'grey';
-    //         default:
-    //             return 'black'
-    //     }
-    // };
     useEffect(() => {
         setDeals(arr)
     }, []);
@@ -146,23 +162,35 @@ export default function StickyHeadTable() {
         { field: 'id', width: 80, headerName: 'Номер',
             renderCell: (params) => (
                 <React.Fragment>
-                    <Link to={`/deals/:id`}>
+                    <Link to={`/deals/${params.getValue('id')}`}>
                         { params.getValue('id') }
                     </Link>
                 </React.Fragment>
             ),
+            cellClassName: classes.header,
         },
-        { field: 'employees', width: 170, headerName: 'Специалисты', headerAlign: 'center',
+        { field: 'employees', width: 200, headerName: 'Специалисты', headerAlign: 'center',
             valueGetter: (params) =>
                 `${params.getValue('employee1') || ''} ${
                     params.getValue('employee2') || ''
                 }`,
+            renderCell: (params) => (
+                <div style={{ }}>
+                    <p>
+                        { params.getValue('employee1') }
+                    </p>
+                    <p>
+                        { params.getValue('employee2') }
+                    </p>
+                </div>
+            ),
+            headerClassName: classes.header
         },
         { field: 'deal_date', type: 'date', width: 120, headerName: 'Дата сделки'},
         { field: 'start_commission_date', type: 'date', width: 145, headerName: 'Дата задатка от'},
         { field: 'end_commission_date', type: 'date', width: 145, headerName: 'Дата задатка до'},
-        { field: 'price', headerName: 'Цена', width: 90, headerAlign: 'center', },
-        { field: 'address', headerName: 'Адрес', headerAlign: 'center'},
+        { field: 'price', headerName: 'Цена', width: 100, headerAlign: 'center', },
+        { field: 'address', headerName: 'Адрес', headerAlign: 'center', width: 140},
         { field: 'contract', headerName: 'Собственик/Покупатель', width: 200,
             valueGetter: (params) =>
                 `${params.getValue('owner') || ''} ${
@@ -172,78 +200,42 @@ export default function StickyHeadTable() {
             headerClassName: classes.header
         },
         { field: 'commission', headerName: 'Задаток', width: 100 },
-        { field: 'moneys', headerName: 'Комиссионные', width: 100,
+        { field: 'moneys', headerName: 'Комиссионные', width: 140,
             valueGetter: (params) =>
                 `${params.getValue('owner_money') || ''} ${
                     params.getValue('customer_money') || ''
                 }`,
             cellClassName: classes.header,
+            renderCell: (params) => (
+                <div>
+                    <p>
+                        { params.getValue('owner_money') }
+                    </p>
+                    <p>
+                        { params.getValue('customer_money') }
+                    </p>
+                </div>
+            ),
         },
         { field: 'contacts', headerName: 'Контакты', width: 140,
             valueGetter: (params) =>
                 `${params.getValue('owner_phone') || ''} ${
                     params.getValue('customer_phone') || ''
                 }`,
+            cellClassName: classes.header,
+            headerAlign: 'center'
+        },
+        { field: 'deal_type', headerName: 'Статус', width: 140,
+            cellClassName: classes.header,
+            headerAlign: 'center'
+        },
+        { field: 'payment', headerName: 'Вид оплаты', width: 140,
+            cellClassName: classes.header,
+            headerAlign: 'center'
         },
     ];
     const rows = [
-        {
-            id: 544,
-            employee1: 'Гульшат Шакенова',
-            employee2: 'Гульшат Шакенова',
-            deal_date: randomCreatedDate().toLocaleDateString(),
-            start_commission_date: randomCreatedDate().toLocaleDateString(),
-            end_commission_date: randomCreatedDate().toLocaleDateString(),
-            address: '212132',
-            price: '250000',
-            owner: 'Бериккали Брекешев',
-            customer: 'Бериккали Брекешев',
-            commission: '300000',
-            owner_money: '200000',
-            customer_money: '2430000',
-            owner_phone: '87007002161',
-            customer_phone: '87007002161',
-            deal_type: 'Сделка',
-            payment: 'Наличные'
-        },
-        {
-            id: 545,
-            employee1: 'Гульшат Шакенова',
-            employee2: 'Гульшат Шакенова',
-            deal_date: randomCreatedDate().toLocaleDateString(),
-            start_commission_date: randomCreatedDate().toLocaleDateString(),
-            end_commission_date: randomCreatedDate().toLocaleDateString(),
-            address: '212132',
-            price: '250000',
-            owner: 'Бериккали Брекешев',
-            customer: 'Бериккали Брекешев',
-            commission: '300000',
-            owner_money: '200000',
-            customer_money: '2430000',
-            owner_phone: '87007002161',
-            customer_phone: '87007002161',
-            deal_type: 'Срыв',
-            payment: 'Наличные'
-        },
-        {
-            id: 546,
-            employee1: 'Гульшат Шакенова',
-            employee2: 'Гульшат Шакенова',
-            deal_date: randomCreatedDate().toLocaleDateString(),
-            start_commission_date: randomCreatedDate().toLocaleDateString(),
-            end_commission_date: randomCreatedDate().toLocaleDateString(),
-            address: '212132',
-            price: '250000',
-            owner: 'Бериккали Брекешев',
-            customer: 'Бериккали Брекешев',
-            commission: '300000',
-            owner_money: '200000',
-            customer_money: '2430000',
-            owner_phone: '87007002161',
-            customer_phone: '87007002161',
-            deal_type: 'Задаток',
-            payment: 'Наличные'
-        },
+        ...deal
     ];
 
 
@@ -254,31 +246,13 @@ export default function StickyHeadTable() {
         });
     };
 
-    // const status = (status, id) => {
-    //     return (
-    //         <Link to={`/deals/${id}`} style={{ textDecoration: 'none'}}>
-    //             <Chip
-    //                 label={status}
-    //                 size="small"
-    //                 style={{ backgroundColor: colors(status), color: 'white', marginLeft: '8px', cursor: 'pointer' }}
-    //             />
-    //         </Link>
-    //     )
-    // };
-
-
-
     const onApply = () => {
         setDeals(deal.filter(d => (
-            moment(d.advances[0], "YYYY-MM-DD HH:mm").unix()  >= moment(state.dep_date, "YYYY-MM-DD HH:mm").unix() &&
-            moment(d.advances[0], "YYYY-MM-DD HH:mm").unix()  <= moment(state.exp_date, "YYYY-MM-DD HH:mm").unix()
-            ) ||
-            d.payment === state?.payment.toLowerCase() ||
-            d.status === state.status ||
-            d.employees.includes(state.name) ||
-            d.deal.includes(state.name) ||
-            new Date(d.transaction).getTime() >= state.transaction
-        ))
+            d.deal_type === state.status ||
+            d.deal_date > state.transaction ||
+            // (d.start_commission_date >= state.dep_date && d.end_commission_date <= state.exp_date) ||
+            d.payment === state.payment
+        )))
     };
 
     const onDepDateChange = e => {
@@ -311,7 +285,7 @@ export default function StickyHeadTable() {
             .setColumns(['Номер', 'Специалист', 'Специалист покупателя', 'Дата сделки', 'Дата задатка от', 'Дата задатка до',
                 'Адрес', 'Цена', 'Собственик', 'Покупатель', 'Сумма задатка', 'Комиссионные собственника', 'Комиссионные покупателя',
                 'Контакты собственника', 'Контакты покупателя', 'Тип сделки', 'Тип оплаты'])
-            .addRows(rows.map(row => Object.values(row)))
+            .addRows(exp.map(row => Object.values(row)))
             .exportFile();
     };
 
@@ -337,8 +311,8 @@ export default function StickyHeadTable() {
                     </div>
                 </div>
             </Container>
-            <Container maxWidth="xl" style={{ marginTop: 30 }}>
-                <div style={{ height: 500, minWidth: 1400, margin: '0 auto', flexGrow: 1 }}>
+            <Container maxWidth="xl" style={{ marginTop: 30, display: 'flex' }}>
+                <div style={{ height: 734, minWidth: 1400, margin: '0 auto', flexGrow: 1 }}>
                     <div style={{ display: 'flex', height: '100%' }}>
                         <div style={{ flexGrow: 1 }}>
                             <DataGrid
