@@ -29,7 +29,9 @@ deals.map(deal => arr.push({
     owner_phone: deal.advertisement.parameters.owner_card.phone_number,
     customer_phone: deal.customer.phone_number !== "NULL" ? deal.customer.phone_number : 'отсутствует' ,
     deal_type: deal.status,
-    payment: deal.customer.payment_type
+    payment: deal.customer.payment_type,
+    bank: deal.customer.bank === null ? 'наличные' :  deal.customer.bank,
+    pledged_bank: deal.advertisement.parameters.pledged_bank === null ? 'Не в залоге' :  deal.advertisement.parameters.pledged_bank
 }));
 deals.map(deal => exp.push({
     id: deal.iddeals,
@@ -48,7 +50,8 @@ deals.map(deal => exp.push({
     owner_phone: deal.advertisement.parameters.owner_card.phone_number,
     customer_phone: deal.customer.phone_number !== "NULL" ? deal.customer.phone_number : 'отсутствует' ,
     deal_type: deal.status,
-    payment: deal.customer.payment_type
+    bank: deal.customer.bank === null ? 'наличные' :  deal.customer.bank,
+    pledged_bank: deal.advertisement.parameters.pledged_bank === null ? 'Не в залоге' :  deal.advertisement.parameters.pledged_bank
 }));
 const useStyles = makeStyles(theme => ({
     root: {
@@ -229,9 +232,22 @@ export default function StickyHeadTable() {
             cellClassName: classes.header,
             headerAlign: 'center'
         },
-        { field: 'payment', headerName: 'Вид оплаты', width: 140,
-            cellClassName: classes.header,
-            headerAlign: 'center'
+        { field: 'payment', width: 200, headerName: 'Банк / Залог', headerAlign: 'center',
+            valueGetter: (params) =>
+                `${params.getValue('bank') || ''} ${
+                    params.getValue('pledged_bank') || ''
+                }`,
+            renderCell: (params) => (
+                <div style={{ }}>
+                    <p>
+                        { params.getValue('bank') }
+                    </p>
+                    <p>
+                        { params.getValue('pledged_bank') }
+                    </p>
+                </div>
+            ),
+            headerClassName: classes.header
         },
     ];
     const rows = [
@@ -284,7 +300,7 @@ export default function StickyHeadTable() {
         new CsvBuilder("users.csv")
             .setColumns(['Номер', 'Специалист', 'Специалист покупателя', 'Дата сделки', 'Дата задатка от', 'Дата задатка до',
                 'Адрес', 'Цена', 'Собственик', 'Покупатель', 'Сумма задатка', 'Комиссионные собственника', 'Комиссионные покупателя',
-                'Контакты собственника', 'Контакты покупателя', 'Тип сделки', 'Тип оплаты'])
+                'Контакты собственника', 'Контакты покупателя', 'Тип сделки', 'Банк', 'Залог'])
             .addRows(exp.map(row => Object.values(row)))
             .exportFile();
     };
