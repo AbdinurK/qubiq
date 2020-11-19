@@ -25,7 +25,8 @@ import { fade, makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/co
 
 const useStyles = makeStyles(theme => ({
     root: {
-        flexGrow: 1,
+        width: '100%',
+        maxWidth: '1318px'
     },
     appBar: {
         backgroundColor: '#028946',
@@ -54,7 +55,7 @@ const useStyles = makeStyles(theme => ({
             backgroundColor: fade(theme.palette.common.white, 0.25),
         },
         marginLeft: 0,
-        width: '50%',
+        width: '40%',
         // [theme.breakpoints.up('sm')]: {
         //     marginLeft: theme.spacing(1),
         //     width: 'auto',
@@ -168,7 +169,7 @@ const Filter = (props) => {
                             />
                         </FormGroup>
                     </div>
-                    <Typography aria-label="status" className={classes.title} variant="h6" noWrap>
+                    <Typography aria-label="status" className={classes.title} variant="body2" noWrap>
                         Статус:
                     </Typography>
                     <FormGroup>
@@ -225,6 +226,7 @@ const Filter = (props) => {
                                             <MenuItem value="Ипотека">Ипотека</MenuItem>
                                         </Select>
                                     </FormGroup>
+
                                     <Typography className={classes.title} variant="body1" noWrap>
                                         Дата задатка от:
                                     </Typography>

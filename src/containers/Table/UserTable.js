@@ -2,7 +2,9 @@ import React, {useEffect, useState} from 'react'
 import { fade, makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
 import {
+    Button,
     Container,
+    Typography
 } from "@material-ui/core"
 import { deals } from '../../data/deals'
 import Filter from "../../components/Filter/Filter";
@@ -69,7 +71,6 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'row',
         height: '100%',
         textDecoration: 'none',
-
     },
     search: {
         position: 'relative',
@@ -100,9 +101,16 @@ const useStyles = makeStyles(theme => ({
         textAlign: 'center',
         color: theme.palette.text.secondary,
     },
+    last: {
+        '& .MuiDataGrid-columnSeparator': {
+            display: 'none'
+        }
+    }
 }));
 const cellStyles = makeStyles(theme => ({
     root: {
+        fontSize: '0.6rem',
+        lineHeight: 1,
         '& .MuiDataGrid-colCell': {
         },
         '& .MuiDataGrid-row > .MuiDataGrid-cell': {
@@ -160,19 +168,46 @@ export default function StickyHeadTable() {
     };
     const classes = useStyles();
     const cell = cellStyles();
-
+    const currencyFormatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'KZT',
+    });
+    const usdPrice = {
+        type: 'number',
+        width: 130,
+        valueFormatter: ({ value }) => currencyFormatter.format(Number(value)),
+        cellClassName: 'font-tabular-nums',
+    };
+    const status = s => {
+        switch (s) {
+            case 'Сделка':
+                return '#028946'
+            case 'Срыв':
+                return 'red'
+            case 'Задаток':
+                return 'green'
+            case 'Заявка':
+                return 'orange'
+            case 'Ожидает':
+                return '#ccc'
+            default: return null
+        }
+    }
     const columns = [
-        { field: 'id', width: 80, headerName: 'Номер',
+        { field: 'id', width: 70, headerName: 'No',
             renderCell: (params) => (
-                <React.Fragment>
+                <div>
                     <Link to={`/deals/${params.getValue('id')}`}>
                         { params.getValue('id') }
+                        <Button style={{ background: status(params.getValue('deal_type')), maxWidth: '45px', fontSize: '9px', color: 'white', padding: '5px 2px' }}>
+                            { params.getValue('deal_type') }
+                        </Button>
                     </Link>
-                </React.Fragment>
+                </div>
             ),
             cellClassName: classes.header,
         },
-        { field: 'employees', width: 200, headerName: 'Специалисты', headerAlign: 'center',
+        { field: 'employees', width: 140, headerName: 'Специалисты', headerAlign: 'center',
             valueGetter: (params) =>
                 `${params.getValue('employee1') || ''} ${
                     params.getValue('employee2') || ''
@@ -189,12 +224,29 @@ export default function StickyHeadTable() {
             ),
             headerClassName: classes.header
         },
-        { field: 'deal_date', type: 'date', width: 120, headerName: 'Дата сделки'},
-        { field: 'start_commission_date', type: 'date', width: 145, headerName: 'Дата задатка от'},
-        { field: 'end_commission_date', type: 'date', width: 145, headerName: 'Дата задатка до'},
-        { field: 'price', headerName: 'Цена', width: 100, headerAlign: 'center', },
-        { field: 'address', headerName: 'Адрес', headerAlign: 'center', width: 140},
-        { field: 'contract', headerName: 'Собственик/Покупатель', width: 200,
+        { field: 'start_commission_date', type: 'date', headerAlign: 'center', width: 110, headerName: 'Дата задатка от'},
+        { field: 'end_commission_date', type: 'date', headerAlign: 'center', width: 110, headerName: 'Дата задатка до'},
+        { field: 'deal_date', type: 'date', width: 100, headerAlign: 'center', headerName: 'Дата сделки'},
+        { field: 'address', headerName: 'Цена / Адрес', headerAlign: 'center', width: 140,
+            valueGetter: (params) =>
+                `${params.getValue('price') || ''} ${
+                    params.getValue('address') || ''
+                }`,
+            renderCell: (params) => (
+                <div style={{ }}>
+                    <p>
+                        {
+                            currencyFormatter.format(Number(params.getValue('price')))
+                        }
+                    </p>
+                    <p>
+                        { params.getValue('address') }
+                    </p>
+                </div>
+            ),
+            headerClassName: classes.header
+        },
+        { field: 'contract', headerName: 'Собственик/Покупатель', width: 160,
             valueGetter: (params) =>
                 `${params.getValue('owner') || ''} ${
                     params.getValue('customer') || ''
@@ -202,25 +254,25 @@ export default function StickyHeadTable() {
             headerAlign: 'center',
             headerClassName: classes.header
         },
-        { field: 'commission', headerName: 'Задаток', width: 100 },
-        { field: 'moneys', headerName: 'Комиссионные', width: 140,
+        { field: 'commission', headerName: 'Задаток', headerAlign: 'center', width: 60, ...usdPrice },
+        { field: 'moneys', headerName: 'Комиссионные', headerAlign: 'center', width: 80, ...usdPrice,
             valueGetter: (params) =>
-                `${params.getValue('owner_money') || ''} ${
+                `${currencyFormatter.format(Number(params.getValue('owner_money'))) || ''} ${
                     params.getValue('customer_money') || ''
                 }`,
             cellClassName: classes.header,
             renderCell: (params) => (
                 <div>
                     <p>
-                        { params.getValue('owner_money') }
+                        { currencyFormatter.format(Number(params.getValue('owner_money'))) }
                     </p>
                     <p>
-                        { params.getValue('customer_money') }
+                        { currencyFormatter.format(Number(params.getValue('customer_money'))) }
                     </p>
                 </div>
             ),
         },
-        { field: 'contacts', headerName: 'Контакты', width: 140,
+        { field: 'contacts', headerName: 'Контакты', width: 100,
             valueGetter: (params) =>
                 `${params.getValue('owner_phone') || ''} ${
                     params.getValue('customer_phone') || ''
@@ -228,11 +280,7 @@ export default function StickyHeadTable() {
             cellClassName: classes.header,
             headerAlign: 'center'
         },
-        { field: 'deal_type', headerName: 'Статус', width: 140,
-            cellClassName: classes.header,
-            headerAlign: 'center'
-        },
-        { field: 'payment', width: 200, headerName: 'Банк / Залог', headerAlign: 'center',
+        { field: 'payment', width: 120, headerName: 'Банк / Залог', headerAlign: 'center',
             valueGetter: (params) =>
                 `${params.getValue('bank') || ''} ${
                     params.getValue('pledged_bank') || ''
@@ -247,8 +295,8 @@ export default function StickyHeadTable() {
                     </p>
                 </div>
             ),
-            headerClassName: classes.header
-        },
+            headerClassName: classes.last
+        }
     ];
     const rows = [
         ...deal
@@ -270,6 +318,16 @@ export default function StickyHeadTable() {
             d.payment === state.payment
         )))
     };
+
+    // useEffect(() => {
+    //     let changedDeals = deal
+    //
+    //     if (state.status) {
+    //         changedDeals = changedDeals.filter(d => d.deal_type === state.status)
+    //     }
+    //
+    //     setDeals(changedDeals)
+    // }, [deal, state.status])
 
     const onDepDateChange = e => {
         setState({
@@ -305,6 +363,8 @@ export default function StickyHeadTable() {
             .exportFile();
     };
 
+
+
     return (
         <React.Fragment>
             <Container maxWidth="xl" style={{ marginTop: 30 }}>
@@ -327,11 +387,18 @@ export default function StickyHeadTable() {
                     </div>
                 </div>
             </Container>
+            <Container maxWidth="xl">
+                <Typography variant="body1">
+                    Число строк: { rows.length }
+                </Typography>
+            </Container>
             <Container maxWidth="xl" style={{ marginTop: 30, display: 'flex' }}>
-                <div style={{ height: 734, minWidth: 1400, margin: '0 auto', flexGrow: 1 }}>
-                    <div style={{ display: 'flex', height: '100%' }}>
+                <div style={{ height: 734,  minWidth: 1318 }}>
+                    <div style={{ display: 'flex', height: '100%', width: '100%' }}>
                         <div style={{ flexGrow: 1 }}>
                             <DataGrid
+                                pageSize={10}
+                                hideFooterRowCount={true}
                                 className={cell.root}
                                 rows={rows}
                                 columns={columns}
