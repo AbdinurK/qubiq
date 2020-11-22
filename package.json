@@ -16,7 +16,8 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "antd": "^4.7.0",
-    "axios": "^0.20.0",
+    "axios": "^0.21.0",
+    "classnames": "^2.2.6",
     "date-fns": "^2.16.1",
     "filefy": "^0.1.10",
     "i": "^0.3.6",
@@ -26,7 +27,8 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
-    "react-swipeable-views": "^0.13.9"
+    "react-swipeable-views": "^0.13.9",
+    "redux": "^4.0.5"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -9,6 +9,7 @@ import {
     Tab,
     Paper,
     Grid,
+    Button,
 } from '@material-ui/core'
 
 function TabPanel(props) {
@@ -88,12 +89,199 @@ export default function VerticalTabs() {
                     aria-label="Vertical tabs example"
                     className={classes.tabs}
                 >
-                    <Tab label="Покупатель" {...a11yProps(0)} />
-                    <Tab label="Объект" {...a11yProps(1)} />
-                    <Tab label="Объект1" {...a11yProps(2)} />
-                    <Tab label="Сделка" {...a11yProps(3)} />
+                    <Tab label="Сделка" {...a11yProps(0)} />
+                    <Tab label="Покупатель" {...a11yProps(1)} />
+                    <Tab label="Объект" {...a11yProps(2)} />
                 </Tabs>
                 <TabPanel value={value} index={0} style={{ backgroundColor: '#fcfcfc', width: '100%' }}>
+                    <Grid container spacing={3}>
+                        <Grid item xs={12}>
+                            <Typography variant="h6" className={classes.field}>
+                                Информация о сделке
+                            </Typography>
+                            <Paper className={classes.paper}>
+                                <Box className={classes.fields}>
+                                    <Typography variant="subtitle1">
+                                         Представитель продавца:
+                                    </Typography>
+                                    <Typography variant="subtitle2">
+                                        Султан
+                                    </Typography>
+                                </Box>
+                                <Box className={classes.fields}>
+                                    <Typography variant="subtitle1">
+                                        Представитель покупателя:
+                                    </Typography>
+                                    <Typography variant="subtitle2">
+                                        Максат
+                                    </Typography>
+                                </Box>
+                                <Box className={classes.fields}>
+                                    <Typography variant="subtitle1">
+                                        Юридическое сопровождение:
+                                    </Typography>
+                                    <Typography variant="subtitle2">
+                                        Абдинур
+                                    </Typography>
+                                </Box>
+                                <Box className={classes.fields}>
+                                    <Typography variant="subtitle1">
+                                        Дата задатка:
+                                    </Typography>
+                                    <Typography variant="subtitle2">
+                                        11.10.2020
+                                    </Typography>
+                                </Box>
+                                <Box className={classes.fields}>
+                                    <Typography variant="subtitle1">
+                                        Дата истечения задатка:
+                                    </Typography>
+                                    <Typography variant="subtitle2">
+                                        11.11.2020
+                                    </Typography>
+                                </Box>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Typography variant="h6" className={classes.field}>
+                                Продавец
+                            </Typography>
+                            <Paper className={classes.paper}>
+                                <Box className={classes.fields}>
+                                    <Typography variant="subtitle1">
+                                        Залог:
+                                    </Typography>
+                                    <Typography variant="subtitle2">
+                                        -
+                                    </Typography>
+                                </Box>
+                                <Box className={classes.fields}>
+                                    <Typography variant="subtitle1">
+                                        Дата ожидаемой оплаты:
+                                    </Typography>
+                                    <Typography variant="subtitle2">
+                                        20.11.2020
+                                    </Typography>
+                                </Box>
+                                <Box className={classes.fields}>
+                                    <Typography variant="subtitle1">
+                                         Дата полной оплаты:
+                                    </Typography>
+                                    <Typography variant="subtitle2">
+                                        12.12.2020
+                                    </Typography>
+                                </Box>
+                                <Box className={classes.fields}>
+                                    <Typography variant="subtitle1">
+                                       Сумма к оплате:
+                                    </Typography>
+                                    <Typography variant="subtitle2">
+                                        300,000
+                                    </Typography>
+                                </Box>
+                                <Box className={classes.fields}>
+                                    <Typography variant="subtitle1">
+                                        Оплаченная часть:
+                                    </Typography>
+                                    <Typography variant="subtitle2">
+                                        300,000
+                                    </Typography>
+                                </Box>
+                                <Box className={classes.fields}>
+                                    <Typography variant="subtitle1">
+                                        Остаток:
+                                    </Typography>
+                                    <Typography variant="subtitle2">
+                                        0
+                                    </Typography>
+                                </Box>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Typography variant="h6" className={classes.field}>
+                                Покупатель
+                            </Typography>
+                            <Paper className={classes.paper}>
+                                <Box className={classes.fields}>
+                                    <Typography variant="subtitle1">
+                                        Ипотека:
+                                    </Typography>
+                                    <Typography variant="subtitle2">
+                                        -
+                                    </Typography>
+                                </Box>
+                                <Box className={classes.fields}>
+                                    <Typography variant="subtitle1">
+                                        Дата ожидаемой оплаты:
+                                    </Typography>
+                                    <Typography variant="subtitle2">
+                                        20.11.2020
+                                    </Typography>
+                                </Box>
+                                <Box className={classes.fields}>
+                                    <Typography variant="subtitle1">
+                                        Дата полной оплаты
+                                    </Typography>
+                                    <Typography variant="subtitle2">
+                                        20.11.2020
+                                    </Typography>
+                                </Box>
+                                <Box className={classes.fields}>
+                                    <Typography variant="subtitle1">
+                                        Сумма к оплате:
+                                    </Typography>
+                                    <Typography variant="subtitle2">
+                                        380,000
+                                    </Typography>
+                                </Box>
+                                <Box className={classes.fields}>
+                                    <Typography variant="subtitle1">
+                                        Оплаченная часть:
+                                    </Typography>
+                                    <Typography variant="subtitle2">
+                                        100,000
+                                    </Typography>
+                                </Box>
+                                <Box className={classes.fields}>
+                                    <Typography variant="subtitle1">
+                                        Остаток:
+                                    </Typography>
+                                    <Typography variant="subtitle2">
+                                        0
+                                    </Typography>
+                                </Box>
+                            </Paper>
+                        </Grid>
+                        <Grid container item xs={12}>
+                            <Grid container justify="center" alignItems="center"  item xs={6}>
+                                <Button variant='outlined' color="primary">
+                                    Редактировать
+                                </Button>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Paper className={classes.paper}>
+                                    <Box className={classes.fields}>
+                                        <Typography variant="subtitle1">
+                                            Итого:
+                                        </Typography>
+                                        <Typography variant="subtitle2">
+                                            600,000
+                                        </Typography>
+                                    </Box>
+                                    <Box className={classes.fields}>
+                                        <Typography variant="subtitle1">
+                                            Оплаченная часть:
+                                        </Typography>
+                                        <Typography variant="subtitle2">
+                                            500,000
+                                        </Typography>
+                                    </Box>
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </TabPanel>
+                <TabPanel value={value} index={1} style={{ backgroundColor: '#fcfcfc', width: '100%' }}>
                     <Grid container spacing={3}>
                         <Grid item xs={6}>
                             <Typography variant="h6" className={classes.field}>
@@ -235,9 +423,14 @@ export default function VerticalTabs() {
                                 </Box>
                             </Paper>
                         </Grid>
+                        <Grid container item xs={12}>
+                            <Button variant='outlined' color="primary">
+                                Редактировать
+                            </Button>
+                        </Grid>
                     </Grid>
                 </TabPanel>
-                <TabPanel value={value} index={1} style={{ backgroundColor: '#fcfcfc', width: '100%' }}>
+                <TabPanel value={value} index={2} style={{ backgroundColor: '#fcfcfc', width: '100%' }}>
                     <Grid container spacing={3}>
                         <Grid item xs={6}>
                             <Typography variant="h6" className={classes.field}>
@@ -446,161 +639,8 @@ export default function VerticalTabs() {
                                 </Paper>
                             </Grid>
                         </Grid>
-                        <Grid item xs={6}>
-                            <Typography variant="h6" className={classes.field}>
-                                Расположение
-                            </Typography>
-                            <Paper className={classes.paper}>
-                                <Box className={classes.fields}>
-                                    <Typography variant="subtitle1">
-                                        Район:
-                                    </Typography>
-                                    <Typography variant="subtitle2">
-                                        Алмалинский
-                                    </Typography>
-                                </Box>
-                                <Box className={classes.fields}>
-                                    <Typography variant="subtitle1">
-                                        Улица:
-                                    </Typography>
-                                    <Typography variant="subtitle2">
-                                        Ади Шарипова(Мечникова)
-                                    </Typography>
-                                </Box>
-                                <Box className={classes.fields}>
-                                    <Typography variant="subtitle1">
-                                        Пересечение:
-                                    </Typography>
-                                    <Typography variant="subtitle2">
-                                        Макатаева
-                                    </Typography>
-                                </Box>
-                                <Box className={classes.fields}>
-                                    <Typography variant="subtitle1">
-                                        Номер дома:
-                                    </Typography>
-                                    <Typography variant="subtitle2">
-                                        17
-                                    </Typography>
-                                </Box>
-                            </Paper>
-                        </Grid>
-                    </Grid>
-                </TabPanel>
-                <TabPanel value={value} index={2}>
-                    <Grid container spacing={3}>
-                        <Grid container spacing={3} item xs={6}>
-                            <Grid item xs={12}>
-                                <Typography variant="h6" className={classes.field}>
-                                    Стоимость
-                                </Typography>
-                                <Paper className={classes.paper}>
-                                    <Box className={classes.fields}>
-                                        <Typography variant="subtitle1">
-                                            Цена:
-                                        </Typography>
-                                        <Typography variant="subtitle2">
-                                            27.0 млн. тг
-                                        </Typography>
-                                    </Box>
-                                    <Box className={classes.fields}>
-                                        <Typography variant="subtitle1">
-                                            Цена за м2:
-                                        </Typography>
-                                        <Typography variant="subtitle2">
-                                            409,985 тг
-                                        </Typography>
-                                    </Box>
-                                </Paper>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Typography variant="h6" className={classes.field}>
-                                    Параметры
-                                </Typography>
-                                <Paper className={classes.paper}>
-                                    <Box className={classes.fields}>
-                                        <Typography variant="subtitle1">
-                                            Комнатность:
-                                        </Typography>
-                                        <Typography variant="subtitle2">
-                                            3
-                                        </Typography>
-                                    </Box>
-                                    <Box className={classes.fields}>
-                                        <Typography variant="subtitle1">
-                                            Площадь:
-                                        </Typography>
-                                        <Typography variant="subtitle2">
-                                            - ( - ) -
-                                        </Typography>
-                                    </Box>
-                                    <Box className={classes.fields}>
-                                        <Typography variant="subtitle1">
-                                            Год подстройки:
-                                        </Typography>
-                                        <Typography variant="subtitle2">
-                                            1990
-                                        </Typography>
-                                    </Box>
-                                    <Box className={classes.fields}>
-                                        <Typography variant="subtitle1">
-                                            Этаж:
-                                        </Typography>
-                                        <Typography variant="subtitle2">
-                                            4 (None)
-                                        </Typography>
-                                    </Box>
-                                </Paper>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Typography variant="h6" className={classes.field}>
-                                     Собственник
-                                </Typography>
-                                <Paper className={classes.paper}>
-                                    <Box className={classes.fields}>
-                                        <Typography variant="subtitle1">
-                                            Имя:
-                                        </Typography>
-                                        <Typography variant="subtitle2">
-                                            Гульнара
-                                        </Typography>
-                                    </Box>
-                                    <Box className={classes.fields}>
-                                        <Typography variant="subtitle1">
-                                            Телефон:
-                                        </Typography>
-                                        <Typography variant="subtitle2">
-                                            +77056114828
-                                        </Typography>
-                                    </Box>
-                                </Paper>
-                            </Grid>
-                        </Grid>
-                        <Grid container spacing={3} item xs={6}>
-                            <Grid item xs={12}>
-                                <Typography variant="h6" className={classes.field}>
-                                    Об объекте
-                                </Typography>
-                                <Paper className={classes.paper}>
-                                    <Box className={classes.fields}>
-                                        <Typography variant="subtitle1">
-                                            Эксклюзив:
-                                        </Typography>
-                                        <Typography variant="subtitle2">
-                                            нет
-                                        </Typography>
-                                    </Box>
-                                    <Box className={classes.fields}>
-                                        <Typography variant="subtitle1">
-                                            В залоге:
-                                        </Typography>
-                                        <Typography variant="subtitle2">
-                                            нет
-                                        </Typography>
-                                    </Box>
-                                </Paper>
-                            </Grid>
-                            <Grid item xs={12}>
+                        <Grid container item xs={6}>
+                            <Grid xs={12}>
                                 <Typography variant="h6" className={classes.field}>
                                     Расположение
                                 </Typography>
@@ -618,7 +658,7 @@ export default function VerticalTabs() {
                                             Улица:
                                         </Typography>
                                         <Typography variant="subtitle2">
-                                            Исаева
+                                            Ади Шарипова(Мечникова)
                                         </Typography>
                                     </Box>
                                     <Box className={classes.fields}>
@@ -626,7 +666,7 @@ export default function VerticalTabs() {
                                             Пересечение:
                                         </Typography>
                                         <Typography variant="subtitle2">
-                                            Гоголя
+                                            Макатаева
                                         </Typography>
                                     </Box>
                                     <Box className={classes.fields}>
@@ -634,147 +674,16 @@ export default function VerticalTabs() {
                                             Номер дома:
                                         </Typography>
                                         <Typography variant="subtitle2">
-                                            10
-                                        </Typography>
-                                    </Box>
-                                    <Box className={classes.fields}>
-                                        <Typography variant="subtitle1">
-                                            Номер квартиры:
-                                        </Typography>
-                                        <Typography variant="subtitle2">
-                                            7
+                                            17
                                         </Typography>
                                     </Box>
                                 </Paper>
                             </Grid>
-                            <Grid item xs={12}>
-                                <Typography variant="h6" className={classes.field}>
-                                     Специалист
-                                </Typography>
-                                <Paper className={classes.paper}>
-                                    <Box className={classes.fields}>
-                                        <Typography variant="subtitle1">
-                                            Ильяс Караталов
-                                        </Typography>
-                                        <Typography variant="subtitle2">
-                                            -
-                                        </Typography>
-                                    </Box>
-                                </Paper>
+                            <Grid container justify="center" alignItems="center" item xs={12}>
+                                <Button variant='outlined' color="primary">
+                                    Редактировать
+                                </Button>
                             </Grid>
-                        </Grid>
-                    </Grid>
-                </TabPanel>
-                <TabPanel value={value} index={3} style={{ backgroundColor: '#fcfcfc', width: '100%' }}>
-                    <Grid container spacing={3}>
-                        <Grid item xs={6}>
-                            <Typography variant="h6" className={classes.field}>
-                                Специалисты
-                            </Typography>
-                            <Paper className={classes.paper}>
-                                <Box className={classes.fields}>
-                                    <Typography variant="subtitle1">
-                                        Со стороны продовца:
-                                    </Typography>
-                                    <Typography variant="subtitle2">
-                                        Ильяс Караталов -
-                                    </Typography>
-                                </Box>
-                                <Box className={classes.fields}>
-                                    <Typography variant="subtitle1">
-                                        Со стороны покупателя:
-                                    </Typography>
-                                    <Typography variant="subtitle2">
-                                        Ильяс Караталов -
-                                    </Typography>
-                                </Box>
-                                <Box className={classes.fields}>
-                                    <Typography variant="subtitle1">
-                                        Юридическое сопровождение:
-                                    </Typography>
-                                    <Typography variant="subtitle2">
-                                        -
-                                    </Typography>
-                                </Box>
-                                <Box className={classes.fields}>
-                                    <Typography variant="subtitle1">
-                                        Комментарий руководителя:
-                                    </Typography>
-                                    <Typography variant="subtitle2">
-                                        -
-                                    </Typography>
-                                </Box>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Typography variant="h6" className={classes.field}>
-                                Сделка
-                            </Typography>
-                            <Paper className={classes.paper}>
-                                <Box className={classes.fields}>
-                                    <Typography variant="subtitle1">
-                                        Дата сделки:
-                                    </Typography>
-                                    <Typography variant="subtitle2">
-                                        10.06.2020
-                                    </Typography>
-                                </Box>
-                                <Box className={classes.fields}>
-                                    <Typography variant="subtitle1">
-                                        Комиссия продавца:
-                                    </Typography>
-                                    <Typography variant="subtitle2">
-                                        0
-                                    </Typography>
-                                </Box>
-                                <Box className={classes.fields}>
-                                    <Typography variant="subtitle1">
-                                        Комиссия покупателя:
-                                    </Typography>
-                                    <Typography variant="subtitle2">
-                                        380000
-                                    </Typography>
-                                </Box>
-                                <Box className={classes.fields}>
-                                    <Typography variant="subtitle1">
-                                        Сумма комиссионных:
-                                    </Typography>
-                                    <Typography variant="subtitle2">
-                                        380,000 - Односторонная
-                                    </Typography>
-                                </Box>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Typography variant="h6" className={classes.field}>
-                                Задаток
-                            </Typography>
-                            <Paper className={classes.paper}>
-                                <Box className={classes.fields}>
-                                    <Typography variant="subtitle1">
-                                        Дата оформления:
-                                    </Typography>
-                                    <Typography variant="subtitle2">
-                                        10.06.2020
-                                    </Typography>
-                                </Box>
-                                <Box className={classes.fields}>
-                                    <Typography variant="subtitle1">
-                                        Дата истечения:
-                                    </Typography>
-                                    <Typography variant="subtitle2">
-                                        дд.мм.гггг
-                                    </Typography>
-                                </Box>
-                                <Box className={classes.fields}>
-                                    <Typography variant="subtitle1">
-                                        Сумма задатка:
-                                    </Typography>
-                                    <Typography variant="subtitle2">
-                                        100000
-                                    </Typography>
-                                </Box>
-                            </Paper>
                         </Grid>
                     </Grid>
                 </TabPanel>

@@ -24,7 +24,7 @@ deals.map(deal => arr.push({
     address: `${deal.advertisement.parameters.street} ${deal.advertisement.parameters.house_number}`,
     price: `${deal.advertisement.parameters.cost}`,
     owner: deal.advertisement.parameters.owner_card.name,
-    customer: `${deal?.customer?.name} ${ deal.customer.surname ? deal.customer.surname : 'отсутствует'  }`,
+    customer: `${deal?.customer?.name} ${ deal.customer.surname ? deal.customer.surname : ''  }`,
     commission: deal.amount_of_deposit,
     owner_money: deal.amount_of_deposit,
     customer_money: deal.customer_commission,
@@ -55,6 +55,8 @@ deals.map(deal => exp.push({
     bank: deal.customer.bank === null ? 'наличные' :  deal.customer.bank,
     pledged_bank: deal.advertisement.parameters.pledged_bank === null ? 'Не в залоге' :  deal.advertisement.parameters.pledged_bank
 }));
+
+
 const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
@@ -110,6 +112,7 @@ const useStyles = makeStyles(theme => ({
 const cellStyles = makeStyles(theme => ({
     root: {
         fontSize: '0.6rem',
+        flexGrow: 1,
         lineHeight: 1,
         '& .MuiDataGrid-colCell': {
         },
@@ -147,7 +150,8 @@ const cellStyles = makeStyles(theme => ({
 }));
 
 
-export default function StickyHeadTable() {
+export default function UserTable() {
+
     const initialState = {
         name: '',
         status: '',
@@ -171,6 +175,7 @@ export default function StickyHeadTable() {
     const currencyFormatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'KZT',
+        minimumFractionDigits: 0
     });
     const usdPrice = {
         type: 'number',
@@ -181,18 +186,23 @@ export default function StickyHeadTable() {
     const status = s => {
         switch (s) {
             case 'Сделка':
-                return '#028946'
-            case 'Срыв':
-                return 'red'
+                return '#6aa84f'
+            case 'Срыв 1':
+                return '#999999'
+            case 'Срыв 2':
+                return '#ff8649'
+            case 'Срыв 3':
+                return '#dd4343'
             case 'Задаток':
-                return 'green'
+                return '#fbbc04'
             case 'Заявка':
-                return 'orange'
+                return '#3d85c6'
             case 'Ожидает':
                 return '#ccc'
             default: return null
         }
     }
+
     const columns = [
         { field: 'id', width: 70, headerName: 'No',
             renderCell: (params) => (
@@ -251,6 +261,16 @@ export default function StickyHeadTable() {
                 `${params.getValue('owner') || ''} ${
                     params.getValue('customer') || ''
                 }`,
+            renderCell: (params) => (
+                <div style={{ }}>
+                    <p style={{ borderBottom: '1px solid #ccc' }}>
+                        { params.getValue('owner') }
+                    </p>
+                    <p>
+                        { params.getValue('customer') }
+                    </p>
+                </div>
+            ),
             headerAlign: 'center',
             headerClassName: classes.header
         },
@@ -287,9 +307,9 @@ export default function StickyHeadTable() {
                 }`,
             renderCell: (params) => (
                 <div style={{ }}>
-                    <p>
+                    <Typography style={{ fontSize: '0.6rem', maxHeight: '60px', }}>
                         { params.getValue('bank') }
-                    </p>
+                    </Typography>
                     <p>
                         { params.getValue('pledged_bank') }
                     </p>
@@ -318,16 +338,6 @@ export default function StickyHeadTable() {
             d.payment === state.payment
         )))
     };
-
-    // useEffect(() => {
-    //     let changedDeals = deal
-    //
-    //     if (state.status) {
-    //         changedDeals = changedDeals.filter(d => d.deal_type === state.status)
-    //     }
-    //
-    //     setDeals(changedDeals)
-    // }, [deal, state.status])
 
     const onDepDateChange = e => {
         setState({
@@ -367,9 +377,9 @@ export default function StickyHeadTable() {
 
     return (
         <React.Fragment>
-            <Container maxWidth="xl" style={{ marginTop: 30 }}>
-                <div style={{ height: 100, minWidth: 1400, margin: '0 auto', flexGrow: 1 }}>
-                    <div style={{ display: 'flex', height: '100%' }}>
+            <Container maxWidth="xl" style={{ marginTop: 30, position: 'relative' }} >
+                <div style={{ margin: '0 auto', flexGrow: 1 }}>
+                    <div style={{ display: 'flex',  height: '100%' }}>
                         <div style={{ flexGrow: 1 }}>
                             <Filter
                                 onSearch={handleSearch}
@@ -387,23 +397,21 @@ export default function StickyHeadTable() {
                     </div>
                 </div>
             </Container>
-            <Container maxWidth="xl">
+            <Container maxWidth="xl" style={{ marginTop: 30, position: 'relative' }}>
                 <Typography variant="body1">
                     Число строк: { rows.length }
                 </Typography>
             </Container>
-            <Container maxWidth="xl" style={{ marginTop: 30, display: 'flex' }}>
-                <div style={{ height: 734,  minWidth: 1318 }}>
+            <Container maxWidth="xl" style={{ marginTop: '30px', marginBottom: 30, display: 'flex' }}>
+                <div style={{ height: 1114, width: '100%' }}>
                     <div style={{ display: 'flex', height: '100%', width: '100%' }}>
-                        <div style={{ flexGrow: 1 }}>
-                            <DataGrid
-                                pageSize={10}
-                                hideFooterRowCount={true}
-                                className={cell.root}
-                                rows={rows}
-                                columns={columns}
-                            />
-                        </div>
+                        <DataGrid
+                            pageSize={10}
+                            hideFooterRowCount={true}
+                            className={cell.root}
+                            rows={rows}
+                            columns={columns}
+                        />
                     </div>
                 </div>
             </Container>

@@ -26,7 +26,7 @@ import { fade, makeStyles, ThemeProvider, createMuiTheme } from '@material-ui/co
 const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
-        maxWidth: '1318px'
+        position: 'relative'
     },
     appBar: {
         backgroundColor: '#028946',
@@ -83,6 +83,7 @@ const useStyles = makeStyles(theme => ({
     },
     toolbar: {
         paddingBottom: theme.spacing(1),
+        position: 'relative'
     },
     input: {
         '& .MuiInput-input': {
@@ -110,6 +111,8 @@ const useStyles = makeStyles(theme => ({
 const defaultMaterialTheme = createMuiTheme({
     color: 'white'
 });
+
+
 const Filter = (props) => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
@@ -184,8 +187,10 @@ const Filter = (props) => {
                             <MenuItem value="Заявка">Заявка</MenuItem>
                             <MenuItem value="Задаток">Задаток</MenuItem>
                             <MenuItem value="Сделка">Сделка</MenuItem>
-                            <MenuItem value="Срыв">Срыв</MenuItem>
-                            <MenuItem value="Ожидает">Ожидает</MenuItem>
+                            <MenuItem value="Срыв 1">Срыв 1</MenuItem>
+                            <MenuItem value="Срыв 2">Срыв 2</MenuItem>
+                            <MenuItem value="Срыв 3">Срыв 3</MenuItem>
+                            <MenuItem value="Ожидает">Не оплачено</MenuItem>
                         </Select>
                     </FormGroup>
                     <Button color="default" disabled={props.apply} className={classes.btn} onClick={handleApply}>
