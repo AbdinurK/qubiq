@@ -52,7 +52,8 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         backgroundColor: theme.palette.background.paper,
         display: 'flex',
-        height: 700,
+        flexDirection: 'column',
+        height: '100%',
     },
     tabs: {
         borderRight: `1px solid ${theme.palette.divider}`,
@@ -71,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function VerticalTabs(props) {
+export default function DealCard(props) {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
     const [deal, setDeal] = useState(null)
@@ -92,8 +93,8 @@ export default function VerticalTabs(props) {
         <Container maxWidth="lg" style={{ marginTop: '30px' }}>
             <div className={classes.root}>
                 <Tabs
-                    orientation="vertical"
-                    variant="fullWidth"
+                    orientation="horizontal"
+                    variant="scrollable"
                     value={value}
                     onChange={handleChange}
                     aria-label="Vertical tabs example"
@@ -152,7 +153,7 @@ export default function VerticalTabs(props) {
                                 </Box>
                             </Paper>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} sm={6}>
                             <Typography variant="h6" className={classes.field}>
                                 Продавец
                             </Typography>
@@ -170,7 +171,7 @@ export default function VerticalTabs(props) {
                                         Дата ожидаемой оплаты:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        20.11.2020
+                                        { deal?.own_pay_date }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -178,7 +179,7 @@ export default function VerticalTabs(props) {
                                          Дата полной оплаты:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        12.12.2020
+                                        { deal?.own_full_pay_date }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -202,12 +203,12 @@ export default function VerticalTabs(props) {
                                         Остаток:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        { deal?.seller_commission - deal?.own_pay }
+                                        { (deal?.seller_commission - deal?.own_pay).toString() }
                                     </Typography>
                                 </Box>
                             </Paper>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} sm={6}>
                             <Typography variant="h6" className={classes.field}>
                                 Покупатель
                             </Typography>
@@ -217,7 +218,7 @@ export default function VerticalTabs(props) {
                                         Ипотека:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        -
+                                        { deal?.customer.bank }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -225,7 +226,7 @@ export default function VerticalTabs(props) {
                                         Дата ожидаемой оплаты:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        20.11.2020
+                                        { deal?.cust_pay_date }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -233,7 +234,7 @@ export default function VerticalTabs(props) {
                                         Дата полной оплаты
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        20.11.2020
+                                        { deal?.cust_full_pay_date }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -257,25 +258,20 @@ export default function VerticalTabs(props) {
                                         Остаток:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        { deal?.customer_commission - deal?.cust_pay }
+                                        { (deal?.customer_commission - deal?.cust_pay).toString() }
                                     </Typography>
                                 </Box>
                             </Paper>
                         </Grid>
-                        <Grid container item xs={12}>
-                            <Grid container justify="center" alignItems="center"  item xs={6}>
-                                <Button variant='outlined' color="primary">
-                                    Редактировать
-                                </Button>
-                            </Grid>
-                            <Grid item xs={6}>
+                        <Grid container spacing={2} item xs={12}>
+                            <Grid xs={12} sm={6} item>
                                 <Paper className={classes.paper}>
                                     <Box className={classes.fields}>
                                         <Typography variant="subtitle1">
                                             Итого:
                                         </Typography>
                                         <Typography variant="subtitle2">
-                                            { deal?.customer_commission + deal?.seller_commission }
+                                            { (deal?.customer_commission + deal?.seller_commission).toString() }
                                         </Typography>
                                     </Box>
                                     <Box className={classes.fields}>
@@ -283,17 +279,22 @@ export default function VerticalTabs(props) {
                                             Оплаченная часть:
                                         </Typography>
                                         <Typography variant="subtitle2">
-                                            { deal?.cust_pay + deal?.own_pay }
+                                            { (deal?.cust_pay + deal?.own_pay).toString() }
                                         </Typography>
                                     </Box>
                                 </Paper>
+                            </Grid>
+                            <Grid xs={12} sm={6} item container alignItems={"flex-end"} justify={"center"}>
+                                <Button href={`http://localhost:8000/customers/customer/${deal?.customer.idcustomer_card}/edit/`} variant='outlined' color="primary">
+                                    Редактировать
+                                </Button>
                             </Grid>
                         </Grid>
                     </Grid>
                 </TabPanel>
                 <TabPanel value={value} index={1} style={{ backgroundColor: '#fcfcfc', width: '100%' }}>
                     <Grid container spacing={3}>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} sm={6}>
                             <Typography variant="h6" className={classes.field}>
                                 Контакты
                             </Typography>
@@ -316,7 +317,7 @@ export default function VerticalTabs(props) {
                                 </Box>
                             </Paper>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} sm={6}>
                             <Typography variant="h6" className={classes.field}>
                                 Специалисты
                             </Typography>
@@ -347,7 +348,7 @@ export default function VerticalTabs(props) {
                                 </Box>
                             </Paper>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} sm={6}>
                             <Typography variant="h6" className={classes.field}>
                                 Параметры поиска
                             </Typography>
@@ -402,47 +403,49 @@ export default function VerticalTabs(props) {
                                 </Box>
                             </Paper>
                         </Grid>
-                        <Grid item xs={6}>
-                            <Typography variant="h6" className={classes.field}>
-                                Информация о покупателе
-                            </Typography>
-                            <Paper className={classes.paper}>
-                                <Box className={classes.fields}>
-                                    <Typography variant="subtitle1">
-                                        Инвестор:
-                                    </Typography>
-                                    <Typography variant="subtitle2">
-                                        { deal?.customer.investor }
-                                    </Typography>
-                                </Box>
-                                <Box className={classes.fields}>
-                                    <Typography variant="subtitle1">
-                                        Бюджет:
-                                    </Typography>
-                                    <Typography variant="subtitle2">
-                                        { deal?.customer.budget }
-                                    </Typography>
-                                </Box>
-                                <Box className={classes.fields}>
-                                    <Typography variant="subtitle1">
-                                        Тип оплаты:
-                                    </Typography>
-                                    <Typography variant="subtitle2">
-                                        { deal?.customer.payment_type }
-                                    </Typography>
-                                </Box>
-                            </Paper>
-                        </Grid>
-                        <Grid container item xs={12}>
-                            <Button variant='outlined' color="primary">
-                                Редактировать
-                            </Button>
+                        <Grid item xs container direction={"row"} spacing={2}>
+                            <Grid item xs={12} sm={12}>
+                                <Typography variant="h6" className={classes.field}>
+                                    Информация о покупателе
+                                </Typography>
+                                <Paper className={classes.paper}>
+                                    <Box className={classes.fields}>
+                                        <Typography variant="subtitle1">
+                                            Инвестор:
+                                        </Typography>
+                                        <Typography variant="subtitle2">
+                                            { deal?.customer.investor }
+                                        </Typography>
+                                    </Box>
+                                    <Box className={classes.fields}>
+                                        <Typography variant="subtitle1">
+                                            Бюджет:
+                                        </Typography>
+                                        <Typography variant="subtitle2">
+                                            { deal?.customer.budget }
+                                        </Typography>
+                                    </Box>
+                                    <Box className={classes.fields}>
+                                        <Typography variant="subtitle1">
+                                            Тип оплаты:
+                                        </Typography>
+                                        <Typography variant="subtitle2">
+                                            { deal?.customer.payment_type }
+                                        </Typography>
+                                    </Box>
+                                </Paper>
+                            </Grid>
+                            <Grid container alignItems={"center"} justify={"center"} item xs={12} sm={12}>
+                                <Button href={`http://localhost:8000/objects/object/${deal?.advertisement.idadvertisement}/edit/`} variant='outlined' color="primary">
+                                    Редактировать
+                                </Button>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </TabPanel>
                 <TabPanel value={value} index={2} style={{ backgroundColor: '#fcfcfc', width: '100%' }}>
                     <Grid container spacing={3}>
-                        <Grid item xs={6}>
+                        <Grid item xs={12}>
                             <Typography variant="h6" className={classes.field}>
                                 Параметры
                             </Typography>
@@ -529,8 +532,8 @@ export default function VerticalTabs(props) {
                                 </Box>
                             </Paper>
                         </Grid>
-                        <Grid container item xs={6}>
-                            <Grid item xs={12}>
+                        <Grid item container spacing={3}>
+                            <Grid item xs={12} sm={6}>
                                 <Typography variant="h6" className={classes.field}>
                                     Об объекте
                                 </Typography>
@@ -577,80 +580,7 @@ export default function VerticalTabs(props) {
                                     </Box>
                                 </Paper>
                             </Grid>
-                            <Grid item xs={12}>
-                                <Typography variant="h6" className={classes.field}>
-                                    Стоимость
-                                </Typography>
-                                <Paper className={classes.paper}>
-                                    <Box className={classes.fields}>
-                                        <Typography variant="subtitle1">
-                                            Цена:
-                                        </Typography>
-                                        <Typography variant="subtitle2">
-                                            { deal?.advertisement.parameters.cost }
-                                        </Typography>
-                                    </Box>
-                                    <Box className={classes.fields}>
-                                        <Typography variant="subtitle1">
-                                            Цена за м2:
-                                        </Typography>
-                                        <Typography variant="subtitle2">
-                                            { deal?.advertisement.parameters.total_cost }
-                                        </Typography>
-                                    </Box>
-                                </Paper>
-                            </Grid>
-                        </Grid>
-                        <Grid container item xs={6}>
-                            <Grid item xs={12}>
-                                <Typography variant="h6" className={classes.field}>
-                                    Специалист
-                                </Typography>
-                                <Paper className={classes.paper}>
-                                    <Box className={classes.fields}>
-                                        <Typography variant="subtitle1">
-                                            Специалист:
-                                        </Typography>
-                                        <Typography variant="subtitle2">
-                                            { deal?.advertisement.employeesid.name } { deal?.advertisement.employeesid.surname }
-                                        </Typography>
-                                    </Box>
-                                    <Box className={classes.fields}>
-                                        <Typography variant="subtitle1">
-                                            Дата добавления:
-                                        </Typography>
-                                        <Typography variant="subtitle2">
-                                            { deal?.advertisement.date_of_creation }
-                                        </Typography>
-                                    </Box>
-                                    <Box className={classes.fields}>
-                                        <Typography variant="subtitle1">
-                                            Дата изменения:
-                                        </Typography>
-                                        <Typography variant="subtitle2">
-                                            { deal?.advertisement.date_of_change }
-                                        </Typography>
-                                    </Box>
-                                </Paper>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Typography variant="h6" className={classes.field}>
-                                    Собственник
-                                </Typography>
-                                <Paper className={classes.paper}>
-                                    <Box className={classes.fields}>
-                                        <Typography variant="subtitle1">
-                                            Имя:
-                                        </Typography>
-                                        <Typography variant="subtitle2">
-                                            { deal?.advertisement.parameters.owner_card.name }
-                                        </Typography>
-                                    </Box>
-                                </Paper>
-                            </Grid>
-                        </Grid>
-                        <Grid container item xs={6}>
-                            <Grid item xs={12}>
+                            <Grid xs={12} sm={6} item>
                                 <Typography variant="h6" className={classes.field}>
                                     Расположение
                                 </Typography>
@@ -689,8 +619,81 @@ export default function VerticalTabs(props) {
                                     </Box>
                                 </Paper>
                             </Grid>
-                            <Grid container justify="center" alignItems="center" item xs={12}>
-                                <Button variant='outlined' color="primary">
+                        </Grid>
+                        <Grid item container spacing={3}>
+                            <Grid item xs={12} sm={6}>
+                                <Typography variant="h6" className={classes.field}>
+                                    Специалист
+                                </Typography>
+                                <Paper className={classes.paper}>
+                                    <Box className={classes.fields}>
+                                        <Typography variant="subtitle1">
+                                            Специалист:
+                                        </Typography>
+                                        <Typography variant="subtitle2">
+                                            { deal?.advertisement.employeesid.name } { deal?.advertisement.employeesid.surname }
+                                        </Typography>
+                                    </Box>
+                                    <Box className={classes.fields}>
+                                        <Typography variant="subtitle1">
+                                            Дата добавления:
+                                        </Typography>
+                                        <Typography variant="subtitle2">
+                                            { deal?.advertisement.date_of_creation }
+                                        </Typography>
+                                    </Box>
+                                    <Box className={classes.fields}>
+                                        <Typography variant="subtitle1">
+                                            Дата изменения:
+                                        </Typography>
+                                        <Typography variant="subtitle2">
+                                            { deal?.advertisement.date_of_change }
+                                        </Typography>
+                                    </Box>
+                                </Paper>
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <Typography variant="h6" className={classes.field}>
+                                    Стоимость
+                                </Typography>
+                                <Paper className={classes.paper}>
+                                    <Box className={classes.fields}>
+                                        <Typography variant="subtitle1">
+                                            Цена:
+                                        </Typography>
+                                        <Typography variant="subtitle2">
+                                            { deal?.advertisement.parameters.cost }
+                                        </Typography>
+                                    </Box>
+                                    <Box className={classes.fields}>
+                                        <Typography variant="subtitle1">
+                                            Цена за м2:
+                                        </Typography>
+                                        <Typography variant="subtitle2">
+                                            { deal?.advertisement.parameters.total_cost }
+                                        </Typography>
+                                    </Box>
+                                </Paper>
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={2} item xs={12}>
+                            <Grid item xs={12} sm={6}>
+                                <Typography variant="h6" className={classes.field}>
+                                    Собственник
+                                </Typography>
+                                <Paper className={classes.paper}>
+                                    <Box className={classes.fields}>
+                                        <Typography variant="subtitle1">
+                                            Имя:
+                                        </Typography>
+                                        <Typography variant="subtitle2">
+                                            { deal?.advertisement.parameters.owner_card.name }
+                                        </Typography>
+                                    </Box>
+                                </Paper>
+                            </Grid>
+                            <Grid xs={12} sm={6} item container alignItems={"flex-end"} justify={"center"}>
+                                <Button href={`http://localhost:8000/objects/object/${deal?.advertisement.idadvertisement}/edit/`} variant='outlined' color="primary">
                                     Редактировать
                                 </Button>
                             </Grid>

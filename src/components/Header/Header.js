@@ -39,7 +39,6 @@ const useStyles = makeStyles((theme) =>
         color: '#000000',
         display: 'flex',
         justifyContent: 'space-between',
-        flex: 1.5,
         fontSize: '0.8rem'
     },
     menuItem: {
@@ -69,7 +68,7 @@ const Header = props => {
                             <IconButton disableFocusRipple edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                                 <img src={logo} className={classes.logo} alt="logo"/>
                             </IconButton>
-                            <Box className={classes.menuItems}>
+                            <Box className={classes.menuItems} xs={{ fontSize: 12 }}>
                                 <Typography className={classes.menuItem}>
                                     Моя страница
                                 </Typography>
