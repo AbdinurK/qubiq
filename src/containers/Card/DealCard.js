@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -11,6 +11,7 @@ import {
     Grid,
     Button,
 } from '@material-ui/core'
+import axios from 'axios'
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -70,13 +71,22 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function VerticalTabs() {
+export default function VerticalTabs(props) {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
+    const [deal, setDeal] = useState(null)
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
+    useEffect(() => {
+        setTimeout(() => {
+            axios.get(`http://localhost:8000/api/deals/${props.match.params.id}/`)
+                .then(res => setDeal(res.data))
+                .catch(e => console.log(e))
+        }, 3000)
+    }, [props.match.params.id])
 
     return (
         <Container maxWidth="lg" style={{ marginTop: '30px' }}>
@@ -105,7 +115,7 @@ export default function VerticalTabs() {
                                          Представитель продавца:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        Султан
+                                        {deal?.advertisement.employeesid.name} {deal?.advertisement.employeesid.surname}
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -113,7 +123,7 @@ export default function VerticalTabs() {
                                         Представитель покупателя:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        Максат
+                                        {deal?.customer.employeesid.name} {deal?.customer.employeesid.surname}
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -121,7 +131,7 @@ export default function VerticalTabs() {
                                         Юридическое сопровождение:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        Абдинур
+                                        { deal?.jurist ?  deal?.jurist : '-'}
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -129,7 +139,7 @@ export default function VerticalTabs() {
                                         Дата задатка:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        11.10.2020
+                                        { deal?.date_of_deposit }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -137,7 +147,7 @@ export default function VerticalTabs() {
                                         Дата истечения задатка:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        11.11.2020
+                                        { deal?.expiration_date_of_deposit ?  deal?.expiration_date_of_deposit : '-'}
                                     </Typography>
                                 </Box>
                             </Paper>
@@ -152,7 +162,7 @@ export default function VerticalTabs() {
                                         Залог:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        -
+                                        { deal?.advertisement.parameters.pledged }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -176,7 +186,7 @@ export default function VerticalTabs() {
                                        Сумма к оплате:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        300,000
+                                        { deal?.seller_commission }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -184,7 +194,7 @@ export default function VerticalTabs() {
                                         Оплаченная часть:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        300,000
+                                        { deal?.own_pay }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -192,7 +202,7 @@ export default function VerticalTabs() {
                                         Остаток:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        0
+                                        { deal?.seller_commission - deal?.own_pay }
                                     </Typography>
                                 </Box>
                             </Paper>
@@ -231,7 +241,7 @@ export default function VerticalTabs() {
                                         Сумма к оплате:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        380,000
+                                        { deal?.customer_commission }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -239,7 +249,7 @@ export default function VerticalTabs() {
                                         Оплаченная часть:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        100,000
+                                        { deal?.cust_pay }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -247,7 +257,7 @@ export default function VerticalTabs() {
                                         Остаток:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        0
+                                        { deal?.customer_commission - deal?.cust_pay }
                                     </Typography>
                                 </Box>
                             </Paper>
@@ -265,7 +275,7 @@ export default function VerticalTabs() {
                                             Итого:
                                         </Typography>
                                         <Typography variant="subtitle2">
-                                            600,000
+                                            { deal?.customer_commission + deal?.seller_commission }
                                         </Typography>
                                     </Box>
                                     <Box className={classes.fields}>
@@ -273,7 +283,7 @@ export default function VerticalTabs() {
                                             Оплаченная часть:
                                         </Typography>
                                         <Typography variant="subtitle2">
-                                            500,000
+                                            { deal?.cust_pay + deal?.own_pay }
                                         </Typography>
                                     </Box>
                                 </Paper>
@@ -293,7 +303,7 @@ export default function VerticalTabs() {
                                          Имя:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        Марат
+                                        { deal?.customer.name }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -301,7 +311,7 @@ export default function VerticalTabs() {
                                         Телефон:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        +77007002161
+                                        { deal?.customer.phone_number }
                                     </Typography>
                                 </Box>
                             </Paper>
@@ -316,7 +326,7 @@ export default function VerticalTabs() {
                                         Специалист:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        Раушан Узакова
+                                        { deal?.customer.employeesid.name } { deal?.customer.employeesid.surname }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -324,7 +334,7 @@ export default function VerticalTabs() {
                                         Дата добавления:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        31.10.2020 в 12:54:40
+                                        { deal?.customer.contact_date }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -332,7 +342,7 @@ export default function VerticalTabs() {
                                         Дата изменения:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        31.10.2020 в 12:54:40
+                                        { deal?.customer.date_of_change }
                                     </Typography>
                                 </Box>
                             </Paper>
@@ -347,7 +357,7 @@ export default function VerticalTabs() {
                                         Комнатность:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        3
+                                        { deal?.advertisement.parameters.room }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -355,7 +365,7 @@ export default function VerticalTabs() {
                                         Сегмент поиска:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        Нет
+
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -363,7 +373,7 @@ export default function VerticalTabs() {
                                         Район:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        Ауезовский
+                                        { deal?.advertisement.parameters.district.name }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -371,7 +381,7 @@ export default function VerticalTabs() {
                                         Год подстройки:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        1969
+                                        { deal?.advertisement.parameters.year_of_construction }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -379,7 +389,7 @@ export default function VerticalTabs() {
                                         Этаж:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        Первый Средний
+                                        { deal?.advertisement.parameters.number_of_floors }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -387,7 +397,7 @@ export default function VerticalTabs() {
                                         Тип планировки:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        ОБ УЛ
+                                        { deal?.advertisement.parameters.type_of_layout }
                                     </Typography>
                                 </Box>
                             </Paper>
@@ -402,7 +412,7 @@ export default function VerticalTabs() {
                                         Инвестор:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        Нет
+                                        { deal?.customer.investor }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -410,7 +420,7 @@ export default function VerticalTabs() {
                                         Бюджет:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        16.7 млн
+                                        { deal?.customer.budget }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -418,7 +428,7 @@ export default function VerticalTabs() {
                                         Тип оплаты:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        Ипотека
+                                        { deal?.customer.payment_type }
                                     </Typography>
                                 </Box>
                             </Paper>
@@ -442,7 +452,7 @@ export default function VerticalTabs() {
                                         Комнатность:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        2
+                                        { deal?.advertisement.parameters.room }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -450,7 +460,7 @@ export default function VerticalTabs() {
                                         Площадь
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        44.0 (-) 6.0
+                                        { deal?.advertisement.parameters.area }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -458,7 +468,7 @@ export default function VerticalTabs() {
                                         Год подстройки:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        1978
+                                        { deal?.advertisement.parameters.year_of_construction }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -466,7 +476,7 @@ export default function VerticalTabs() {
                                         Этаж:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        3 (5)
+                                        { deal?.advertisement.parameters.floor }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -474,7 +484,7 @@ export default function VerticalTabs() {
                                         Тип конструкции:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        панельный
+                                        { deal?.advertisement.parameters.type_of_layout }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -482,7 +492,7 @@ export default function VerticalTabs() {
                                         Состояние:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        хорошее
+                                        { deal?.advertisement.parameters.condition }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -490,7 +500,7 @@ export default function VerticalTabs() {
                                         Высота потолков:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        2.8
+                                        { deal?.advertisement.parameters.ceiling_height }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -498,7 +508,7 @@ export default function VerticalTabs() {
                                         Угловая:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        нет
+                                        { deal?.advertisement.parameters.angle }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -506,7 +516,7 @@ export default function VerticalTabs() {
                                         Бывшее общежите:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        нет
+                                        { deal?.advertisement.parameters.former_hostel }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -514,7 +524,7 @@ export default function VerticalTabs() {
                                         Кухня студия:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        нет
+                                        { deal?.advertisement.parameters.studio_kitchen }
                                     </Typography>
                                 </Box>
                             </Paper>
@@ -530,7 +540,7 @@ export default function VerticalTabs() {
                                             Эксклюзив:
                                         </Typography>
                                         <Typography variant="subtitle2">
-                                            нет
+                                            { deal?.advertisement.parameters.exclusive }
                                         </Typography>
                                     </Box>
                                     <Box className={classes.fields}>
@@ -538,7 +548,7 @@ export default function VerticalTabs() {
                                             В залоге:
                                         </Typography>
                                         <Typography variant="subtitle2">
-                                            нет
+                                            { deal?.advertisement.parameters.pledged }
                                         </Typography>
                                     </Box>
                                     <Box className={classes.fields}>
@@ -546,7 +556,7 @@ export default function VerticalTabs() {
                                             Переплан:
                                         </Typography>
                                         <Typography variant="subtitle2">
-                                            да
+                                            { deal?.advertisement.parameters.replan }
                                         </Typography>
                                     </Box>
                                     <Box className={classes.fields}>
@@ -554,7 +564,7 @@ export default function VerticalTabs() {
                                             Переплан узаконен:
                                         </Typography>
                                         <Typography variant="subtitle2">
-                                            нет
+                                            { deal?.advertisement.parameters.legalized_replan }
                                         </Typography>
                                     </Box>
                                     <Box className={classes.fields}>
@@ -562,7 +572,7 @@ export default function VerticalTabs() {
                                             Ключь iAgent:
                                         </Typography>
                                         <Typography variant="subtitle2">
-                                            14718558
+                                            { deal?.advertisement.parameters.iagent_number }
                                         </Typography>
                                     </Box>
                                 </Paper>
@@ -577,7 +587,7 @@ export default function VerticalTabs() {
                                             Цена:
                                         </Typography>
                                         <Typography variant="subtitle2">
-                                            18.0 млн тг
+                                            { deal?.advertisement.parameters.cost }
                                         </Typography>
                                     </Box>
                                     <Box className={classes.fields}>
@@ -585,7 +595,7 @@ export default function VerticalTabs() {
                                             Цена за м2:
                                         </Typography>
                                         <Typography variant="subtitle2">
-                                            409,090 тг
+                                            { deal?.advertisement.parameters.total_cost }
                                         </Typography>
                                     </Box>
                                 </Paper>
@@ -602,7 +612,7 @@ export default function VerticalTabs() {
                                             Специалист:
                                         </Typography>
                                         <Typography variant="subtitle2">
-                                            Асель Джанбасарова
+                                            { deal?.advertisement.employeesid.name } { deal?.advertisement.employeesid.surname }
                                         </Typography>
                                     </Box>
                                     <Box className={classes.fields}>
@@ -610,7 +620,7 @@ export default function VerticalTabs() {
                                             Дата добавления:
                                         </Typography>
                                         <Typography variant="subtitle2">
-                                            31.10.2020 в 18:37:20
+                                            { deal?.advertisement.date_of_creation }
                                         </Typography>
                                     </Box>
                                     <Box className={classes.fields}>
@@ -618,7 +628,7 @@ export default function VerticalTabs() {
                                             Дата изменения:
                                         </Typography>
                                         <Typography variant="subtitle2">
-                                            31.10.2020 в 18:37:20
+                                            { deal?.advertisement.date_of_change }
                                         </Typography>
                                     </Box>
                                 </Paper>
@@ -633,14 +643,14 @@ export default function VerticalTabs() {
                                             Имя:
                                         </Typography>
                                         <Typography variant="subtitle2">
-                                            Гуля
+                                            { deal?.advertisement.parameters.owner_card.name }
                                         </Typography>
                                     </Box>
                                 </Paper>
                             </Grid>
                         </Grid>
                         <Grid container item xs={6}>
-                            <Grid xs={12}>
+                            <Grid item xs={12}>
                                 <Typography variant="h6" className={classes.field}>
                                     Расположение
                                 </Typography>
@@ -650,7 +660,7 @@ export default function VerticalTabs() {
                                             Район:
                                         </Typography>
                                         <Typography variant="subtitle2">
-                                            Алмалинский
+                                            { deal?.advertisement.parameters.district.name }
                                         </Typography>
                                     </Box>
                                     <Box className={classes.fields}>
@@ -658,7 +668,7 @@ export default function VerticalTabs() {
                                             Улица:
                                         </Typography>
                                         <Typography variant="subtitle2">
-                                            Ади Шарипова(Мечникова)
+                                            { deal?.advertisement.parameters.street }
                                         </Typography>
                                     </Box>
                                     <Box className={classes.fields}>
@@ -666,7 +676,7 @@ export default function VerticalTabs() {
                                             Пересечение:
                                         </Typography>
                                         <Typography variant="subtitle2">
-                                            Макатаева
+                                            { deal?.advertisement.parameters.cross_street }
                                         </Typography>
                                     </Box>
                                     <Box className={classes.fields}>
@@ -674,7 +684,7 @@ export default function VerticalTabs() {
                                             Номер дома:
                                         </Typography>
                                         <Typography variant="subtitle2">
-                                            17
+                                            { deal?.advertisement.parameters.apartment_number }
                                         </Typography>
                                     </Box>
                                 </Paper>

@@ -10,6 +10,7 @@ import { deals } from '../../data/deals'
 import Filter from "../../components/Filter/Filter";
 import { CsvBuilder } from 'filefy';
 import { DataGrid } from "@material-ui/data-grid";
+import axios from 'axios';
 
 
 const arr = [];
@@ -69,10 +70,8 @@ const useStyles = makeStyles(theme => ({
         maxHeight: 800,
     },
     header: {
-        display: 'flex',
-        flexDirection: 'row',
-        height: '100%',
-        textDecoration: 'none',
+        minWidth: '5%',
+        width: '100%'
     },
     search: {
         position: 'relative',
@@ -106,17 +105,16 @@ const useStyles = makeStyles(theme => ({
     last: {
         '& .MuiDataGrid-columnSeparator': {
             display: 'none'
-        }
+        },
+        flex: 1,
     }
 }));
 const cellStyles = makeStyles(theme => ({
     root: {
         fontSize: '0.6rem',
-        flexGrow: 1,
         lineHeight: 1,
-        '& .MuiDataGrid-colCell': {
-        },
         '& .MuiDataGrid-row > .MuiDataGrid-cell': {
+            flex: 1,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -166,6 +164,16 @@ export default function UserTable() {
     useEffect(() => {
         setDeals(arr)
     }, []);
+
+    useEffect(() => {
+        setTimeout(() => {
+            axios.get('http://localhost:8000/api/deals/')
+                .then(data => console.log(data.data))
+                .catch(e => console.log(e))
+        }, 3000)
+    }, [])
+
+
     const onReset = () => {
         setDeals(arr);
         setState(initialState)
@@ -199,12 +207,12 @@ export default function UserTable() {
                 return '#3d85c6'
             case 'Ожидает':
                 return '#ccc'
-            default: return null
+            default: return '#dd4343'
         }
     }
 
     const columns = [
-        { field: 'id', width: 70, headerName: 'No',
+        { field: 'id', flex: 1, headerName: 'No',
             renderCell: (params) => (
                 <div>
                     <Link to={`/deals/${params.getValue('id')}`}>
@@ -215,7 +223,6 @@ export default function UserTable() {
                     </Link>
                 </div>
             ),
-            cellClassName: classes.header,
         },
         { field: 'employees', width: 140, headerName: 'Специалисты', headerAlign: 'center',
             valueGetter: (params) =>
@@ -275,7 +282,7 @@ export default function UserTable() {
             headerClassName: classes.header
         },
         { field: 'commission', headerName: 'Задаток', headerAlign: 'center', width: 60, ...usdPrice },
-        { field: 'moneys', headerName: 'Комиссионные', headerAlign: 'center', width: 80, ...usdPrice,
+        { field: 'moneys', flex: 1, headerName: 'Комиссионные', headerAlign: 'center', width: 80, ...usdPrice,
             valueGetter: (params) =>
                 `${currencyFormatter.format(Number(params.getValue('owner_money'))) || ''} ${
                     params.getValue('customer_money') || ''
@@ -292,7 +299,7 @@ export default function UserTable() {
                 </div>
             ),
         },
-        { field: 'contacts', headerName: 'Контакты', width: 100,
+        { field: 'contacts', headerName: 'Контакты', flex: 1,
             valueGetter: (params) =>
                 `${params.getValue('owner_phone') || ''} ${
                     params.getValue('customer_phone') || ''
@@ -300,7 +307,7 @@ export default function UserTable() {
             cellClassName: classes.header,
             headerAlign: 'center'
         },
-        { field: 'payment', width: 120, headerName: 'Банк / Залог', headerAlign: 'center',
+        { field: 'payment', flex: 1, headerName: 'Банк / Залог', headerAlign: 'center',
             valueGetter: (params) =>
                 `${params.getValue('bank') || ''} ${
                     params.getValue('pledged_bank') || ''
