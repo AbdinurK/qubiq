@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
+import { DatePicker } from 'antd';
 import {
     Tabs,
     Typography,
@@ -11,6 +12,7 @@ import {
     Grid,
     Button,
 } from '@material-ui/core'
+import moment from "moment";
 import axios from 'axios'
 
 function TabPanel(props) {
@@ -89,6 +91,18 @@ export default function DealCard(props) {
         }, 3000)
     }, [props.match.params.id])
 
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        axios.put(`http://localhost:8000/api/deals/3/`, {
+            cust_full_pay_date: '2017-08-21',
+        }).then(e => console.log(e)).catch(e => new Error(e))
+    };
+
+
+    // const [selectedDate, setSelectedDate] = useState(moment(deal?.date_of_deposit, 'YYYY-MM-DD'));
+
     return (
         <Container maxWidth="lg" style={{ marginTop: '30px' }}>
             <div className={classes.root}>
@@ -139,16 +153,14 @@ export default function DealCard(props) {
                                     <Typography variant="subtitle1">
                                         Дата задатка:
                                     </Typography>
-                                    <Typography variant="subtitle2">
-                                        { deal?.date_of_deposit }
-                                    </Typography>
+                                    <DatePicker value={moment(deal?.date_of_deposit, 'DD-MM-YYYY')} />
                                 </Box>
                                 <Box className={classes.fields}>
                                     <Typography variant="subtitle1">
                                         Дата истечения задатка:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        { deal?.expiration_date_of_deposit ?  deal?.expiration_date_of_deposit : '-'}
+                                        <DatePicker value={moment(deal?.expiration_date_of_deposit, 'DD-MM-YYYY')} />
                                     </Typography>
                                 </Box>
                             </Paper>
@@ -171,7 +183,7 @@ export default function DealCard(props) {
                                         Дата ожидаемой оплаты:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        { deal?.own_pay_date }
+                                        <DatePicker value={moment(deal?.own_pay_date, 'DD-MM-YYYY').isValid()} />
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -179,7 +191,7 @@ export default function DealCard(props) {
                                          Дата полной оплаты:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        { deal?.own_full_pay_date }
+                                        <DatePicker value={moment(deal?.own_full_pay_date, 'DD-MM-YYYY').isValid() } />
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -226,7 +238,7 @@ export default function DealCard(props) {
                                         Дата ожидаемой оплаты:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        { deal?.cust_pay_date }
+                                        <DatePicker value={moment(deal?.cust_pay_date, 'DD-MM-YYYY')} />
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -234,7 +246,7 @@ export default function DealCard(props) {
                                         Дата полной оплаты
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        { deal?.cust_full_pay_date }
+                                        <DatePicker value={moment(deal?.cust_full_pay_date, 'DD-MM-YYYY')} />
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -285,7 +297,7 @@ export default function DealCard(props) {
                                 </Paper>
                             </Grid>
                             <Grid xs={12} sm={6} item container alignItems={"flex-end"} justify={"center"}>
-                                <Button href={`http://localhost:8000/customers/customer/${deal?.customer.idcustomer_card}/edit/`} variant='outlined' color="primary">
+                                <Button onClick={handleSubmit} variant='outlined' color="primary">
                                     Редактировать
                                 </Button>
                             </Grid>
@@ -436,7 +448,7 @@ export default function DealCard(props) {
                                 </Paper>
                             </Grid>
                             <Grid container alignItems={"center"} justify={"center"} item xs={12} sm={12}>
-                                <Button href={`http://localhost:8000/objects/object/${deal?.advertisement.idadvertisement}/edit/`} variant='outlined' color="primary">
+                                <Button href={`http://localhost:8000/customers/customer/${deal?.customer.idcustomer_card}/edit/`} variant='outlined' color="primary">
                                     Редактировать
                                 </Button>
                             </Grid>
