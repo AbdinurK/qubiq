@@ -83,7 +83,6 @@ const UserCard = props => {
             .get('http://localhost:8000/api/employees/156')
             .then(res => setData(res.data))
     }, [])
-    console.log(data)
     const { checkedA, checkedB } = state;
     const [chipData, setChipData] = React.useState([
         { key: 0, label: 'Модератор' },

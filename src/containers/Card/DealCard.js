@@ -96,12 +96,14 @@ export default function DealCard(props) {
     const handleSubmit = (e) => {
         e.preventDefault()
         axios.put(`http://localhost:8000/api/deals/3/`, {
+            ...deal,
+            cause_of_failure: '',
+            jurist: '',
             cust_full_pay_date: '2017-08-21',
         }).then(e => console.log(e)).catch(e => new Error(e))
     };
 
 
-    // const [selectedDate, setSelectedDate] = useState(moment(deal?.date_of_deposit, 'YYYY-MM-DD'));
 
     return (
         <Container maxWidth="lg" style={{ marginTop: '30px' }}>

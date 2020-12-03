@@ -102,9 +102,11 @@ const Header = props => {
                             </IconButton>
                             <Hidden only={["md", "sm", "xs"]}>
                                 <Box className={classes.menuItems} xs={{ fontSize: 12 }}>
-                                    <Typography className={classes.menuItem}>
-                                        Моя страница
-                                    </Typography>
+                                    <Link to="/dashboard">
+                                        <Typography className={classes.menuItem}>
+                                            Моя страница
+                                        </Typography>
+                                    </Link>
                                     <Typography className={classes.menuItem}>
                                         Директория HR
                                     </Typography>

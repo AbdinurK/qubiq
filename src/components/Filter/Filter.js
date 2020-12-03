@@ -10,6 +10,7 @@ import {
     MenuItem,
     Grid,
     Fade,
+    Box,
     FormGroup
 } from "@material-ui/core"
 import DateFnsUtils from '@date-io/date-fns';
@@ -33,6 +34,7 @@ const useStyles = makeStyles(theme => ({
         borderRadius: theme.shape.borderRadius,
     },
     title: {
+        color: '#fff',
         display: 'none',
         [theme.breakpoints.up('sm')]: {
             display: 'block',
@@ -214,82 +216,93 @@ const Filter = (props) => {
                         <Toolbar className={classes.toolbar}>
 
                             <Grid direction={"row"} container>
-                                <Grid item direction={"row"} alignItems={"center"} justify={"space-between"} container>
-                                    <Typography aria-label="transaction" className={classes.title} variant="body1" noWrap>
-                                        Оплата:
-                                    </Typography>
-                                    <FormGroup>
-                                        <Select
-                                            className={classes.nativeInput}
-                                            labelId="transaction"
-                                            id="payment"
-                                            name="payment"
-                                            value={props.state.payment}
-                                            onChange={handleChange}
-                                        >
-                                            <MenuItem value="Наличные">Наличные</MenuItem>
-                                            <MenuItem value="Ипотека">Ипотека</MenuItem>
-                                        </Select>
-                                    </FormGroup>
+                                <Grid item direction={"row"} alignItems={"center"} justify={"space-between"} wrap={"wrap"} container>
+                                    <Box>
+                                        <Typography aria-label="transaction" className={classes.title} variant="body1" noWrap>
+                                            Оплата:
+                                        </Typography>
+                                        <FormGroup>
+                                            <Select
+                                                className={classes.nativeInput}
+                                                labelId="transaction"
+                                                id="payment"
+                                                name="payment"
+                                                value={props.state.payment}
+                                                onChange={handleChange}
+                                            >
+                                                <MenuItem value="Наличные">Наличные</MenuItem>
+                                                <MenuItem value="Ипотека">Ипотека</MenuItem>
+                                            </Select>
+                                        </FormGroup>
+                                    </Box>
 
-                                    <Typography className={classes.title} variant="body1" noWrap>
-                                        Дата задатка от:
-                                    </Typography>
-                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                        <ThemeProvider theme={defaultMaterialTheme}>
+                                    <Box>
+                                        <Typography className={classes.title} variant="body1" noWrap>
+                                            Дата задатка от:
+                                        </Typography>
+                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                            <ThemeProvider theme={defaultMaterialTheme}>
+                                                <FormGroup>
+                                                    <KeyboardDatePicker
+                                                        variant="inline"
+                                                        format="yyyy-MM-dd"
+                                                        margin="normal"
+                                                        name="dep_date"
+                                                        id="dep_date"
+                                                        value={props.state.dep_date}
+                                                        onChange={handleDepDateChange}
+                                                        KeyboardButtonProps={{
+                                                            'aria-label': 'change date',
+                                                        }}
+                                                    />
+                                                </FormGroup>
+                                            </ThemeProvider>
+                                        </MuiPickersUtilsProvider>
+                                    </Box>
+
+                                    <Box>
+                                        <Typography className={classes.title} variant="body1" noWrap>
+                                            до:
+                                        </Typography>
+                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                             <FormGroup>
                                                 <KeyboardDatePicker
                                                     variant="inline"
                                                     format="yyyy-MM-dd"
                                                     margin="normal"
-                                                    name="dep_date"
-                                                    id="dep_date"
-                                                    value={props.state.dep_date}
-                                                    onChange={handleDepDateChange}
+                                                    name="advances2"
+                                                    id="advances-b"
+                                                    value={props.state.exp_date}
+                                                    onChange={handleExpDateChange}
                                                     KeyboardButtonProps={{
                                                         'aria-label': 'change date',
                                                     }}
                                                 />
                                             </FormGroup>
-                                        </ThemeProvider>
-                                    </MuiPickersUtilsProvider>
-                                    <Typography className={classes.title} variant="body1" noWrap>
-                                        до:
-                                    </Typography>
-                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                        <FormGroup>
-                                            <KeyboardDatePicker
-                                                variant="inline"
-                                                format="yyyy-MM-dd"
-                                                margin="normal"
-                                                name="advances2"
-                                                id="advances-b"
-                                                value={props.state.exp_date}
-                                                onChange={handleExpDateChange}
-                                                KeyboardButtonProps={{
-                                                    'aria-label': 'change date',
-                                                }}
-                                            />
-                                        </FormGroup>
-                                    </MuiPickersUtilsProvider>
-                                    <Typography className={classes.title} variant="body1" noWrap>
-                                        Дата сделки:
-                                    </Typography>
-                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                        <FormGroup>
-                                            <KeyboardDatePicker
-                                                variant="inline"
-                                                format="yyyy-MM-dd"
-                                                margin="normal"
-                                                id="transaction"
-                                                value={props.state.transaction}
-                                                onChange={handleDealDateChange}
-                                                KeyboardButtonProps={{
-                                                    'aria-label': 'change date',
-                                                }}
-                                            />
-                                        </FormGroup>
-                                    </MuiPickersUtilsProvider>
+                                        </MuiPickersUtilsProvider>
+                                    </Box>
+
+                                    <Box>
+                                        <Typography className={classes.title} variant="body1" noWrap>
+                                            Дата сделки:
+                                        </Typography>
+                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                            <FormGroup>
+                                                <KeyboardDatePicker
+                                                    variant="inline"
+                                                    format="yyyy-MM-dd"
+                                                    margin="normal"
+                                                    id="transaction"
+                                                    value={props.state.transaction}
+                                                    onChange={handleDealDateChange}
+                                                    KeyboardButtonProps={{
+                                                        'aria-label': 'change date',
+                                                    }}
+                                                />
+                                            </FormGroup>
+                                        </MuiPickersUtilsProvider>
+                                    </Box>
+
                                 </Grid>
                             </Grid>
 
