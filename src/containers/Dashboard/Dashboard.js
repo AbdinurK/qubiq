@@ -1,10 +1,11 @@
-import React, { useState, Component } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import {Container, Grid, Tabs, Tab, Box, Typography, Paper} from '@material-ui/core';
 import FusionCharts from 'fusioncharts';
 import TimeSeries from 'fusioncharts/fusioncharts.timeseries';
 import ReactFC from 'react-fusioncharts';
 import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
+import axios from 'axios'
 
 ReactFC.fcRoot(FusionCharts, TimeSeries, FusionTheme);
 
@@ -156,13 +157,24 @@ function a11yProps(index) {
     };
 }
 
-const Dashboard = () => {
+const Dashboard = (props) => {
     const styles = useStyles();
 
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = useState(0);
+    const [data, setData] = useState({})
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
+    useEffect(() => {
+        setTimeout(() => {
+            axios.get(`http://localhost:8000/api/dashboard/${props.match.params.id}/`)
+                .then(res => setData(res.data))
+                .catch(e => console.log(e))
+        }, 3000)
+    }, [props.match.params.id])
+
+
     return (
         <Container maxWidth="xl">
             <div className={styles.root}>
@@ -186,13 +198,13 @@ const Dashboard = () => {
                             </Typography>
                             <Paper className={styles.paper}>
                                 <Typography>
-                                    Айтуар Серикханов
+                                    { data?.name } { data?.surname }
                                 </Typography>
                                 <Typography>
-                                    Агент категорий "A"
+                                    Агент категорий "{ data?.grade }"
                                 </Typography>
                                 <Typography>
-                                    TL Бейбарс Тулебаев
+                                   TL { data?.leader }
                                 </Typography>
                             </Paper>
                         </Grid>
@@ -204,10 +216,10 @@ const Dashboard = () => {
                                 <Box className={styles.box}>
                                     <Paper className={styles.row}>
                                         <Typography variant="h4">
-                                            35 oч.
+                                            { data?.current_points } oч.
                                         </Typography>
                                         <Typography variant="subtitle1">
-                                            66% от 45 оч.
+                                            {(data?.current_points / data?.plan_points) * 100 }% от { data?.plan_points  } оч.
                                         </Typography>
                                     </Paper>
                                     <Paper className={styles.row}>
@@ -222,10 +234,10 @@ const Dashboard = () => {
                                 <Box className={styles.box}>
                                     <Paper className={styles.row}>
                                         <Typography variant="h4">
-                                            300 000 тг.
+                                            { data?.current_profit } тг.
                                         </Typography>
                                         <Typography variant="subtitle1">
-                                            50% от 600 000 тг
+                                            {(data?.current_profit / data?.plan_profit) * 100 }% от { data?.plan_profit } тг
                                         </Typography>
                                     </Paper>
                                     <Paper className={styles.row}>
@@ -240,7 +252,7 @@ const Dashboard = () => {
                                 <Box className={styles.box}>
                                     <Paper className={styles.row}>
                                         <Typography variant="h4">
-                                            15 | 30
+                                            { data?.new_objects } | { data?.active_objects }
                                         </Typography>
                                         <Typography variant="subtitle1">
                                             новых | всего
@@ -251,7 +263,7 @@ const Dashboard = () => {
                                     </Paper>
                                     <Paper className={styles.row}>
                                         <Typography variant="h4">
-                                            15 | 30
+                                            { data?.new_customers } | { data?.active_customers }
                                         </Typography>
                                         <Typography variant="subtitle1">
                                             новых | всего
@@ -290,10 +302,10 @@ const Dashboard = () => {
                                 </Typography>
                                 <Paper className={styles.paper} style={{ marginTop: 10, }}>
                                     <Typography variant="subtitle1">
-                                        Показов объектов: 50
+                                        Показов объектов: { data?.obj?.length }
                                     </Typography>
                                     <Typography variant="subtitle1">
-                                        Показов покупателям: 31
+                                        Показов покупателям: { data?.cust?.length }
                                     </Typography>
                                 </Paper>
                             </Grid>
@@ -304,7 +316,7 @@ const Dashboard = () => {
                     <ChartViewer/>
                 </TabPanel>
                 <TabPanel value={value} index={2} className={styles.tabPanel}>
-                    Tab 3
+                    <ChartViewer/>
                 </TabPanel>
             </div>
         </Container>

@@ -103,8 +103,6 @@ export default function DealCard(props) {
         }).then(e => console.log(e)).catch(e => new Error(e))
     };
 
-
-
     return (
         <Container maxWidth="lg" style={{ marginTop: '30px' }}>
             <div className={classes.root}>
