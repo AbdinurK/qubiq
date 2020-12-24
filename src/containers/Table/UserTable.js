@@ -230,7 +230,7 @@ export default function UserTable() {
                     params.getValue('employee2') || ''
                 }`,
             renderCell: (params) => (
-                <div style={{ }}>
+                <div>
                     <p>
                         { params.getValue('employee1') }
                     </p>
@@ -269,7 +269,7 @@ export default function UserTable() {
                     params.getValue('customer') || ''
                 }`,
             renderCell: (params) => (
-                <div style={{ }}>
+                <div>
                     <p style={{ borderBottom: '1px solid #ccc' }}>
                         { params.getValue('owner') }
                     </p>
@@ -313,7 +313,7 @@ export default function UserTable() {
                     params.getValue('pledged_bank') || ''
                 }`,
             renderCell: (params) => (
-                <div style={{ }}>
+                <div>
                     <Typography style={{ fontSize: '0.6rem', maxHeight: '60px', }}>
                         { params.getValue('bank') }
                     </Typography>
