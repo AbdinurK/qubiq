@@ -4,7 +4,6 @@ import UserCard from "./containers/Card/UserCard";
 import UserTable from "./containers/Table/UserTable";
 import DealCard from "./containers/Card/DealCard";
 import DashboardDetail from "./containers/Dashboard/DashboardDetail";
-import TeamDashboard from "./containers/Dashboard/TeamDashboard";
 import Dashboard from "./containers/Dashboard/Dashboard";
 import { Switch, Route } from "react-router-dom"
 import 'antd/dist/antd.css';

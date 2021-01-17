@@ -15,7 +15,6 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-
 const Dashboard = () => {
     const classes = useStyles()
     return (
@@ -47,7 +46,7 @@ const Dashboard = () => {
                                 Результат за месяц:
                             </Typography>
                             <Typography variant="subtitle2">
-                                🥇
+
                             </Typography>
                         </Box>
                         <Box className={classes.box}>
@@ -55,7 +54,7 @@ const Dashboard = () => {
                                 Рейтинг за месяц:
                             </Typography>
                             <Typography variant="subtitle2">
-                                +2 🚀
+                                +2
                             </Typography>
                         </Box>
                         <Chip
@@ -91,7 +90,7 @@ const Dashboard = () => {
                                 Результат за месяц:
                             </Typography>
                             <Typography variant="subtitle2">
-                                🥇
+
                             </Typography>
                         </Box>
                         <Box className={classes.box}>
@@ -99,7 +98,7 @@ const Dashboard = () => {
                                 Рейтинг за месяц:
                             </Typography>
                             <Typography variant="subtitle2">
-                                +2 🚀
+                                +2
                             </Typography>
                         </Box>
                         <Chip
@@ -135,7 +134,7 @@ const Dashboard = () => {
                                 Результат за месяц:
                             </Typography>
                             <Typography variant="subtitle2">
-                                🥇
+
                             </Typography>
                         </Box>
                         <Box className={classes.box}>
@@ -143,7 +142,7 @@ const Dashboard = () => {
                                 Рейтинг за месяц:
                             </Typography>
                             <Typography variant="subtitle2">
-                                +2 🚀
+                                +2
                             </Typography>
                         </Box>
                         <Chip
@@ -179,7 +178,7 @@ const Dashboard = () => {
                                 Результат за месяц:
                             </Typography>
                             <Typography variant="subtitle2">
-                                🥇
+
                             </Typography>
                         </Box>
                         <Box className={classes.box}>
@@ -187,7 +186,7 @@ const Dashboard = () => {
                                 Рейтинг за месяц:
                             </Typography>
                             <Typography variant="subtitle2">
-                                +2 🚀
+                                +2
                             </Typography>
                         </Box>
                         <Chip
@@ -223,7 +222,7 @@ const Dashboard = () => {
                                 Результат за месяц:
                             </Typography>
                             <Typography variant="subtitle2">
-                                🥇
+
                             </Typography>
                         </Box>
                         <Box className={classes.box}>
@@ -231,7 +230,7 @@ const Dashboard = () => {
                                 Рейтинг за месяц:
                             </Typography>
                             <Typography variant="subtitle2">
-                                +2 🚀
+                                +2
                             </Typography>
                         </Box>
                         <Chip
@@ -267,7 +266,7 @@ const Dashboard = () => {
                                 Результат за месяц:
                             </Typography>
                             <Typography variant="subtitle2">
-                                🥇
+
                             </Typography>
                         </Box>
                         <Box className={classes.box}>
@@ -275,7 +274,7 @@ const Dashboard = () => {
                                 Рейтинг за месяц:
                             </Typography>
                             <Typography variant="subtitle2">
-                                +2 🚀
+
                             </Typography>
                         </Box>
                         <Chip
@@ -311,7 +310,7 @@ const Dashboard = () => {
                                 Результат за месяц:
                             </Typography>
                             <Typography variant="subtitle2">
-                                🥇
+
                             </Typography>
                         </Box>
                         <Box className={classes.box}>
@@ -319,7 +318,7 @@ const Dashboard = () => {
                                 Рейтинг за месяц:
                             </Typography>
                             <Typography variant="subtitle2">
-                                +2 🚀
+
                             </Typography>
                         </Box>
                         <Chip
@@ -355,7 +354,7 @@ const Dashboard = () => {
                                 Результат за месяц:
                             </Typography>
                             <Typography variant="subtitle2">
-                                🥇
+
                             </Typography>
                         </Box>
                         <Box className={classes.box}>
@@ -363,7 +362,7 @@ const Dashboard = () => {
                                 Рейтинг за месяц:
                             </Typography>
                             <Typography variant="subtitle2">
-                                +2 🚀
+                                +2
                             </Typography>
                         </Box>
                         <Chip

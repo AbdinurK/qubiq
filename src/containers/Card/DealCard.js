@@ -95,11 +95,9 @@ export default function DealCard(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        console.log(deal)
         axios.put(`http://localhost:8000/api/deals/3/`, {
             ...deal,
-            cause_of_failure: '',
-            jurist: '',
-            cust_full_pay_date: '2017-08-21',
         }).then(e => console.log(e)).catch(e => new Error(e))
     };
 
@@ -160,7 +158,16 @@ export default function DealCard(props) {
                                         Дата истечения задатка:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        <DatePicker value={moment(deal?.expiration_date_of_deposit, 'DD-MM-YYYY')} />
+                                        <DatePicker
+                                            value={deal?.expiration_date_of_deposit
+                                                ? moment(deal?.expiration_date_of_deposit, 'DD-MM-YYYY') : ''
+                                            }
+                                            onChange={(date, dateString) => setDeal({
+                                                ...deal,
+                                                expiration_date_of_deposit: date.format("YYYY-MM-DD")
+                                            })}
+                                            allowClear={false}
+                                        />
                                     </Typography>
                                 </Box>
                             </Paper>
@@ -183,7 +190,16 @@ export default function DealCard(props) {
                                         Дата ожидаемой оплаты:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        <DatePicker value={moment(deal?.own_pay_date, 'DD-MM-YYYY').isValid()} />
+                                        <DatePicker
+                                            value={deal?.own_pay_date
+                                                ? moment(deal?.own_pay_date, 'DD-MM-YYYY') : ''
+                                            }
+                                            onChange={(date, dateString) => setDeal({
+                                                ...deal,
+                                                own_pay_date: date.format("YYYY-MM-DD")
+                                            })}
+                                            allowClear={false}
+                                        />
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -191,7 +207,16 @@ export default function DealCard(props) {
                                          Дата полной оплаты:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        <DatePicker value={moment(deal?.own_full_pay_date, 'DD-MM-YYYY').isValid() } />
+                                        <DatePicker
+                                            value={deal?.own_full_pay_date
+                                                ? moment(deal?.own_full_pay_date, 'DD-MM-YYYY') : ''
+                                            }
+                                            onChange={(date, dateString) => setDeal({
+                                                ...deal,
+                                                own_full_pay_date: date.format("YYYY-MM-DD")
+                                            })}
+                                            allowClear={false}
+                                        />
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -238,7 +263,16 @@ export default function DealCard(props) {
                                         Дата ожидаемой оплаты:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        <DatePicker value={moment(deal?.cust_pay_date, 'DD-MM-YYYY')} />
+                                        <DatePicker
+                                            value={deal?.cust_pay_date ?
+                                                moment(deal?.cust_pay_date, 'YYYY-MM-DD') : ''
+                                            }
+                                            onChange={(date, dateString) => setDeal({
+                                                ...deal,
+                                                cust_pay_date: date.format("YYYY-MM-DD")
+                                            })}
+                                            allowClear={false}
+                                        />
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -246,7 +280,17 @@ export default function DealCard(props) {
                                         Дата полной оплаты
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        <DatePicker value={moment(deal?.cust_full_pay_date, 'DD-MM-YYYY')} />
+                                        <DatePicker
+                                            value={deal?.cust_full_pay_date ?
+                                                moment(deal?.cust_full_pay_date, 'DD-MM-YYYY') : ''
+                                            }
+                                            onChange={(date, dateString) => setDeal({
+                                                ...deal,
+                                                cust_full_pay_date: date.format("YYYY-MM-DD")
+                                            })}
+                                            format="YYYY-MM-DD"
+                                            allowClear={false}
+                                        />
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
