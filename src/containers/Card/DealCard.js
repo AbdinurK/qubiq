@@ -78,6 +78,7 @@ export default function DealCard(props) {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
     const [deal, setDeal] = useState(null)
+    const [formData, setFormData] = useState({})
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -95,9 +96,9 @@ export default function DealCard(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(deal)
+        console.log(formData)
         axios.put(`http://localhost:8000/api/deals/3/`, {
-            ...deal,
+            ...formData,
         }).then(e => console.log(e)).catch(e => new Error(e))
     };
 
@@ -151,7 +152,20 @@ export default function DealCard(props) {
                                     <Typography variant="subtitle1">
                                         Дата задатка:
                                     </Typography>
-                                    <DatePicker value={moment(deal?.date_of_deposit, 'DD-MM-YYYY')} />
+                                    <DatePicker
+                                        value={moment(deal?.date_of_deposit, 'DD-MM-YYYY')}
+                                        onChange={(date) => {
+                                            setDeal({
+                                                ...deal,
+                                                date_of_deposit: date.format("YYYY-MM-DD")
+                                            })
+                                            setFormData({
+                                                ...formData,
+                                                date_of_deposit: date.format("YYYY-MM-DD")
+                                            })
+                                        }}
+                                        allowClear={false}
+                                    />
                                 </Box>
                                 <Box className={classes.fields}>
                                     <Typography variant="subtitle1">
@@ -162,10 +176,16 @@ export default function DealCard(props) {
                                             value={deal?.expiration_date_of_deposit
                                                 ? moment(deal?.expiration_date_of_deposit, 'DD-MM-YYYY') : ''
                                             }
-                                            onChange={(date, dateString) => setDeal({
-                                                ...deal,
-                                                expiration_date_of_deposit: date.format("YYYY-MM-DD")
-                                            })}
+                                            onChange={(date) => {
+                                                setDeal({
+                                                    ...deal,
+                                                    expiration_date_of_deposit: date.format("YYYY-MM-DD")
+                                                })
+                                                setFormData({
+                                                    ...formData,
+                                                    expiration_date_of_deposit: date.format("YYYY-MM-DD")
+                                                })
+                                            }}
                                             allowClear={false}
                                         />
                                     </Typography>
@@ -194,10 +214,17 @@ export default function DealCard(props) {
                                             value={deal?.own_pay_date
                                                 ? moment(deal?.own_pay_date, 'DD-MM-YYYY') : ''
                                             }
-                                            onChange={(date, dateString) => setDeal({
-                                                ...deal,
-                                                own_pay_date: date.format("YYYY-MM-DD")
-                                            })}
+                                            onChange={(date) => {
+                                                setDeal({
+                                                    ...deal,
+                                                    own_pay_date: date.format("YYYY-MM-DD")
+                                                })
+                                                setFormData({
+                                                    ...formData,
+                                                    own_pay_date: date.format("YYYY-MM-DD")
+                                                })
+                                                }
+                                            }
                                             allowClear={false}
                                         />
                                     </Typography>
@@ -211,10 +238,17 @@ export default function DealCard(props) {
                                             value={deal?.own_full_pay_date
                                                 ? moment(deal?.own_full_pay_date, 'DD-MM-YYYY') : ''
                                             }
-                                            onChange={(date, dateString) => setDeal({
-                                                ...deal,
-                                                own_full_pay_date: date.format("YYYY-MM-DD")
-                                            })}
+                                            onChange={(date) => {
+                                                setDeal({
+                                                    ...deal,
+                                                    own_full_pay_date: date.format("YYYY-MM-DD")
+                                                })
+                                                setFormData({
+                                                    ...formData,
+                                                    own_full_pay_date: date.format("YYYY-MM-DD")
+                                                })
+                                            }
+                                            }
                                             allowClear={false}
                                         />
                                     </Typography>
@@ -267,10 +301,17 @@ export default function DealCard(props) {
                                             value={deal?.cust_pay_date ?
                                                 moment(deal?.cust_pay_date, 'YYYY-MM-DD') : ''
                                             }
-                                            onChange={(date, dateString) => setDeal({
-                                                ...deal,
-                                                cust_pay_date: date.format("YYYY-MM-DD")
-                                            })}
+                                            onChange={(date) => {
+                                                setDeal({
+                                                    ...deal,
+                                                    cust_pay_date: date.format("YYYY-MM-DD")
+                                                })
+                                                setFormData({
+                                                    ...formData,
+                                                    cust_pay_date: date.format("YYYY-MM-DD")
+                                                })
+                                            }
+                                            }
                                             allowClear={false}
                                         />
                                     </Typography>
@@ -284,10 +325,17 @@ export default function DealCard(props) {
                                             value={deal?.cust_full_pay_date ?
                                                 moment(deal?.cust_full_pay_date, 'DD-MM-YYYY') : ''
                                             }
-                                            onChange={(date, dateString) => setDeal({
-                                                ...deal,
-                                                cust_full_pay_date: date.format("YYYY-MM-DD")
-                                            })}
+                                            onChange={(date) => {
+                                                setDeal({
+                                                    ...deal,
+                                                    cust_full_pay_date: date.format("YYYY-MM-DD")
+                                                })
+                                                setFormData({
+                                                    ...formData,
+                                                    cust_full_pay_date: date.format("YYYY-MM-DD")
+                                                })
+                                            }
+                                            }
                                             format="YYYY-MM-DD"
                                             allowClear={false}
                                         />
