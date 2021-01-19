@@ -161,7 +161,6 @@ const UserTable = ({ getDeals, deals }) => {
     });
     const usdPrice = {
         type: 'number',
-        width: 130,
         valueFormatter: ({ value }) => currencyFormatter.format(Number(value)),
         cellClassName: 'font-tabular-nums',
     };
@@ -215,6 +214,21 @@ const UserTable = ({ getDeals, deals }) => {
             ),
             headerClassName: classes.header
         },
+        { field: 'address', headerName: 'Цена / Адрес', headerAlign: 'center', flex: 1,
+            renderCell: (params) => (
+                <div style={{ }}>
+                    <p>
+                        {
+                            currencyFormatter.format(Number(params.getValue('price')))
+                        }
+                    </p>
+                    <p>
+                        { params.getValue('address') }
+                    </p>
+                </div>
+            ),
+            headerClassName: classes.header
+        },
         { field: 'start_commission_date', type: 'date', headerAlign: 'center', width: 130, headerName: 'Дата задатка от'},
         { field: 'end_commission_date', type: 'date', headerAlign: 'center', width: 130, headerName: 'Дата задатка до'},
         { field: 'deal_date', type: 'date', width: 120, headerAlign: 'center', headerName: 'Дата сделки'},
@@ -236,7 +250,7 @@ const UserTable = ({ getDeals, deals }) => {
             headerAlign: 'center',
             headerClassName: classes.header
         },
-        { field: 'commission', headerName: 'Задаток', headerAlign: 'center', width: 50, ...usdPrice },
+        { field: 'commission', headerName: 'Задаток', headerAlign: 'center', ...usdPrice },
         { field: 'moneys', flex: 1, headerName: 'Комиссионные', headerAlign: 'center', width: 80, ...usdPrice,
             valueGetter: (params) =>
                 `${currencyFormatter.format(Number(params.getValue('owner_money'))) || ''} ${
