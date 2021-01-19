@@ -6,56 +6,35 @@ import {
     Container,
     Typography
 } from "@material-ui/core"
-import { deals } from '../../data/deals'
 import Filter from "../../components/Filter/Filter";
 import { CsvBuilder } from 'filefy';
 import { DataGrid } from "@material-ui/data-grid";
-import axios from 'axios';
+import { connect } from "react-redux"
+import { getDeals } from '../../store/action/dealsActions'
 
 
-const arr = [];
 const exp = [];
-deals.map(deal => arr.push({
-    id: deal.iddeals,
-    employee1: `${deal.advertisement.employeesid.name} ${deal.advertisement.employeesid.surname}`,
-    employee2: `${deal.customer.employeesid.name} ${deal.customer.employeesid.surname}`,
-    deal_date: new Date(deal.transaction_date),
-    start_commission_date: new Date(deal.date_of_deposit),
-    end_commission_date: new Date(deal.expiration_date_of_deposit),
-    address: `${deal.advertisement.parameters.street} ${deal.advertisement.parameters.house_number}`,
-    price: `${deal.advertisement.parameters.cost}`,
-    owner: deal.advertisement.parameters.owner_card.name,
-    customer: `${deal?.customer?.name} ${ deal.customer.surname ? deal.customer.surname : ''  }`,
-    commission: deal.amount_of_deposit,
-    owner_money: deal.amount_of_deposit,
-    customer_money: deal.customer_commission,
-    owner_phone: deal.advertisement.parameters.owner_card.phone_number,
-    customer_phone: deal.customer.phone_number !== "NULL" ? deal.customer.phone_number : 'отсутствует' ,
-    deal_type: deal.status,
-    payment: deal.customer.payment_type,
-    bank: deal.customer.bank === null ? 'наличные' :  deal.customer.bank,
-    pledged_bank: deal.advertisement.parameters.pledged_bank === null ? 'Не в залоге' :  deal.advertisement.parameters.pledged_bank
-}));
-deals.map(deal => exp.push({
-    id: deal.iddeals,
-    employee1: `${deal.advertisement.employeesid.name} ${deal.advertisement.employeesid.surname}`,
-    employee2: `${deal.customer.employeesid.name} ${deal.customer.employeesid.surname}`,
-    deal_date: new Date(deal.transaction_date).toLocaleDateString(),
-    start_commission_date: new Date(deal.date_of_deposit).toLocaleDateString(),
-    end_commission_date: new Date(deal.expiration_date_of_deposit).toLocaleDateString(),
-    address: `${deal.advertisement.parameters.street} ${deal.advertisement.parameters.house_number}`,
-    price: `${deal.advertisement.parameters.cost}`,
-    owner: deal.advertisement.parameters.owner_card.name,
-    customer: `${deal?.customer?.name} ${ deal.customer.surname ? deal.customer.surname : 'отсутствует'  }`,
-    commission: deal.amount_of_deposit,
-    owner_money: deal.amount_of_deposit,
-    customer_money: deal.customer_commission,
-    owner_phone: deal.advertisement.parameters.owner_card.phone_number,
-    customer_phone: deal.customer.phone_number !== "NULL" ? deal.customer.phone_number : 'отсутствует' ,
-    deal_type: deal.status,
-    bank: deal.customer.bank === null ? 'наличные' :  deal.customer.bank,
-    pledged_bank: deal.advertisement.parameters.pledged_bank === null ? 'Не в залоге' :  deal.advertisement.parameters.pledged_bank
-}));
+
+// deals.map(deal => exp.push({
+//     id: deal.iddeals,
+//     employee1: `${deal.advertisement.employeesid.name} ${deal.advertisement.employeesid.surname}`,
+//     employee2: `${deal.customer.employeesid.name} ${deal.customer.employeesid.surname}`,
+//     deal_date: new Date(deal.transaction_date).toLocaleDateString(),
+//     start_commission_date: new Date(deal.date_of_deposit).toLocaleDateString(),
+//     end_commission_date: new Date(deal.expiration_date_of_deposit).toLocaleDateString(),
+//     address: `${deal.advertisement.parameters.street} ${deal.advertisement.parameters.house_number}`,
+//     price: `${deal.advertisement.parameters.cost}`,
+//     owner: deal.advertisement.parameters.owner_card.name,
+//     customer: `${deal?.customer?.name} ${ deal.customer.surname ? deal.customer.surname : 'отсутствует'  }`,
+//     commission: deal.amount_of_deposit,
+//     owner_money: deal.amount_of_deposit,
+//     customer_money: deal.customer_commission,
+//     owner_phone: deal.advertisement.parameters.owner_card.phone_number,
+//     customer_phone: deal.customer.phone_number !== "NULL" ? deal.customer.phone_number : 'отсутствует' ,
+//     deal_type: deal.status,
+//     bank: deal.customer.bank === null ? 'наличные' :  deal.customer.bank,
+//     pledged_bank: deal.advertisement.parameters.pledged_bank === null ? 'Не в залоге' :  deal.advertisement.parameters.pledged_bank
+// }));
 
 
 const useStyles = makeStyles(theme => ({
@@ -148,7 +127,7 @@ const cellStyles = makeStyles(theme => ({
 }));
 
 
-export default function UserTable() {
+const UserTable = ({ getDeals, deals }) => {
 
     const initialState = {
         name: '',
@@ -161,17 +140,12 @@ export default function UserTable() {
     const [state, setState] = useState(initialState);
     const [use, setUsed] = useState(false);
     const [deal, setDeals] = useState([]);
-    useEffect(() => {
-        setDeals(arr)
-    }, []);
+    const arr = []
+
 
     useEffect(() => {
-        setTimeout(() => {
-            axios.get('http://localhost:8000/api/deals/')
-                .then(data => console.log(data.data))
-                .catch(e => console.log(e))
-        }, 3000)
-    }, [])
+        getDeals();
+    }, [getDeals])
 
 
     const onReset = () => {
@@ -212,12 +186,12 @@ export default function UserTable() {
     }
 
     const columns = [
-        { field: 'id', flex: 1, headerName: 'No',
+        { field: 'id', width: 120, headerName: 'No',
             renderCell: (params) => (
-                <div>
-                    <Link to={`/deals/${params.getValue('id')}`}>
+                <div style={{ width: '100%' }}>
+                    <Link to={`/deals/${params.getValue('id')}`} style={{ display: 'inline-block', width: '100%' }}>
                         { params.getValue('id') }
-                        <Button style={{ background: status(params.getValue('deal_type')), maxWidth: '45px', fontSize: '9px', color: 'white', padding: '5px 2px' }}>
+                        <Button style={{ background: status(params.getValue('deal_type')), marginLeft: 5, maxWidth: '45px', fontSize: '9px', color: 'white', padding: '5px 2px' }}>
                             { params.getValue('deal_type') }
                         </Button>
                     </Link>
@@ -241,29 +215,10 @@ export default function UserTable() {
             ),
             headerClassName: classes.header
         },
-        { field: 'start_commission_date', type: 'date', headerAlign: 'center', width: 110, headerName: 'Дата задатка от'},
-        { field: 'end_commission_date', type: 'date', headerAlign: 'center', width: 110, headerName: 'Дата задатка до'},
-        { field: 'deal_date', type: 'date', width: 100, headerAlign: 'center', headerName: 'Дата сделки'},
-        { field: 'address', headerName: 'Цена / Адрес', headerAlign: 'center', width: 140,
-            valueGetter: (params) =>
-                `${params.getValue('price') || ''} ${
-                    params.getValue('address') || ''
-                }`,
-            renderCell: (params) => (
-                <div style={{ }}>
-                    <p>
-                        {
-                            currencyFormatter.format(Number(params.getValue('price')))
-                        }
-                    </p>
-                    <p>
-                        { params.getValue('address') }
-                    </p>
-                </div>
-            ),
-            headerClassName: classes.header
-        },
-        { field: 'contract', headerName: 'Собственик/Покупатель', width: 160,
+        { field: 'start_commission_date', type: 'date', headerAlign: 'center', width: 130, headerName: 'Дата задатка от'},
+        { field: 'end_commission_date', type: 'date', headerAlign: 'center', width: 130, headerName: 'Дата задатка до'},
+        { field: 'deal_date', type: 'date', width: 120, headerAlign: 'center', headerName: 'Дата сделки'},
+        { field: 'contract', headerName: 'Собственик/Покупатель', width: 170,
             valueGetter: (params) =>
                 `${params.getValue('owner') || ''} ${
                     params.getValue('customer') || ''
@@ -281,7 +236,7 @@ export default function UserTable() {
             headerAlign: 'center',
             headerClassName: classes.header
         },
-        { field: 'commission', headerName: 'Задаток', headerAlign: 'center', width: 60, ...usdPrice },
+        { field: 'commission', headerName: 'Задаток', headerAlign: 'center', width: 50, ...usdPrice },
         { field: 'moneys', flex: 1, headerName: 'Комиссионные', headerAlign: 'center', width: 80, ...usdPrice,
             valueGetter: (params) =>
                 `${currencyFormatter.format(Number(params.getValue('owner_money'))) || ''} ${
@@ -299,7 +254,7 @@ export default function UserTable() {
                 </div>
             ),
         },
-        { field: 'contacts', headerName: 'Контакты', flex: 1,
+        { field: 'contacts', headerName: 'Контакты', width: 120,
             valueGetter: (params) =>
                 `${params.getValue('owner_phone') || ''} ${
                     params.getValue('customer_phone') || ''
@@ -325,10 +280,11 @@ export default function UserTable() {
             headerClassName: classes.last
         }
     ];
-    const rows = [
-        ...deal
-    ];
+    let rows = []
 
+    if (deals) {
+        rows = deals
+    }
 
     const handleSearch = (e) => {
         setState({
@@ -381,7 +337,6 @@ export default function UserTable() {
     };
 
 
-
     return (
         <React.Fragment>
             <Container maxWidth="xl" style={{ marginTop: 30, position: 'relative' }} >
@@ -408,20 +363,25 @@ export default function UserTable() {
                 <Typography variant="body1">
                     Число строк: { rows.length }
                 </Typography>
-            </Container>
-            <Container maxWidth="xl" style={{ marginTop: '30px', marginBottom: 30, display: 'flex' }}>
-                <div style={{ height: 1114, width: '100%' }}>
-                    <div style={{ display: 'flex', height: '100%', width: '100%' }}>
-                        <DataGrid
-                            pageSize={10}
-                            hideFooterRowCount={true}
-                            className={cell.root}
-                            rows={rows}
-                            columns={columns}
-                        />
-                    </div>
+                <div style={{ height: 1114, width: '100%', marginTop: '30px', marginBottom: 30 }}>
+                    <DataGrid
+                        pageSize={10}
+                        hideFooterRowCount={true}
+                        className={cell.root}
+                        rows={rows}
+                        columns={columns}
+                        loading={!deals}
+                    />
                 </div>
             </Container>
         </React.Fragment>
     );
 }
+
+const mapStateToProps = (state) => ({
+    deals: state.deals.deals,
+    loading: state.deals.loading
+});
+
+
+export default connect(mapStateToProps, { getDeals })(UserTable)
