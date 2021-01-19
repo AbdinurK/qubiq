@@ -9,12 +9,17 @@ import { DataGrid } from "@material-ui/data-grid";
 import {Link} from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
+    container: {
+        marginTop: 30,
+        // position: 'relative'
+    },
     box: {
         display: 'table',
         marginBottom: theme.spacing(2),
         maxWidth: 600,
         width: '100%',
         border: '1px solid #ccc',
+        borderRadius: '4px',
     },
     innerBox: {
         display: 'table-cell',
@@ -74,16 +79,16 @@ const TeamDashboard = props => {
         }
     }
     const columns = [
-        { field: 'id', headerName: 'No', width: 70 },
-        { field: 'fullName', headerName: 'ФИО агента', headerAlign: 'center', width: 170,
+        { field: 'id', headerName: 'No', width: 80 },
+        { field: 'fullName', headerName: 'ФИО агента', headerAlign: 'center', flex: 0.7,
         renderCell: params => (
             <Link to={`/dashboard/171`}>
                 { params.getValue('fullName') }
             </Link>
         )},
-        { field: 'category', headerName: 'Категория', headerAlign: 'center', width: 110},
-        { field: 'plan', headerName: 'План ВД', headerAlign: 'center'},
-        { field: 'facts', headerName: 'Факт ВД', headerAlign: 'center', width: 180,
+        { field: 'category', headerName: 'Категория', headerAlign: 'center', width: 130},
+        { field: 'plan', headerName: 'План ВД', headerAlign: 'center', flex: .6},
+        { field: 'facts', headerName: 'Факт ВД', headerAlign: 'center', flex: 1,
             renderCell: (params) => (
                 <React.Fragment>
                     <div className={styles.jss153}>
@@ -103,10 +108,10 @@ const TeamDashboard = props => {
                 </React.Fragment>
             )
         },
-        { field: 'activity', headerName: 'Участ. в сделке про./пок', headerAlign: 'center', width: 230},
-        { field: 'prediction', headerName: 'Прогноз', headerAlign: 'center', width: 150,},
-        { field: 'fact2', headerName: 'Факт ВД + прогноз', headerAlign: 'center', width: 180},
-        { field: 'sum', headerName: 'Сумма срыва', headerAlign: 'center', width: 160, headerClassName: styles.last},
+        { field: 'activity', headerName: 'Участ. в сделке про./пок', headerAlign: 'center', flex: 1},
+        { field: 'prediction', headerName: 'Прогноз', headerAlign: 'center', width: 120},
+        { field: 'fact2', headerName: 'Факт ВД + прогноз', headerAlign: 'center', flex: .9},
+        { field: 'sum', headerName: 'Сумма срыва', headerAlign: 'center', flex: .7},
     ];
     const rows = [
         {
@@ -135,43 +140,37 @@ const TeamDashboard = props => {
         },
     ]
     return (
-        <Container maxWidth="xl" style={{ marginTop: 30, position: 'relative' }}>
-            <Box className={styles.box}>
-                <Box className={styles.innerBox}>
-                    <Typography className={styles.bold}>
-                        Team Leader:
-                    </Typography>
-                    <Typography>
-                        Султан Гибатуллин
-                    </Typography>
+        <React.Fragment>
+            <Container maxWidth="xl" className={styles.container}>
+                <Box className={styles.box}>
+                    <Box className={styles.innerBox}>
+                        <Typography className={styles.bold}>
+                            Team Leader:
+                        </Typography>
+                        <Typography>
+                            Султан Гибатуллин
+                        </Typography>
+                    </Box>
+                    <Box className={styles.innerBox}>
+                        <Typography className={styles.bold}>
+                            Всего агентов:
+                        </Typography>
+                        <Typography className={styles.bold}>
+                            Новых:
+                        </Typography>
+                        <Typography className={styles.bold}>
+                            Удаленных:
+                        </Typography>
+                    </Box>
                 </Box>
-                <Box className={styles.innerBox}>
-                    <Typography className={styles.bold}>
-                        Всего агентов:
-                    </Typography>
-                    <Typography className={styles.bold}>
-                        Новых:
-                    </Typography>
-                    <Typography className={styles.bold}>
-                        Удаленных:
-                    </Typography>
-                </Box>
-            </Box>
-            <div style={{ height: 400, width: '100%' }}>
-                <div style={{ display: 'flex', height: '100%' }}>
-                    <div style={{ flexGrow: 1 }}>
-                        <DataGrid
-                            rowHeight={52}
-                            headerHeight={56}
-                            pageSize={10}
-                            hideFooterRowCount={true}
-                            rows={rows}
-                            columns={columns}
-                        />
-                    </div>
+                <div style={{ height: 250, width: '100%' }}>
+                    <DataGrid
+                        columns={columns}
+                        rows={rows}
+                    />
                 </div>
-            </div>
-        </Container>
+            </Container>
+        </React.Fragment>
     );
 }
 
