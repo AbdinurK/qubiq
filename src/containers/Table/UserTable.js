@@ -88,7 +88,7 @@ const useStyles = makeStyles(theme => ({
         flex: 1,
     }
 }));
-const cellStyles = makeStyles(theme => ({
+const cellStyles = makeStyles(() => ({
     root: {
         fontSize: '0.6rem',
         lineHeight: 1,
@@ -129,31 +129,9 @@ const cellStyles = makeStyles(theme => ({
 
 const UserTable = ({ getDeals, deals }) => {
 
-    const initialState = {
-        name: '',
-        status: '',
-        payment: '',
-        dep_date: new Date('2017-06-13'),
-        exp_date: new Date('2017-06-16'),
-        transaction: new Date()
-    };
-    const [state, setState] = useState(initialState);
-    const [use, setUsed] = useState(false);
-    const [deal, setDeals] = useState([]);
-    const arr = []
-
-
-    useEffect(() => {
-        getDeals();
-    }, [getDeals])
-
-
-    const onReset = () => {
-        setDeals(arr);
-        setState(initialState)
-    };
     const classes = useStyles();
     const cell = cellStyles();
+
     const currencyFormatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'KZT',
@@ -163,6 +141,19 @@ const UserTable = ({ getDeals, deals }) => {
         type: 'number',
         valueFormatter: ({ value }) => currencyFormatter.format(Number(value)),
         cellClassName: 'font-tabular-nums',
+    };
+
+    useEffect(() => {
+        getDeals();
+    }, [getDeals])
+
+    const handleExport = () => {
+        new CsvBuilder("users.csv")
+            .setColumns(['Номер', 'Специалист', 'Специалист покупателя', 'Дата сделки', 'Дата задатка от', 'Дата задатка до',
+                'Адрес', 'Цена', 'Собственик', 'Покупатель', 'Сумма задатка', 'Комиссионные собственника', 'Комиссионные покупателя',
+                'Контакты собственника', 'Контакты покупателя', 'Тип сделки', 'Банк', 'Залог'])
+            .addRows(exp.map(row => Object.values(row)))
+            .exportFile();
     };
     const status = s => {
         switch (s) {
@@ -251,7 +242,7 @@ const UserTable = ({ getDeals, deals }) => {
             headerClassName: classes.header
         },
         { field: 'commission', headerName: 'Задаток', headerAlign: 'center', ...usdPrice },
-        { field: 'moneys', flex: 1, headerName: 'Комиссионные', headerAlign: 'center', width: 80, ...usdPrice,
+        { field: 'moneys', flex: 1.1, headerName: 'Комиссионные', headerAlign: 'center', ...usdPrice,
             valueGetter: (params) =>
                 `${currencyFormatter.format(Number(params.getValue('owner_money'))) || ''} ${
                     params.getValue('customer_money') || ''
@@ -296,24 +287,63 @@ const UserTable = ({ getDeals, deals }) => {
     ];
     let rows = []
 
+    const initialState = {
+        name: '',
+        status: '',
+        payment: '',
+        dep_date: new Date('2020-08-12'),
+        exp_date: new Date('2021-12-01'),
+        transaction: new Date('2020-08-12')
+    };
+
+    const [state, setState] = useState(initialState);
+    const [use, setUsed] = useState(false);
+    const [deal, setDeals] = useState([]);
+    const arr = []
     if (deals) {
         rows = deals
     }
+    if (use) {
+        rows = deal
+    }
 
+    const onReset = () => {
+        setDeals(arr);
+        setState(initialState)
+    };
     const handleSearch = (e) => {
         setState({
             ...state,
             [e.target.name]: e.target.value
         });
     };
-
     const onApply = () => {
-        setDeals(deal.filter(d => (
-            d.deal_type === state.status ||
-            d.deal_date > state.transaction ||
-            // (d.start_commission_date >= state.dep_date && d.end_commission_date <= state.exp_date) ||
-            d.payment === state.payment
-        )))
+
+        let sortedDeals = deals
+
+        if (state.status) {
+            sortedDeals = sortedDeals.filter(d => d.deal_type === state.status)
+        }
+        if (state.payment) {
+            sortedDeals = sortedDeals.filter(d => d.payment === state.payment)
+        }
+
+        if (state.name) {
+            sortedDeals = sortedDeals.filter(d => d.employee1.includes(state.name) || d.employee2.includes(state.name))
+        }
+
+        // if (state.transaction) {
+        //     sortedDeals = sortedDeals.filter(d => d.deal_date === state.dep_date)
+        // }
+        //
+        // if (state.dep_date) {
+        //     sortedDeals = sortedDeals.filter(d =>
+        //         (d.start_commission_date >= state.dep_date) && (d.start_commission_date <= state.exp_date)
+        //     )
+        // }
+
+
+        setDeals(sortedDeals)
     };
 
     const onDepDateChange = e => {
@@ -341,15 +371,6 @@ const UserTable = ({ getDeals, deals }) => {
         setUsed(state)
     };
 
-    const handleExport = () => {
-        new CsvBuilder("users.csv")
-            .setColumns(['Номер', 'Специалист', 'Специалист покупателя', 'Дата сделки', 'Дата задатка от', 'Дата задатка до',
-                'Адрес', 'Цена', 'Собственик', 'Покупатель', 'Сумма задатка', 'Комиссионные собственника', 'Комиссионные покупателя',
-                'Контакты собственника', 'Контакты покупателя', 'Тип сделки', 'Банк', 'Залог'])
-            .addRows(exp.map(row => Object.values(row)))
-            .exportFile();
-    };
-
 
     return (
         <React.Fragment>
@@ -358,15 +379,15 @@ const UserTable = ({ getDeals, deals }) => {
                     <div style={{ display: 'flex',  height: '100%' }}>
                         <div style={{ flexGrow: 1 }}>
                             <Filter
-                                onSearch={handleSearch}
                                 state={state}
+                                apply={use}
+                                onUsed={onUsed}
                                 onApply={onApply}
+                                onReset={onReset}
+                                onSearch={handleSearch}
                                 onDepDateChange={onDepDateChange}
                                 onExpDateChange={onExpDateChange}
                                 onDealDateChange={onDealDateChange}
-                                onReset={onReset}
-                                apply={use}
-                                onUsed={onUsed}
                                 handleExport={handleExport}
                             />
                         </div>

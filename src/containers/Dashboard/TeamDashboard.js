@@ -11,7 +11,6 @@ import {Link} from "react-router-dom";
 const useStyles = makeStyles(theme => ({
     container: {
         marginTop: 30,
-        // position: 'relative'
     },
     box: {
         display: 'table',
@@ -139,6 +138,7 @@ const TeamDashboard = props => {
             sum: '300 000 / 13%'
         },
     ]
+
     return (
         <React.Fragment>
             <Container maxWidth="xl" className={styles.container}>

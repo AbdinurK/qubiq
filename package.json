@@ -20,7 +20,7 @@
     "axios": "^0.21.0",
     "classnames": "^2.2.6",
     "date-fns": "^2.16.1",
-    "dateformat": "^4.0.0",
+    "dateformat": "^4.4.1",
     "filefy": "^0.1.10",
     "fusioncharts": "^3.15.3",
     "i": "^0.3.6",
