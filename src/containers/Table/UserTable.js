@@ -204,7 +204,16 @@ const UserTable = ({ getDeals, deals }) => {
             headerClassName: classes.header
         },
         { field: 'start_commission_date', type: 'date', headerAlign: 'center', width: 130, headerName: 'Дата задатка от'},
-        { field: 'end_commission_date', type: 'date', headerAlign: 'center', width: 130, headerName: 'Дата задатка до'},
+        { field: 'end_commission_date', type: 'date', headerAlign: 'center', width: 130, headerName: 'Дата задатка до',
+            renderCell: (params) => (
+                <div
+                    style={{
+                        width: '100%',
+                        backgroundColor: moment(params.getValue('end_commission_date')).isBefore(moment()) && params.getValue('deal_type') === 'Задаток' ? 'red' : '' }}>
+                    { moment(params.getValue('end_commission_date'), 'DD.MM.YYYY').format('DD.MM.YYYY') }
+                </div>
+            ),
+        },
         { field: 'deal_date', type: 'date', width: 120, headerAlign: 'center', headerName: 'Дата сделки'},
         { field: 'contract', headerName: 'Собственик/Покупатель', width: 170,
             valueGetter: (params) =>
