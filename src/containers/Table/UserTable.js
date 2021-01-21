@@ -10,32 +10,8 @@ import Filter from "../../components/Filter/Filter";
 import { CsvBuilder } from 'filefy';
 import { DataGrid } from "@material-ui/data-grid";
 import { connect } from "react-redux"
+import moment from 'moment'
 import { getDeals } from '../../store/action/dealsActions'
-
-
-const exp = [];
-
-// deals.map(deal => exp.push({
-//     id: deal.iddeals,
-//     employee1: `${deal.advertisement.employeesid.name} ${deal.advertisement.employeesid.surname}`,
-//     employee2: `${deal.customer.employeesid.name} ${deal.customer.employeesid.surname}`,
-//     deal_date: new Date(deal.transaction_date).toLocaleDateString(),
-//     start_commission_date: new Date(deal.date_of_deposit).toLocaleDateString(),
-//     end_commission_date: new Date(deal.expiration_date_of_deposit).toLocaleDateString(),
-//     address: `${deal.advertisement.parameters.street} ${deal.advertisement.parameters.house_number}`,
-//     price: `${deal.advertisement.parameters.cost}`,
-//     owner: deal.advertisement.parameters.owner_card.name,
-//     customer: `${deal?.customer?.name} ${ deal.customer.surname ? deal.customer.surname : 'отсутствует'  }`,
-//     commission: deal.amount_of_deposit,
-//     owner_money: deal.amount_of_deposit,
-//     customer_money: deal.customer_commission,
-//     owner_phone: deal.advertisement.parameters.owner_card.phone_number,
-//     customer_phone: deal.customer.phone_number !== "NULL" ? deal.customer.phone_number : 'отсутствует' ,
-//     deal_type: deal.status,
-//     bank: deal.customer.bank === null ? 'наличные' :  deal.customer.bank,
-//     pledged_bank: deal.advertisement.parameters.pledged_bank === null ? 'Не в залоге' :  deal.advertisement.parameters.pledged_bank
-// }));
-
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -45,8 +21,9 @@ const useStyles = makeStyles(theme => ({
             minHeight: 110,
         },
     },
-    container: {
-        maxHeight: 800,
+    space: {
+        marginTop: 30,
+        position: 'relative'
     },
     header: {
         minWidth: '5%',
@@ -86,6 +63,12 @@ const useStyles = makeStyles(theme => ({
             display: 'none'
         },
         flex: 1,
+    },
+    gridWrapper: {
+        height: 1114,
+        width: '100%',
+        marginTop: '30px',
+        marginBottom: 30
     }
 }));
 const cellStyles = makeStyles(() => ({
@@ -152,7 +135,7 @@ const UserTable = ({ getDeals, deals }) => {
             .setColumns(['Номер', 'Специалист', 'Специалист покупателя', 'Дата сделки', 'Дата задатка от', 'Дата задатка до',
                 'Адрес', 'Цена', 'Собственик', 'Покупатель', 'Сумма задатка', 'Комиссионные собственника', 'Комиссионные покупателя',
                 'Контакты собственника', 'Контакты покупателя', 'Тип сделки', 'Банк', 'Залог'])
-            .addRows(exp.map(row => Object.values(row)))
+            .addRows(deals.map(row => Object.values(row)))
             .exportFile();
     };
     const status = s => {
@@ -291,9 +274,12 @@ const UserTable = ({ getDeals, deals }) => {
         name: '',
         status: '',
         payment: '',
-        dep_date: new Date('2020-08-12'),
-        exp_date: new Date('2021-12-01'),
-        transaction: new Date('2020-08-12')
+        dep_date: moment('08.12.2020', 'DD.MM.YYYY'),
+        dep_used: false,
+        exp_date: moment('08.12.2020', 'DD.MM.YYYY'),
+        exp_used: false,
+        transaction: moment('08.12.2020', 'DD.MM.YYYY'),
+        transaction_used: false,
     };
 
     const [state, setState] = useState(initialState);
@@ -332,15 +318,18 @@ const UserTable = ({ getDeals, deals }) => {
             sortedDeals = sortedDeals.filter(d => d.employee1.includes(state.name) || d.employee2.includes(state.name))
         }
 
-        // if (state.transaction) {
-        //     sortedDeals = sortedDeals.filter(d => d.deal_date === state.dep_date)
-        // }
-        //
-        // if (state.dep_date) {
-        //     sortedDeals = sortedDeals.filter(d =>
-        //         (d.start_commission_date >= state.dep_date) && (d.start_commission_date <= state.exp_date)
-        //     )
-        // }
+
+        if (state.dep_used && state.dep_date) {
+            sortedDeals = sortedDeals.filter(d => moment(d.start_commission_date).isSameOrAfter(state.dep_date))
+        }
+
+        if (state.exp_used && state.exp_date) {
+            sortedDeals = sortedDeals.filter(d => moment(d.end_commission_date).isSameOrBefore(state.exp_date))
+        }
+
+        if (state.transaction_used && state.transaction) {
+            sortedDeals = sortedDeals.filter(d => moment(d.deal_date).isSame(state.transaction))
+        }
 
 
         setDeals(sortedDeals)
@@ -349,21 +338,24 @@ const UserTable = ({ getDeals, deals }) => {
     const onDepDateChange = e => {
         setState({
             ...state,
-            dep_date: e
+            dep_date: e,
+            dep_used: true
         })
     };
 
     const onExpDateChange = e => {
         setState({
             ...state,
-            exp_date: e
+            exp_date: e,
+            exp_used: true
         })
     };
 
     const onDealDateChange = e => {
         setState({
             ...state,
-            transaction: e
+            transaction: e,
+            transaction_used: true
         })
     };
 
@@ -374,31 +366,23 @@ const UserTable = ({ getDeals, deals }) => {
 
     return (
         <React.Fragment>
-            <Container maxWidth="xl" style={{ marginTop: 30, position: 'relative' }} >
-                <div style={{ margin: '0 auto', flexGrow: 1 }}>
-                    <div style={{ display: 'flex',  height: '100%' }}>
-                        <div style={{ flexGrow: 1 }}>
-                            <Filter
-                                state={state}
-                                apply={use}
-                                onUsed={onUsed}
-                                onApply={onApply}
-                                onReset={onReset}
-                                onSearch={handleSearch}
-                                onDepDateChange={onDepDateChange}
-                                onExpDateChange={onExpDateChange}
-                                onDealDateChange={onDealDateChange}
-                                handleExport={handleExport}
-                            />
-                        </div>
-                    </div>
-                </div>
-            </Container>
-            <Container maxWidth="xl" style={{ marginTop: 30, position: 'relative' }}>
-                <Typography variant="body1">
+            <Container maxWidth="xl" className={classes.space}>
+                <Filter
+                    state={state}
+                    apply={use}
+                    onUsed={onUsed}
+                    onApply={onApply}
+                    onReset={onReset}
+                    onSearch={handleSearch}
+                    onDepDateChange={onDepDateChange}
+                    onExpDateChange={onExpDateChange}
+                    onDealDateChange={onDealDateChange}
+                    handleExport={handleExport}
+                />
+                <Typography variant="body1" className={classes.space}>
                     Число строк: { rows.length }
                 </Typography>
-                <div style={{ height: 1114, width: '100%', marginTop: '30px', marginBottom: 30 }}>
+                <div className={classes.gridWrapper}>
                     <DataGrid
                         pageSize={10}
                         hideFooterRowCount={true}
@@ -417,6 +401,5 @@ const mapStateToProps = (state) => ({
     deals: state.deals.deals,
     loading: state.deals.loading
 });
-
 
 export default connect(mapStateToProps, { getDeals })(UserTable)

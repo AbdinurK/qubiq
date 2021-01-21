@@ -32,6 +32,7 @@ const useStyles = makeStyles(theme => ({
     appBar: {
         backgroundColor: '#028946',
         borderRadius: theme.shape.borderRadius,
+        overflow: 'hidden'
     },
     title: {
         color: '#fff',
@@ -57,14 +58,23 @@ const useStyles = makeStyles(theme => ({
             backgroundColor: fade(theme.palette.common.white, 0.25),
         },
         marginLeft: 0,
-        width: '40%',
-        // [theme.breakpoints.up('sm')]: {
-        //     marginLeft: theme.spacing(1),
-        //     width: 'auto',
-        // },
+        width: '60%',
     },
     btn: {
         flexGrow: 1,
+        maxWidth: '150px',
+        marginLeft: theme.spacing(2),
+        backgroundColor: '#2A4C37',
+        color: 'white',
+        '&:hover': {
+            backgroundColor: '#fff',
+            color: 'black'
+        },
+        fontSize: '0.6rem'
+    },
+    extend: {
+        flexGrow: 1,
+        maxWidth: '200px',
         marginLeft: theme.spacing(2),
         backgroundColor: '#2A4C37',
         color: 'white',
@@ -163,6 +173,7 @@ const Filter = (props) => {
                         <FormGroup>
                             <InputBase
                                 name="name"
+                                autoFocus={false}
                                 value={props.state.name}
                                 onChange={handleChange}
                                 placeholder="Search…"
@@ -174,37 +185,17 @@ const Filter = (props) => {
                             />
                         </FormGroup>
                     </div>
-                    <Typography aria-label="status" className={classes.title} variant="body2" noWrap>
-                        Статус:
-                    </Typography>
-                    <FormGroup>
-                        <Select
-                            className={classes.nativeInput}
-                            labelId="status"
-                            id="status"
-                            name="status"
-                            value={props.state.status}
-                            onChange={handleChange}
-                        >
-                            <MenuItem value="Заявка">Заявка</MenuItem>
-                            <MenuItem value="Задаток">Задаток</MenuItem>
-                            <MenuItem value="Сделка">Сделка</MenuItem>
-                            <MenuItem value="Срыв 1">Срыв 1</MenuItem>
-                            <MenuItem value="Срыв 2">Срыв 2</MenuItem>
-                            <MenuItem value="Срыв 3">Срыв 3</MenuItem>
-                            <MenuItem value="Ожидает">Не оплачено</MenuItem>
-                        </Select>
-                    </FormGroup>
                     <Button color="default" disabled={props.apply} className={classes.btn} onClick={handleApply}>
-                        Применить
+                        <Typography variant="caption">
+                            Применить
+                        </Typography>
                     </Button>
-                    <Button color="default" className={classes.btn} onClick={onReset}>
-                        Сбросить
+                    <Button color="default" variant="outlined" className={classes.btn} onClick={onReset}>
+                        <Typography variant="caption">
+                            Сбросить
+                        </Typography>
                     </Button>
-                    <Button onClick={props.handleExport} className={classes.btn} variant="contained" color="primary">
-                        Экспорт
-                    </Button>
-                    <Button color="default" variant="outlined" className={classes.btn} onClick={handleClick}>
+                    <Button color="default" variant="outlined" className={classes.extend} onClick={handleClick}>
                         <Typography variant="srOnly">
                             Расширенный поиск
                         </Typography>
@@ -237,6 +228,30 @@ const Filter = (props) => {
                                     </Box>
 
                                     <Box>
+                                        <Typography aria-label="status" className={classes.title} variant="body2" noWrap>
+                                            Статус:
+                                        </Typography>
+                                        <FormGroup>
+                                            <Select
+                                                className={classes.nativeInput}
+                                                labelId="status"
+                                                id="status"
+                                                name="status"
+                                                value={props.state.status}
+                                                onChange={handleChange}
+                                            >
+                                                <MenuItem value="Заявка">Заявка</MenuItem>
+                                                <MenuItem value="Задаток">Задаток</MenuItem>
+                                                <MenuItem value="Сделка">Сделка</MenuItem>
+                                                <MenuItem value="Срыв 1">Срыв 1</MenuItem>
+                                                <MenuItem value="Срыв 2">Срыв 2</MenuItem>
+                                                <MenuItem value="Срыв 3">Срыв 3</MenuItem>
+                                                <MenuItem value="Ожидает">Не оплачено</MenuItem>
+                                            </Select>
+                                        </FormGroup>
+                                    </Box>
+
+                                    <Box>
                                         <Typography className={classes.title} variant="body1" noWrap>
                                             Дата задатка от:
                                         </Typography>
@@ -245,7 +260,7 @@ const Filter = (props) => {
                                                 <FormGroup>
                                                     <KeyboardDatePicker
                                                         variant="inline"
-                                                        format="yyyy-MM-dd"
+                                                        format="dd.MM.yyyy"
                                                         margin="normal"
                                                         name="dep_date"
                                                         id="dep_date"
@@ -268,7 +283,7 @@ const Filter = (props) => {
                                             <FormGroup>
                                                 <KeyboardDatePicker
                                                     variant="inline"
-                                                    format="yyyy-MM-dd"
+                                                    format="dd.MM.yyyy"
                                                     margin="normal"
                                                     name="advances2"
                                                     id="advances-b"
@@ -290,7 +305,7 @@ const Filter = (props) => {
                                             <FormGroup>
                                                 <KeyboardDatePicker
                                                     variant="inline"
-                                                    format="yyyy-MM-dd"
+                                                    format="dd.MM.yyyy"
                                                     margin="normal"
                                                     id="transaction"
                                                     value={props.state.transaction}
@@ -302,7 +317,11 @@ const Filter = (props) => {
                                             </FormGroup>
                                         </MuiPickersUtilsProvider>
                                     </Box>
-
+                                    <Box>
+                                        <Button onClick={props.handleExport} className={classes.btn} variant="contained" color="primary">
+                                            Экспорт
+                                        </Button>
+                                    </Box>
                                 </Grid>
                             </Grid>
 

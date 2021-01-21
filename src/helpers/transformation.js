@@ -1,12 +1,14 @@
+import moment from 'moment'
+
 export const transformation = deals => {
     let arr = []
     deals.map(deal => arr.push({
         id: deal.iddeals,
         employee1: `${deal.advertisement?.employeesid?.name ? deal.advertisement?.employeesid?.name : ''} ${deal.advertisement?.employeesid?.surname}`,
         employee2: `${deal.customer?.employeesid?.name ? deal.customer?.employeesid?.name : ''} ${deal.customer?.employeesid?.surname ? deal.customer.employeesid.surname : ''}`,
-        deal_date: new Date(deal.transaction_date),
-        start_commission_date: new Date(deal.date_of_deposit),
-        end_commission_date: new Date(deal.expiration_date_of_deposit),
+        deal_date: moment(deal.transaction_date, 'DD.MM.YYYY').toDate(),
+        start_commission_date: moment(deal.date_of_deposit, 'DD.MM.YYYY').toDate(),
+        end_commission_date: moment(deal.expiration_date_of_deposit, 'DD.MM.YYYY').toDate(),
         address: `${deal.advertisement?.parameters?.street} ${deal.advertisement?.parameters?.house_number }`,
         price: `${deal.advertisement?.parameters?.cost}`,
         owner: deal.advertisement?.parameters?.owner_card?.name,
