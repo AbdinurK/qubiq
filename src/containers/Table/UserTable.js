@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core"
 import Filter from "../../components/Filter/Filter";
 import { CsvBuilder } from 'filefy';
-import { DataGrid } from "@material-ui/data-grid";
+import { DataGrid, GridToolbar } from "@material-ui/data-grid";
 import { connect } from "react-redux"
 import moment from 'moment'
 import { getDeals } from '../../store/action/dealsActions'
@@ -393,12 +393,38 @@ const UserTable = ({ getDeals, deals }) => {
                 </Typography>
                 <div className={classes.gridWrapper}>
                     <DataGrid
+                        showToolbar
                         pageSize={10}
+                        components={{
+                            Toolbar: GridToolbar,
+                        }}
                         hideFooterRowCount={true}
                         className={cell.root}
                         rows={rows}
                         columns={columns}
                         loading={!deals}
+                        density='compact'
+                        localeText={{
+                            toolbarDensity: 'Размер',
+                            toolbarDensityLabel: 'Размер',
+                            toolbarDensityCompact: 'Компактный',
+                            toolbarDensityStandard: 'Стандартный',
+                            toolbarDensityComfortable: 'Большой',
+                            columnsPanelTextFieldLabel: 'Найти колонку',
+                            columnsPanelTextFieldPlaceholder: 'Имя колонки',
+                            columnsPanelShowAllButton: 'Показать все',
+                            columnsPanelHideAllButton: 'Скрыть все',
+                            toolbarColumns: 'Колонки',
+                            toolbarFilters: 'Фильтры',
+                            filterPanelOperators: 'Операторы',
+                            filterPanelColumns: 'Колонки',
+                            filterPanelInputLabel: 'Значение',
+                            filterPanelInputPlaceholder: 'Фильровать значение',
+                            filterOperatorContains: 'включает',
+                            filterOperatorEquals: 'equals',
+                            filterOperatorStartsWith: 'starts with',
+                            filterOperatorEndsWith: 'ends with',
+                        }}
                     />
                 </div>
             </Container>
