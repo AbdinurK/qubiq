@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom'
 import { DatePicker } from 'antd';
 import {
     Tabs,
@@ -75,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function DealCard(props) {
+function EditDeal(props) {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
     const [deal, setDeal] = useState(null)
@@ -93,6 +92,15 @@ export default function DealCard(props) {
         }, 3000)
     }, [props.match.params.id])
 
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        console.log(formData)
+        axios.put(`http://localhost:8000/api/deals/${props.match.params.id}/`, {
+            ...formData,
+        }).then(e => console.log(e)).catch(e => new Error(e))
+    };
 
     return (
         <Container maxWidth="lg" style={{ marginTop: '30px' }}>
@@ -118,7 +126,7 @@ export default function DealCard(props) {
                             <Paper className={classes.paper}>
                                 <Box className={classes.fields}>
                                     <Typography variant="subtitle1">
-                                         Представитель продавца:
+                                        Представитель продавца:
                                     </Typography>
                                     <Typography variant="subtitle2">
                                         {deal?.advertisement.employeesid.name} {deal?.advertisement.employeesid.surname}
@@ -218,7 +226,7 @@ export default function DealCard(props) {
                                                     ...formData,
                                                     own_pay_date: date.format("DD.MM.YYYY")
                                                 })
-                                                }
+                                            }
                                             }
                                             allowClear={false}
                                         />
@@ -226,7 +234,7 @@ export default function DealCard(props) {
                                 </Box>
                                 <Box className={classes.fields}>
                                     <Typography variant="subtitle1">
-                                         Дата полной оплаты:
+                                        Дата полной оплаты:
                                     </Typography>
                                     <Typography variant="subtitle2">
                                         <DatePicker
@@ -251,7 +259,7 @@ export default function DealCard(props) {
                                 </Box>
                                 <Box className={classes.fields}>
                                     <Typography variant="subtitle1">
-                                       Сумма к оплате:
+                                        Сумма к оплате:
                                     </Typography>
                                     <Typography variant="subtitle2">
                                         { deal?.seller_commission }
@@ -380,15 +388,15 @@ export default function DealCard(props) {
                                             Оплаченная часть:
                                         </Typography>
                                         <Typography variant="subtitle2">
-                                            { (deal?.cust_pay + deal?.own_pay).toString() ? (deal?.cust_pay + deal?.own_pay).toString() : 0 }
+                                            { (deal?.cust_pay + deal?.own_pay).toString() }
                                         </Typography>
                                     </Box>
                                 </Paper>
                             </Grid>
                             <Grid xs={12} sm={6} item container alignItems={"flex-end"} justify={"center"}>
-                                <Link to={`/deals/edit/${props.match.params.id}`}>
-                                    Перейти к редактированию
-                                </Link>
+                                <Button onClick={handleSubmit} variant='outlined' color="primary">
+                                    Редактировать
+                                </Button>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -402,7 +410,7 @@ export default function DealCard(props) {
                             <Paper className={classes.paper}>
                                 <Box className={classes.fields}>
                                     <Typography variant="subtitle1">
-                                         Имя:
+                                        Имя:
                                     </Typography>
                                     <Typography variant="subtitle2">
                                         { deal?.customer.name }
@@ -805,3 +813,6 @@ export default function DealCard(props) {
         </Container>
     );
 }
+
+
+export default EditDeal

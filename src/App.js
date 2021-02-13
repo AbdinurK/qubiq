@@ -5,6 +5,7 @@ import UserTable from "./containers/Table/UserTable";
 import DealCard from "./containers/Card/DealCard";
 import DashboardDetail from "./containers/Dashboard/DashboardDetail";
 import TeamDashboard from "./containers/Dashboard/TeamDashboard";
+import EditDeal from "./containers/Card/EditDeal";
 import { Switch, Route } from "react-router-dom"
 import 'antd/dist/antd.css';
 
@@ -16,6 +17,7 @@ function App() {
             <Route exact path={"/"} component={UserCard}/>
             <Route exact path={"/deals"} component={UserTable}/>
             <Route exact path={"/deals/:id"} component={DealCard}/>
+            <Route exact path={"/deals/edit/:id"} component={EditDeal}/>
             <Route exact path={"/dashboard/:id"} component={DashboardDetail}/>
             <Route exact path={"/dashboard"} component={TeamDashboard}/>
         </Switch>
