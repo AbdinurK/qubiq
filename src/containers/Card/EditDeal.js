@@ -11,6 +11,7 @@ import {
     Paper,
     Grid,
     Button,
+    TextField
 } from '@material-ui/core'
 import moment from "moment";
 import axios from 'axios'
@@ -78,7 +79,12 @@ function EditDeal(props) {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
     const [deal, setDeal] = useState(null)
-    const [formData, setFormData] = useState({})
+    const [formData, setFormData] = useState({
+        seller_commission: '',
+        own_pay: '',
+        customer_commission: '',
+        cust_pay: ''
+    })
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -87,7 +93,16 @@ function EditDeal(props) {
     useEffect(() => {
         setTimeout(() => {
             axios.get(`http://localhost:8000/api/deals/${props.match.params.id}/`)
-                .then(res => setDeal(res.data))
+                .then(res => {
+                    setDeal(res.data)
+                    setFormData({
+                        ...formData,
+                        seller_commission: res?.data?.seller_commission ? res?.data?.seller_commission : '',
+                        own_pay: res?.data?.own_pay ? res?.data?.own_pay : '',
+                        customer_commission: res?.data?.customer_commission ? res?.data?.customer_commission : '',
+                        cust_pay: res?.data?.cust_pay ? res?.data?.cust_pay : ''
+                    })
+                })
                 .catch(e => console.log(e))
         }, 3000)
     }, [props.match.params.id])
@@ -96,9 +111,13 @@ function EditDeal(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(formData)
+        const { seller_commission, customer_commission, cust_pay, own_pay } = formData
         axios.put(`http://localhost:8000/api/deals/${props.match.params.id}/`, {
             ...formData,
+            seller_commission: parseInt(seller_commission),
+            customer_commission: parseInt(customer_commission),
+            cust_pay: parseInt(cust_pay),
+            own_pay: parseInt(own_pay),
         }).then(e => console.log(e)).catch(e => new Error(e))
     };
 
@@ -261,17 +280,27 @@ function EditDeal(props) {
                                     <Typography variant="subtitle1">
                                         Сумма к оплате:
                                     </Typography>
-                                    <Typography variant="subtitle2">
-                                        { deal?.seller_commission }
-                                    </Typography>
+                                    <TextField
+                                        value={formData?.seller_commission}
+                                        onChange={e => setFormData({
+                                            ...formData,
+                                            seller_commission: e.target.value
+                                        })}
+                                        style={{ maxWidth: '90px' }}
+                                    />
                                 </Box>
                                 <Box className={classes.fields}>
                                     <Typography variant="subtitle1">
                                         Оплаченная часть:
                                     </Typography>
-                                    <Typography variant="subtitle2">
-                                        { deal?.own_pay ? deal?.own_pay : 0 }
-                                    </Typography>
+                                    <TextField
+                                        value={formData?.own_pay}
+                                        onChange={e => setFormData({
+                                            ...formData,
+                                            own_pay: e.target.value
+                                        })}
+                                        style={{ maxWidth: '90px' }}
+                                    />
                                 </Box>
                                 <Box className={classes.fields}>
                                     <Typography variant="subtitle1">
@@ -350,17 +379,27 @@ function EditDeal(props) {
                                     <Typography variant="subtitle1">
                                         Сумма к оплате:
                                     </Typography>
-                                    <Typography variant="subtitle2">
-                                        { deal?.customer_commission }
-                                    </Typography>
+                                    <TextField
+                                        value={formData?.customer_commission}
+                                        onChange={e => setFormData({
+                                            ...formData,
+                                            customer_commission: e.target.value
+                                        })}
+                                        style={{ maxWidth: '90px' }}
+                                    />
                                 </Box>
                                 <Box className={classes.fields}>
                                     <Typography variant="subtitle1">
                                         Оплаченная часть:
                                     </Typography>
-                                    <Typography variant="subtitle2">
-                                        { deal?.cust_pay ? deal?.cust_pay : 0 }
-                                    </Typography>
+                                    <TextField
+                                        value={formData?.cust_pay}
+                                        onChange={e => setFormData({
+                                            ...formData,
+                                            cust_pay: e.target.value
+                                        })}
+                                        style={{ maxWidth: '90px' }}
+                                    />
                                 </Box>
                                 <Box className={classes.fields}>
                                     <Typography variant="subtitle1">
