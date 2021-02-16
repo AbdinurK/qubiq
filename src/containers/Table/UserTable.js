@@ -209,7 +209,7 @@ const UserTable = ({ getDeals, deals }) => {
                 <div
                     style={{
                         width: '100%',
-                        backgroundColor: moment(params.getValue('end_commission_date')).isBefore(moment()) && params.getValue('deal_type') === 'Задаток' ? 'red' : '' }}>
+                        color: moment(params.getValue('end_commission_date')).isBefore(moment()) && params.getValue('deal_type') === 'Задаток' ? 'red' : '' }}>
                     { moment(params.getValue('end_commission_date'), 'DD.MM.YYYY').format('DD.MM.YYYY') }
                 </div>
             ),

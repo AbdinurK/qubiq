@@ -204,24 +204,7 @@ export default function DealCard(props) {
                                         Дата ожидаемой оплаты:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        <DatePicker
-                                            value={deal?.own_pay_date
-                                                ? moment(deal?.own_pay_date, 'DD.MM.YYYY') : ''
-                                            }
-                                            format={'DD.MM.YYYY'}
-                                            onChange={(date) => {
-                                                setDeal({
-                                                    ...deal,
-                                                    own_pay_date: date.format("DD.MM.YYYY")
-                                                })
-                                                setFormData({
-                                                    ...formData,
-                                                    own_pay_date: date.format("DD.MM.YYYY")
-                                                })
-                                                }
-                                            }
-                                            allowClear={false}
-                                        />
+                                        { deal?.own_pay_date }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -229,24 +212,7 @@ export default function DealCard(props) {
                                          Дата полной оплаты:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        <DatePicker
-                                            value={deal?.own_full_pay_date
-                                                ? moment(deal?.own_full_pay_date, 'DD.MM.YYYY') : ''
-                                            }
-                                            format={'DD.MM.YYYY'}
-                                            onChange={(date) => {
-                                                setDeal({
-                                                    ...deal,
-                                                    own_full_pay_date: date.format("DD.MM.YYYY")
-                                                })
-                                                setFormData({
-                                                    ...formData,
-                                                    own_full_pay_date: date.format("DD.MM.YYYY")
-                                                })
-                                            }
-                                            }
-                                            allowClear={false}
-                                        />
+                                        { deal?.own_full_pay_date }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -293,24 +259,7 @@ export default function DealCard(props) {
                                         Дата ожидаемой оплаты:
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        <DatePicker
-                                            value={deal?.cust_pay_date ?
-                                                moment(deal?.cust_pay_date, 'DD.MM.YYYY') : ''
-                                            }
-                                            format={'DD.MM.YYYY'}
-                                            onChange={(date) => {
-                                                setDeal({
-                                                    ...deal,
-                                                    cust_pay_date: date.format("DD.MM.YYYY")
-                                                })
-                                                setFormData({
-                                                    ...formData,
-                                                    cust_pay_date: date.format("DD.MM.YYYY")
-                                                })
-                                            }
-                                            }
-                                            allowClear={false}
-                                        />
+                                        { deal?.cust_pay_date }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
@@ -318,24 +267,7 @@ export default function DealCard(props) {
                                         Дата полной оплаты
                                     </Typography>
                                     <Typography variant="subtitle2">
-                                        <DatePicker
-                                            value={deal?.cust_full_pay_date ?
-                                                moment(deal?.cust_full_pay_date, 'DD.MM.YYYY') : ''
-                                            }
-                                            format={'DD.MM.YYYY'}
-                                            onChange={(date) => {
-                                                setDeal({
-                                                    ...deal,
-                                                    cust_full_pay_date: date.format("DD.MM.YYYY")
-                                                })
-                                                setFormData({
-                                                    ...formData,
-                                                    cust_full_pay_date: date.format("DD.MM.YYYY")
-                                                })
-                                            }
-                                            }
-                                            allowClear={false}
-                                        />
+                                        { deal?.cust_full_pay_date }
                                     </Typography>
                                 </Box>
                                 <Box className={classes.fields}>
