@@ -12,6 +12,7 @@ import { DataGrid, GridToolbar } from "@material-ui/data-grid";
 import { connect } from "react-redux"
 import moment from 'moment'
 import { getDeals } from '../../store/action/dealsActions'
+import Header from "../../components/Header/Header";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -375,6 +376,7 @@ const UserTable = ({ getDeals, deals }) => {
 
     return (
         <React.Fragment>
+            <Header/>
             <Container maxWidth="xl" className={classes.space}>
                 <Filter
                     state={state}

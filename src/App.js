@@ -6,13 +6,14 @@ import DealCard from "./containers/Card/DealCard";
 import DashboardDetail from "./containers/Dashboard/DashboardDetail";
 import TeamDashboard from "./containers/Dashboard/TeamDashboard";
 import EditDeal from "./containers/Card/EditDeal";
+import Login from "./pages/Login";
 import { Switch, Route } from "react-router-dom"
 import 'antd/dist/antd.css';
+
 
 function App() {
   return (
     <React.Fragment>
-        <Header/>
         <Switch>
             <Route exact path={"/"} component={UserCard}/>
             <Route exact path={"/deals"} component={UserTable}/>
@@ -20,6 +21,7 @@ function App() {
             <Route exact path={"/deals/edit/:id"} component={EditDeal}/>
             <Route exact path={"/dashboard/:id"} component={DashboardDetail}/>
             <Route exact path={"/dashboard"} component={TeamDashboard}/>
+            <Route exact path={"/login"} component={Login}/>
         </Switch>
     </React.Fragment>
   );

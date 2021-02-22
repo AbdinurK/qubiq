@@ -7,6 +7,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { DataGrid } from "@material-ui/data-grid";
 import {Link} from "react-router-dom";
+import Header from "../../components/Header/Header";
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -141,6 +142,7 @@ const TeamDashboard = props => {
 
     return (
         <React.Fragment>
+            <Header/>
             <Container maxWidth="xl" className={styles.container}>
                 <Box className={styles.box}>
                     <Box className={styles.innerBox}>

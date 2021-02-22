@@ -6,6 +6,7 @@ import TimeSeries from 'fusioncharts/fusioncharts.timeseries';
 import ReactFC from 'react-fusioncharts';
 import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
 import axios from 'axios'
+import Header from "../../components/Header/Header";
 
 ReactFC.fcRoot(FusionCharts, TimeSeries, FusionTheme);
 
@@ -176,150 +177,153 @@ const DashboardDetail = (props) => {
 
 
     return (
-        <Container maxWidth="xl">
-            <div className={styles.root}>
-                <Tabs
-                    orientation="vertical"
-                    variant="fullWidth"
-                    value={value}
-                    onChange={handleChange}
-                    aria-label="Vertical tabs example"
-                    className={styles.tabs}
-                >
-                    <Tab label="Общее" {...a11yProps(0)} />
-                    <Tab label="Очки" {...a11yProps(1)} />
-                    <Tab label="Валовый доход" {...a11yProps(2)} />
-                </Tabs>
-                <TabPanel value={value} index={0} className={styles.tabPanel}>
-                    <Grid container>
-                        <Grid item container direction={"column"}>
-                            <Typography variant="h6" className={styles.field}>
-                                Показатели агента
-                            </Typography>
-                            <Paper className={styles.paper}>
-                                <Typography>
-                                    { data?.name } { data?.surname }
-                                </Typography>
-                                <Typography>
-                                    Агент категорий "{ data?.grade }"
-                                </Typography>
-                                <Typography>
-                                   TL { data?.leader }
-                                </Typography>
-                            </Paper>
-                        </Grid>
-                        <Grid item container justify={"space-between"}>
-                            <Grid item xs={5}>
+        <React.Fragment>
+            <Header/>
+            <Container maxWidth="xl">
+                <div className={styles.root}>
+                    <Tabs
+                        orientation="vertical"
+                        variant="fullWidth"
+                        value={value}
+                        onChange={handleChange}
+                        aria-label="Vertical tabs example"
+                        className={styles.tabs}
+                    >
+                        <Tab label="Общее" {...a11yProps(0)} />
+                        <Tab label="Очки" {...a11yProps(1)} />
+                        <Tab label="Валовый доход" {...a11yProps(2)} />
+                    </Tabs>
+                    <TabPanel value={value} index={0} className={styles.tabPanel}>
+                        <Grid container>
+                            <Grid item container direction={"column"}>
                                 <Typography variant="h6" className={styles.field}>
-                                    Общие показатели
+                                    Показатели агента
                                 </Typography>
-                                <Box className={styles.box}>
-                                    <Paper className={styles.row}>
-                                        <Typography variant="h4">
-                                            { data?.current_points } oч.
-                                        </Typography>
-                                        <Typography variant="subtitle1">
-                                            {(data?.current_points / data?.plan_points) * 100 }% от { data?.plan_points  } оч.
-                                        </Typography>
-                                    </Paper>
-                                    <Paper className={styles.row}>
-                                        <Typography variant="h4">
-                                            10 дн.
-                                        </Typography>
-                                        <Typography variant="subtitle1">
-                                            с последнего задатка.
-                                        </Typography>
-                                    </Paper>
-                                </Box>
-                                <Box className={styles.box}>
-                                    <Paper className={styles.row}>
-                                        <Typography variant="h4">
-                                            { data?.current_profit } тг.
-                                        </Typography>
-                                        <Typography variant="subtitle1">
-                                            {(data?.current_profit / data?.plan_profit) * 100 }% от { data?.plan_profit } тг
-                                        </Typography>
-                                    </Paper>
-                                    <Paper className={styles.row}>
-                                        <Typography variant="h4">
-                                            14 дн.
-                                        </Typography>
-                                        <Typography variant="subtitle1">
-                                            с последней сделки.
-                                        </Typography>
-                                    </Paper>
-                                </Box>
-                                <Box className={styles.box}>
-                                    <Paper className={styles.row}>
-                                        <Typography variant="h4">
-                                            { data?.new_objects } | { data?.active_objects }
-                                        </Typography>
-                                        <Typography variant="subtitle1">
-                                            новых | всего
-                                        </Typography>
-                                        <Typography variant="subtitle1">
-                                            объектов
-                                        </Typography>
-                                    </Paper>
-                                    <Paper className={styles.row}>
-                                        <Typography variant="h4">
-                                            { data?.new_customers } | { data?.active_customers }
-                                        </Typography>
-                                        <Typography variant="subtitle1">
-                                            новых | всего
-                                        </Typography>
-                                        <Typography variant="subtitle1">
-                                            покупателей
-                                        </Typography>
-                                    </Paper>
-
-                                </Box>
-                            </Grid>
-                            <Grid item xs={6}>
-                                <Typography variant="h6" className={styles.field}>
-                                    Рейтинг по очкам
-                                </Typography>
-                                <Paper className={styles.paper} style={{ height: 70 }}>
-                                    <Typography variant="subtitle1">
-                                        15. Айтуар Серикханов
+                                <Paper className={styles.paper}>
+                                    <Typography>
+                                        { data?.name } { data?.surname }
                                     </Typography>
-                                </Paper>
-
-                                <Typography variant="h6" className={styles.field}>
-                                    Рейтинг по валовому доходу
-                                </Typography>
-                                <Paper className={styles.paper} style={{ height: 100 }}>
-                                    <Typography variant="subtitle1">
-                                        1. ...
+                                    <Typography>
+                                        Агент категорий "{ data?.grade }"
                                     </Typography>
-                                    <Typography variant="subtitle1">
-                                        8. Айтуар Серикханов
-                                    </Typography>
-                                </Paper>
-
-                                <Typography variant="h6" className={styles.field}>
-                                    Показы
-                                </Typography>
-                                <Paper className={styles.paper} style={{ marginTop: 10, }}>
-                                    <Typography variant="subtitle1">
-                                        Показов объектов: { data?.obj?.length }
-                                    </Typography>
-                                    <Typography variant="subtitle1">
-                                        Показов покупателям: { data?.cust?.length }
+                                    <Typography>
+                                        TL { data?.leader }
                                     </Typography>
                                 </Paper>
                             </Grid>
+                            <Grid item container justify={"space-between"}>
+                                <Grid item xs={5}>
+                                    <Typography variant="h6" className={styles.field}>
+                                        Общие показатели
+                                    </Typography>
+                                    <Box className={styles.box}>
+                                        <Paper className={styles.row}>
+                                            <Typography variant="h4">
+                                                { data?.current_points } oч.
+                                            </Typography>
+                                            <Typography variant="subtitle1">
+                                                {(data?.current_points / data?.plan_points) * 100 }% от { data?.plan_points  } оч.
+                                            </Typography>
+                                        </Paper>
+                                        <Paper className={styles.row}>
+                                            <Typography variant="h4">
+                                                10 дн.
+                                            </Typography>
+                                            <Typography variant="subtitle1">
+                                                с последнего задатка.
+                                            </Typography>
+                                        </Paper>
+                                    </Box>
+                                    <Box className={styles.box}>
+                                        <Paper className={styles.row}>
+                                            <Typography variant="h4">
+                                                { data?.current_profit } тг.
+                                            </Typography>
+                                            <Typography variant="subtitle1">
+                                                {(data?.current_profit / data?.plan_profit) * 100 }% от { data?.plan_profit } тг
+                                            </Typography>
+                                        </Paper>
+                                        <Paper className={styles.row}>
+                                            <Typography variant="h4">
+                                                14 дн.
+                                            </Typography>
+                                            <Typography variant="subtitle1">
+                                                с последней сделки.
+                                            </Typography>
+                                        </Paper>
+                                    </Box>
+                                    <Box className={styles.box}>
+                                        <Paper className={styles.row}>
+                                            <Typography variant="h4">
+                                                { data?.new_objects } | { data?.active_objects }
+                                            </Typography>
+                                            <Typography variant="subtitle1">
+                                                новых | всего
+                                            </Typography>
+                                            <Typography variant="subtitle1">
+                                                объектов
+                                            </Typography>
+                                        </Paper>
+                                        <Paper className={styles.row}>
+                                            <Typography variant="h4">
+                                                { data?.new_customers } | { data?.active_customers }
+                                            </Typography>
+                                            <Typography variant="subtitle1">
+                                                новых | всего
+                                            </Typography>
+                                            <Typography variant="subtitle1">
+                                                покупателей
+                                            </Typography>
+                                        </Paper>
+
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Typography variant="h6" className={styles.field}>
+                                        Рейтинг по очкам
+                                    </Typography>
+                                    <Paper className={styles.paper} style={{ height: 70 }}>
+                                        <Typography variant="subtitle1">
+                                            15. Айтуар Серикханов
+                                        </Typography>
+                                    </Paper>
+
+                                    <Typography variant="h6" className={styles.field}>
+                                        Рейтинг по валовому доходу
+                                    </Typography>
+                                    <Paper className={styles.paper} style={{ height: 100 }}>
+                                        <Typography variant="subtitle1">
+                                            1. ...
+                                        </Typography>
+                                        <Typography variant="subtitle1">
+                                            8. Айтуар Серикханов
+                                        </Typography>
+                                    </Paper>
+
+                                    <Typography variant="h6" className={styles.field}>
+                                        Показы
+                                    </Typography>
+                                    <Paper className={styles.paper} style={{ marginTop: 10, }}>
+                                        <Typography variant="subtitle1">
+                                            Показов объектов: { data?.obj?.length }
+                                        </Typography>
+                                        <Typography variant="subtitle1">
+                                            Показов покупателям: { data?.cust?.length }
+                                        </Typography>
+                                    </Paper>
+                                </Grid>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </TabPanel>
-                <TabPanel value={value} index={1} className={styles.tabPanel}>
-                    <ChartViewer/>
-                </TabPanel>
-                <TabPanel value={value} index={2} className={styles.tabPanel}>
-                    <ChartViewer/>
-                </TabPanel>
-            </div>
-        </Container>
+                    </TabPanel>
+                    <TabPanel value={value} index={1} className={styles.tabPanel}>
+                        <ChartViewer/>
+                    </TabPanel>
+                    <TabPanel value={value} index={2} className={styles.tabPanel}>
+                        <ChartViewer/>
+                    </TabPanel>
+                </div>
+            </Container>
+        </React.Fragment>
     )
 };
 
