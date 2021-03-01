@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from './components/Header/Header'
 import UserCard from "./containers/Card/UserCard";
 import UserTable from "./containers/Table/UserTable";
 import DealCard from "./containers/Card/DealCard";
