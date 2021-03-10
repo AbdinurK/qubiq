@@ -1,0 +1,4 @@
+export const GET_DEALS = 'GET_DEALS'
+export const GET_DEALS_SUCCESS = 'GET_DEALS_SUCCESS'
+export const GET_DEALS_FAILURE = 'GET_DEALS_FAILURE'
+

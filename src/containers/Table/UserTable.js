@@ -11,7 +11,7 @@ import { CsvBuilder } from 'filefy';
 import { DataGrid, GridToolbar } from "@material-ui/data-grid";
 import { connect } from "react-redux"
 import moment from 'moment'
-import { getDeals } from '../../store/action/dealsActions'
+import { getDealsAction } from '../../store/actions'
 import Header from "../../components/Header/Header";
 
 const useStyles = makeStyles(theme => ({
@@ -111,7 +111,7 @@ const cellStyles = makeStyles(() => ({
 }));
 
 
-const UserTable = ({ getDeals, deals }) => {
+const UserTable = ({ getDealsAction, deals }) => {
 
     const classes = useStyles();
     const cell = cellStyles();
@@ -128,8 +128,8 @@ const UserTable = ({ getDeals, deals }) => {
     };
 
     useEffect(() => {
-        getDeals();
-    }, [getDeals])
+        getDealsAction();
+    }, [getDealsAction])
 
     const handleExport = () => {
         new CsvBuilder("users.csv")
@@ -435,8 +435,7 @@ const UserTable = ({ getDeals, deals }) => {
 }
 
 const mapStateToProps = (state) => ({
-    deals: state.deals.deals,
-    loading: state.deals.loading
+    deals: state.Deals.deals,
 });
 
-export default connect(mapStateToProps, { getDeals })(UserTable)
+export default connect(mapStateToProps, { getDealsAction })(UserTable)
