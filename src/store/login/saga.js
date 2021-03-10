@@ -7,7 +7,7 @@ import { postJwtLogin } from '../../api/login'
 function* loginUser({ payload: { user, history } }) {
     try {
         const response = yield call(postJwtLogin, {
-            email: user.email,
+            username: user.username,
             password: user.password,
         })
         localStorage.setItem("qubiq", JSON.stringify(response))

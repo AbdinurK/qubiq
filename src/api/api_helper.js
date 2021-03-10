@@ -7,6 +7,7 @@ const API_URL = ""
 
 const axiosApi = axios.create({
     baseURL: API_URL,
+
 })
 
 

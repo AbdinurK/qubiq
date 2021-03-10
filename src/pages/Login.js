@@ -19,8 +19,8 @@ import profile from './profile-img.png'
 
 const Login = (props) => {
     const [state, setState] = useState({
-        email: '',
-        password: ''
+        username: 'Sultan',
+        password: 'gss280697'
     })
 
     const handleValidSubmit = (event, values) => {
@@ -75,9 +75,9 @@ const Login = (props) => {
 
                                             <div className="form-group mb-3">
                                                 <AvField
-                                                    name="email"
+                                                    name="username"
                                                     label="Логин"
-                                                    value={state.email}
+                                                    value={state.username}
                                                     className="form-control"
                                                     placeholder="Enter email"
                                                     onChange={onChange}
