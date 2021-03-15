@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
     Container,
     Box,
@@ -7,7 +7,10 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { DataGrid } from "@material-ui/data-grid";
 import {Link} from "react-router-dom";
+import { connect } from 'react-redux'
+import { getIndicators, getIndicator } from '../../store/actions'
 import Header from "../../components/Header/Header";
+
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -67,7 +70,15 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const TeamDashboard = props => {
+const TeamDashboard = ({ getIndicators, getIndicator, indicators, indicator, match }) => {
+
+    useEffect(() => {
+        getIndicators()
+        getIndicator('1')
+    }, [getIndicators, getIndicator, match])
+
+    console.log(indicator)
+
     const styles = useStyles();
     const vol = per => {
         switch (per) {
@@ -150,15 +161,15 @@ const TeamDashboard = props => {
                             Team Leader:
                         </Typography>
                         <Typography>
-                            Султан Гибатуллин
+                            { indicator.leader }
                         </Typography>
                     </Box>
                     <Box className={styles.innerBox}>
                         <Typography className={styles.bold}>
-                            Всего агентов:
+                            Всего агентов: { indicator.number_all }
                         </Typography>
                         <Typography className={styles.bold}>
-                            Новых:
+                            Новых: { indicator.number_new }
                         </Typography>
                         <Typography className={styles.bold}>
                             Удаленных:
@@ -176,5 +187,9 @@ const TeamDashboard = props => {
     );
 }
 
+const mapStateToProps = (state) => ({
+    indicators: state.Indicators.indicators,
+    indicator: state.Indicators.indicator,
+})
 
-export default TeamDashboard;
+export default connect(mapStateToProps, { getIndicators, getIndicator })(TeamDashboard);

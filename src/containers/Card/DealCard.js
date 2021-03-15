@@ -147,44 +147,16 @@ export default function DealCard(props) {
                                         <Typography variant="subtitle1">
                                             Дата задатка:
                                         </Typography>
-                                        <DatePicker
-                                            value={moment(deal?.date_of_deposit, 'DD.MM.YYYY')}
-                                            format={'DD.MM.YYYY'}
-                                            onChange={(date) => {
-                                                setDeal({
-                                                    ...deal,
-                                                    date_of_deposit: date.format("DD.MM.YYYY")
-                                                })
-                                                setFormData({
-                                                    ...formData,
-                                                    date_of_deposit: date.format("DD.MM.YYYY")
-                                                })
-                                            }}
-                                            allowClear={false}
-                                        />
+                                        <Typography variant="subtitle2">
+                                            { deal?.date_of_deposit }
+                                        </Typography>
                                     </Box>
                                     <Box className={classes.fields}>
                                         <Typography variant="subtitle1">
                                             Дата истечения задатка:
                                         </Typography>
                                         <Typography variant="subtitle2">
-                                            <DatePicker
-                                                value={deal?.expiration_date_of_deposit
-                                                    ? moment(deal?.expiration_date_of_deposit, 'DD.MM.YYYY') : ''
-                                                }
-                                                format={'DD.MM.YYYY'}
-                                                onChange={(date) => {
-                                                    setDeal({
-                                                        ...deal,
-                                                        expiration_date_of_deposit: date.format("DD.MM.YYYY")
-                                                    })
-                                                    setFormData({
-                                                        ...formData,
-                                                        expiration_date_of_deposit: date.format("DD.MM.YYYY")
-                                                    })
-                                                }}
-                                                allowClear={false}
-                                            />
+                                            { deal?.expiration_date_of_deposit }
                                         </Typography>
                                     </Box>
                                 </Paper>

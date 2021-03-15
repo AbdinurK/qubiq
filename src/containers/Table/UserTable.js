@@ -127,6 +127,8 @@ const UserTable = ({ getDealsAction, deals }) => {
         cellClassName: 'font-tabular-nums',
     };
 
+    console.log(deals)
+
     useEffect(() => {
         getDealsAction();
     }, [getDealsAction])
@@ -135,7 +137,7 @@ const UserTable = ({ getDealsAction, deals }) => {
         new CsvBuilder("users.csv")
             .setColumns(['Номер', 'Специалист', 'Специалист покупателя', 'Дата сделки', 'Дата задатка от', 'Дата задатка до',
                 'Адрес', 'Цена', 'Собственик', 'Покупатель', 'Сумма задатка', 'Комиссионные собственника', 'Комиссионные покупателя',
-                'Контакты собственника', 'Контакты покупателя', 'Тип сделки', 'Банк', 'Залог'])
+                'Контакты собственника', 'Контакты покупателя', 'Тип сделки', 'Оплата', 'Банк', 'Залог'])
             .addRows(deals.map(row => Object.values(row)))
             .exportFile();
     };

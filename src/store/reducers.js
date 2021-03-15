@@ -2,11 +2,13 @@ import { combineReducers } from 'redux'
 
 import Login from './login/reducer'
 import Deals from './deals/reducer'
+import Indicators from './indicators/reducer'
 
 
 const rootReducer = combineReducers({
     Login,
-    Deals
+    Deals,
+    Indicators
 })
 
 export default rootReducer
