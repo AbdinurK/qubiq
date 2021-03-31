@@ -10,6 +10,7 @@ import {Link} from "react-router-dom";
 import { connect } from 'react-redux'
 import { getIndicators, getIndicator } from '../../store/actions'
 import Header from "../../components/Header/Header";
+import { employeeTransform } from '../../helpers/dashboardTransformation'
 
 
 const useStyles = makeStyles(theme => ({
@@ -77,7 +78,17 @@ const TeamDashboard = ({ getIndicators, getIndicator, indicators, indicator, mat
         getIndicator('1')
     }, [getIndicators, getIndicator, match])
 
-    console.log(indicator)
+
+
+
+    // name - FIO
+    // grade - Категория
+    // active - Статус
+    // plan_profit - План ВД
+    // current_profit - Факт ВД
+    // number_cust - Участ в сделках
+    // number_obj - Учас в сделках продава
+    // current_fails - Сумма срыва
 
     const styles = useStyles();
     const vol = per => {
@@ -91,64 +102,77 @@ const TeamDashboard = ({ getIndicators, getIndicator, indicators, indicator, mat
     }
     const columns = [
         { field: 'id', headerName: 'No', width: 80 },
-        { field: 'fullName', headerName: 'ФИО агента', headerAlign: 'center', flex: 0.7,
+        { field: 'name', headerName: 'ФИО агента', headerAlign: 'center', flex: 0.7,
         renderCell: params => (
-            <Link to={`/dashboard/171`}>
-                { params.getValue('fullName') }
+            <Link to={`/dashboard/${params.getValue('link')}`}>
+                { params.getValue('name') }
             </Link>
         )},
-        { field: 'category', headerName: 'Категория', headerAlign: 'center', width: 130},
-        { field: 'plan', headerName: 'План ВД', headerAlign: 'center', flex: .6},
-        { field: 'facts', headerName: 'Факт ВД', headerAlign: 'center', flex: 1,
+        { field: 'grade', headerName: 'Категория', headerAlign: 'center', width: 130,
+            renderCell: (params) => (
+                <div style={{ width: '100%', textAlign: 'center' }}>
+                    { params.getValue('grade') }
+                </div>
+            )
+        },
+        { field: 'plan_profit', headerName: 'План ВД', headerAlign: 'center', flex: .6,
+            renderCell: (params) => (
+                <div style={{ width: '100%', textAlign: 'center' }}>
+                    { params.getValue('plan_profit') }
+                </div>
+            )
+        },
+        { field: 'current_profit', headerName: 'Факт ВД', headerAlign: 'center', flex: 1,
             renderCell: (params) => (
                 <React.Fragment>
-                    <div className={styles.jss153}>
-                        <div className={styles.jss154}>
-                            { params.getValue('percent') }
-                        </div>
-                        <div
-                            className={styles.jss155}
-                            style={{
-                                maxWidth: `${params.getValue('percent')}%`,
-                                backgroundColor: vol(params.getValue('percent'))
-                            }}/>
-                    </div>
-                    <div>
-                        { params.getValue('fact') }
+                    {/*<div className={styles.jss153}>*/}
+                    {/*    <div className={styles.jss154}>*/}
+                    {/*        { params.getValue('percent') }*/}
+                    {/*    </div>*/}
+                    {/*    <div*/}
+                    {/*        className={styles.jss155}*/}
+                    {/*        style={{*/}
+                    {/*            maxWidth: `${params.getValue('percent')}%`,*/}
+                    {/*            backgroundColor: vol(params.getValue('percent'))*/}
+                    {/*        }}/>*/}
+                    {/*</div>*/}
+                    <div style={{ width: '100%', textAlign: 'center' }}>
+                        { params.getValue('current_profit') }
                     </div>
                 </React.Fragment>
             )
         },
-        { field: 'activity', headerName: 'Участ. в сделке про./пок', headerAlign: 'center', flex: 1},
-        { field: 'prediction', headerName: 'Прогноз', headerAlign: 'center', width: 120},
-        { field: 'fact2', headerName: 'Факт ВД + прогноз', headerAlign: 'center', flex: .9},
-        { field: 'sum', headerName: 'Сумма срыва', headerAlign: 'center', flex: .7},
+        { field: 'activity', headerName: 'Участ. в сделке про./пок', headerAlign: 'center', flex: 1,
+            renderCell: (params) => (
+                <div style={{ width: '100%', textAlign: 'center' }}>
+                    { params.getValue('activity') }
+                </div>
+            )
+        },
+        { field: 'prediction', headerName: 'Прогноз', headerAlign: 'center', width: 120,
+            renderCell: (params) => (
+                <div style={{ width: '100%', textAlign: 'center' }}>
+                    { params.getValue('prediction') }
+                </div>
+            )
+        },
+        { field: 'fact2', headerName: 'Факт ВД + прогноз', headerAlign: 'center', flex: .9,
+            renderCell: (params) => (
+                <div style={{ width: '100%', textAlign: 'center' }}>
+                    { params.getValue('fact2') }
+                </div>
+            )
+        },
+        { field: 'current_fails', headerName: 'Сумма срыва', headerAlign: 'center', flex: .7,
+            renderCell: (params) => (
+                <div style={{ width: '100%', textAlign: 'center' }}>
+                    { params.getValue('current_fails') }
+                </div>
+            )
+        },
     ];
     const rows = [
-        {
-            id: 1,
-            fullName: 'Султан Гибатуллин',
-            category: 'А',
-            plan: '450 000',
-            fact: '225 000',
-            percent: 33,
-            activity: '2 / 5',
-            prediction: '250 000',
-            fact2: '-',
-            sum: '300 000 / 13%'
-        },
-        {
-            id: 2,
-            fullName: 'Максат Егисбаев',
-            category: 'В',
-            plan: '300 000',
-            fact: '200 000',
-            percent: 66,
-            activity: '2 / 4',
-            prediction: '250 000',
-            fact2: '-',
-            sum: '300 000 / 13%'
-        },
+        ...employeeTransform(indicator?.employees_set)
     ]
 
     return (
@@ -176,7 +200,7 @@ const TeamDashboard = ({ getIndicators, getIndicator, indicators, indicator, mat
                         </Typography>
                     </Box>
                 </Box>
-                <div style={{ height: 250, width: '100%' }}>
+                <div style={{ height: 550, width: '100%' }}>
                     <DataGrid
                         columns={columns}
                         rows={rows}
